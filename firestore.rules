@@ -32,11 +32,20 @@ service cloud.firestore {
              && d.done is bool;
     }
 
+    // ข้อความจะมีแค่ตัวหนังสือ หรือแค่รูป หรือทั้งคู่ก็ได้ แต่ต้องมีอย่างน้อยหนึ่งอย่าง
+    // รูปเก็บเป็น base64 data URL — จำกัดขนาดไม่ให้ชน 1MB ที่เป็นเพดานของ Firestore
     function validMessage() {
       let d = request.resource.data;
-      return d.text is string && d.text.size() > 0 && d.text.size() <= 300
-             && d.name is string && d.name.size() <= 20
-             && d.ts is number;
+      return d.name is string && d.name.size() <= 20
+             && d.ts is number
+             && d.text is string && d.text.size() <= 300
+             && (
+                  !d.keys().hasAny(['image'])
+                  || (d.image is string
+                      && d.image.size() <= 700000
+                      && d.image.matches('data:image/.*'))
+                )
+             && (d.text.size() > 0 || d.keys().hasAny(['image']));
     }
 
     match /rooms/{room} {
