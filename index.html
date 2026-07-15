@@ -22,14 +22,20 @@
       font-family: 'Mitr', 'Inter', sans-serif;
     }
 
-    /* ช่องกรอกทุกชนิดต้องเป็นตัวหนังสือสีดำเสมอ —
-       ไม่งั้นจะสืบทอดสีขาวมาจาก container ของธีมแล้วมองไม่เห็น */
+    /* ช่องกรอกทุกชนิดต้องเป็นตัวหนังสือสีดำเสมอ ไม่งั้นสืบทอดสีขาวจากธีมแล้วมองไม่เห็น
+       ต้องใช้ !important เพราะ preflight ของ Tailwind ตั้ง `color: inherit` ให้ form element
+       และมันถูกฉีดเข้า <head> ตอนรันไทม์ = มาทีหลัง style นี้ = ชนะด้วย document order */
     input, select, textarea, option {
-      color: #0f172a;
+      color: #0f172a !important;
       font-family: inherit;
     }
     input::placeholder, textarea::placeholder {
-      color: #94a3b8;
+      color: #94a3b8 !important;
+      opacity: 1;
+    }
+    /* ปฏิทินของ input[type=date] บน Safari/Chrome ใช้สีจาก color-scheme */
+    input[type="date"] {
+      color-scheme: light;
     }
 
     /* Smooth transition animations for panels and buttons */
