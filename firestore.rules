@@ -1,0 +1,85 @@
+rules_version = '2';
+
+// กฎความปลอดภัยของ Pawmate
+// วางกฎนี้ที่ Firebase Console -> Firestore Database -> แท็บ Rules -> Publish
+//
+// หลักการ: เว็บเปิดสาธารณะ ใครก็เข้าได้ จึงกันไม่ได้ว่า "ใครอ่านห้องไหน"
+// (ความเป็นส่วนตัวอยู่ที่การตั้งรหัสห้องให้เดายาก เหมือนตอนใช้ MQTT)
+// แต่กันได้ว่า ต้องล็อกอินก่อน / เขียนทับ presence คนอื่นไม่ได้ / ยัดข้อมูลใหญ่ ๆ ไม่ได้
+// เพื่อไม่ให้ใครยิงข้อมูลขยะจนเปลืองโควตา
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /rooms/{room} {
+
+      // ห้องต้องมีชื่อสั้น ๆ กันคนสร้างห้องขยะชื่อยาว ๆ
+      allow read: if isSignedIn();
+
+      // presence ของสมาชิก — แก้ได้เฉพาะเอกสารของ uid ตัวเอง
+      match /members/{uid} {
+        allow read: if isSignedIn();
+        allow write: if isSignedIn()
+                     && request.auth.uid == uid
+                     && (request.method == 'delete' || validMember());
+      }
+
+      // งาน — ใครในห้องก็เพิ่ม/ปิด/ลบได้ (เป็นกระดานร่วมของทีม)
+      match /tasks/{taskId} {
+        allow read: if isSignedIn();
+        allow create, update: if isSignedIn() && validTask();
+        allow delete: if isSignedIn();
+      }
+
+      // แชท — เขียนได้อย่างเดียว แก้/ลบข้อความคนอื่นย้อนหลังไม่ได้
+      match /messages/{msgId} {
+        allow read: if isSignedIn();
+        allow create: if isSignedIn() && validMessage();
+        allow update, delete: if false;
+      }
+
+      // event ชั่วคราว (ทัก/โฟกัส) — ลบได้เพื่อให้แอปเก็บกวาดของเก่า
+      match /events/{eventId} {
+        allow read, delete: if isSignedIn();
+        allow create: if isSignedIn() && request.resource.data.ts is number;
+        allow update: if false;
+      }
+
+      // สถานะร่วมของห้อง เช่น ธีม
+      match /meta/{docId} {
+        allow read: if isSignedIn();
+        allow write: if isSignedIn()
+                     && request.resource.data.keys().hasOnly(['themeId', 'ts'])
+                     && request.resource.data.themeId is string
+                     && request.resource.data.themeId.size() <= 20;
+      }
+    }
+  }
+
+  function isSignedIn() {
+    return request.auth != null;
+  }
+
+  function validMember() {
+    let d = request.resource.data;
+    return d.name is string && d.name.size() > 0 && d.name.size() <= 20
+           && d.pet is string && d.pet.size() <= 10
+           && d.points is number && d.points >= 0 && d.points <= 1000000
+           && d.lastSeen is number;
+  }
+
+  function validTask() {
+    let d = request.resource.data;
+    return d.text is string && d.text.size() > 0 && d.text.size() <= 100
+           && d.category is string && d.category.size() <= 20
+           && d.date is string && d.date.size() == 10
+           && d.points is number && d.points >= 0 && d.points <= 100
+           && d.done is bool;
+  }
+
+  function validMessage() {
+    let d = request.resource.data;
+    return d.text is string && d.text.size() > 0 && d.text.size() <= 300
+           && d.name is string && d.name.size() <= 20
+           && d.ts is number;
+  }
+}
