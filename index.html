@@ -32,6 +32,12 @@
     .animate-bounce-slow {
       animation: bounce 2s infinite;
     }
+    .animate-float {
+      animation: float 3s ease-in-out infinite;
+    }
+    .animate-zzz {
+      animation: zzz 2.5s ease-out infinite;
+    }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(12px); }
@@ -44,6 +50,15 @@
     @keyframes wiggle {
       0%, 100% { transform: rotate(-3deg); }
       50% { transform: rotate(3deg); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    @keyframes zzz {
+      0% { opacity: 0; transform: translate(0, 0) scale(0.7); }
+      30% { opacity: 1; }
+      100% { opacity: 0; transform: translate(18px, -34px) scale(1.25); }
     }
 
     /* Scrollbar customization */
@@ -99,6 +114,8 @@
       purple: {
         id: 'purple',
         name: 'ธีมสีม่วง สัตว์กินองุ่น 🍇',
+        shortName: 'ม่วง',
+        swatch: 'bg-fuchsia-500',
         bgClass: 'bg-gradient-to-br from-indigo-900 via-purple-800 to-fuchsia-900 text-white',
         headerClass: 'bg-purple-950/90 border-purple-800 shadow-purple-900/50 text-white',
         primaryButton: 'bg-fuchsia-600 hover:bg-fuchsia-700 focus:ring-fuchsia-500',
@@ -110,6 +127,8 @@
       lightblue: {
         id: 'lightblue',
         name: 'ธีมสีฟ้า สัตว์ว่ายน้ำ 🏊‍♂️',
+        shortName: 'ฟ้า',
+        swatch: 'bg-sky-400',
         bgClass: 'bg-gradient-to-br from-sky-800 via-cyan-800 to-blue-900 text-white',
         headerClass: 'bg-cyan-950/95 border-cyan-800 shadow-cyan-900/50 text-white',
         primaryButton: 'bg-sky-500 hover:bg-sky-600 focus:ring-sky-400',
@@ -121,6 +140,8 @@
       blue: {
         id: 'blue',
         name: 'ธีมน้ำเงิน สัตว์ตั้งใจทำงาน 💻',
+        shortName: 'น้ำเงิน',
+        swatch: 'bg-indigo-600',
         bgClass: 'bg-gradient-to-br from-blue-900 via-indigo-950 to-indigo-900 text-white',
         headerClass: 'bg-indigo-950/90 border-indigo-800 shadow-indigo-950/50 text-white',
         primaryButton: 'bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500',
@@ -132,6 +153,8 @@
       green: {
         id: 'green',
         name: 'ธีมสีเขียว สัตว์กินชาเขียว 🍵',
+        shortName: 'เขียว',
+        swatch: 'bg-emerald-500',
         bgClass: 'bg-gradient-to-br from-emerald-950 via-green-800 to-teal-950 text-white',
         headerClass: 'bg-emerald-950/95 border-emerald-800 shadow-emerald-900/50 text-white',
         primaryButton: 'bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-500',
@@ -143,6 +166,8 @@
       yellow: {
         id: 'yellow',
         name: 'ธีมเหลือง เลม่อนโซดา 🍋',
+        shortName: 'เหลือง',
+        swatch: 'bg-amber-400',
         bgClass: 'bg-gradient-to-br from-yellow-100 via-amber-200 to-orange-300 text-amber-950',
         headerClass: 'bg-yellow-100/90 border-yellow-300 shadow-yellow-300/50 text-amber-950',
         primaryButton: 'bg-amber-600 hover:bg-amber-700 focus:ring-amber-500',
@@ -154,6 +179,8 @@
       orange: {
         id: 'orange',
         name: 'ธีมสีส้ม สัตว์กินส้ม 🍊',
+        shortName: 'ส้ม',
+        swatch: 'bg-orange-500',
         bgClass: 'bg-gradient-to-br from-orange-400 via-amber-400 to-red-600 text-white',
         headerClass: 'bg-orange-950/90 border-orange-800 shadow-orange-900/50 text-white',
         primaryButton: 'bg-orange-600 hover:bg-orange-700 focus:ring-orange-500',
@@ -162,9 +189,24 @@
         bannerEmoji: '🍊',
         illustrationText: '🐱🍊 ปอกส้มสีทองแสนอร่อยแบ่งปันเพื่อนรัก! 🦆🍊'
       },
+      red: {
+        id: 'red',
+        name: 'ธีมสีแดง สัตว์กินแตงโม 🍉',
+        shortName: 'แดง',
+        swatch: 'bg-red-600',
+        bgClass: 'bg-gradient-to-br from-red-900 via-rose-800 to-red-950 text-white',
+        headerClass: 'bg-red-950/90 border-red-800 shadow-red-900/50 text-white',
+        primaryButton: 'bg-red-600 hover:bg-red-700 focus:ring-red-500',
+        activeTabClass: 'bg-red-900/80 text-white border-l-4 border-red-400 shadow-sm',
+        accentText: 'text-red-200',
+        bannerEmoji: '🍉',
+        illustrationText: '🐼🍉 ฝานแตงโมเย็นฉ่ำแบ่งกันกินหน้าร้อน! 🐱🍉'
+      },
       pink: {
         id: 'pink',
         name: 'ธีมชมพู สัตว์รักกัน กินขนม 💖',
+        shortName: 'ชมพู',
+        swatch: 'bg-pink-500',
         bgClass: 'bg-gradient-to-br from-pink-300 via-rose-300 to-purple-400 text-pink-950',
         headerClass: 'bg-pink-50/90 border-pink-200 shadow-pink-200/50 text-pink-950',
         primaryButton: 'bg-pink-600 hover:bg-pink-700 focus:ring-pink-500',
@@ -193,19 +235,27 @@
       { emoji: '🔥', text: 'ปั่นงานเร่งด่วนสุดๆ' }
     ];
 
-    const TABS = [
-      { id: 'lobby', label: 'ห้องนั่งเล่น', emoji: '🏡' },
-      { id: 'tasks', label: 'กระดานงาน', emoji: '📋' },
-      { id: 'chat', label: 'แชท', emoji: '💬' },
-      { id: 'board', label: 'อันดับดาวเด่น', emoji: '🏆' },
-      { id: 'food', label: 'สุ่มข้าวเที่ยง', emoji: '🍽️' }
+    const CATEGORIES = [
+      { id: 'urgent', name: 'งานด่วน!', emoji: '🔥', urgent: true },
+      { id: 'marketing', name: 'Marketing', emoji: '✨' },
+      { id: 'design', name: 'Design', emoji: '🎨' },
+      { id: 'production', name: 'Production', emoji: '🎬' }
     ];
+
+    const THAI_DAYS = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัส', 'ศุกร์', 'เสาร์'];
+    const THAI_DAYS_SHORT = ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'];
+    const THAI_MONTHS = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
+      'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
 
     // Public MQTT broker (WebSocket over TLS) — ทุกคนที่รู้รหัสห้องเข้าถึงข้อความได้
     const MQTT_BROKER = 'wss://broker.emqx.io:8084/mqtt';
-    const TOPIC_PREFIX = 'pawmate/v1/';
+    const TOPIC_PREFIX = 'pawmate/v2/';
     const HEARTBEAT_MS = 4000;
     const MEMBER_TIMEOUT_MS = 13000;
+
+    const WORKLOAD_CAPACITY = 5;   // งานค้างกี่ชิ้นถึงเรียกว่าเต็มมือ
+    const HOUSE_EXP_PER_LEVEL = 100;
+    const FOCUS_MINUTES = 25;
 
     /* ============================================================
        SOUND — สังเคราะห์เสียงสัตว์ด้วย Web Audio API
@@ -279,6 +329,21 @@
             osc.stop(now + offset + 0.18);
           };
           playQuack(0); playQuack(0.22);
+
+        } else if (type === 'chime') {
+          // เสียงกริ๊งจบ Focus Time
+          [880, 1320, 1760].forEach((freq, i) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain); gain.connect(ctx.destination);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now + i * 0.16);
+            gain.gain.setValueAtTime(0.001, now + i * 0.16);
+            gain.gain.exponentialRampToValueAtTime(0.25, now + i * 0.16 + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.16 + 0.5);
+            osc.start(now + i * 0.16);
+            osc.stop(now + i * 0.16 + 0.52);
+          });
         }
       } catch (err) {
         // เสียงเล่นไม่ได้ ไม่ควรทำให้ทั้งแอปพัง
@@ -305,13 +370,34 @@
       try { localStorage.setItem(key, JSON.stringify(value)); } catch (err) { /* โควตาเต็ม — ข้ามไป */ }
     };
 
-    const levelOf = (points) => Math.floor((points || 0) / 50) + 1;
-    const levelProgress = (points) => ((points || 0) % 50) / 50 * 100;
+    const clamp = (n, lo, hi) => Math.min(hi, Math.max(lo, n));
 
     const timeLabel = (ts) => {
       const d = new Date(ts);
       return d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0');
     };
+
+    // วันที่แบบ local (ไม่ใช่ UTC) เพื่อไม่ให้วันเพี้ยนข้ามเขตเวลา
+    const toISO = (d) => {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return y + '-' + m + '-' + day;
+    };
+    const fromISO = (s) => {
+      const [y, m, d] = s.split('-').map(Number);
+      return new Date(y, m - 1, d);
+    };
+    const addDays = (date, n) => {
+      const d = new Date(date);
+      d.setDate(d.getDate() + n);
+      return d;
+    };
+    const startOfWeek = (date) => addDays(date, -date.getDay());
+
+    const URL_RE = /(https?:\/\/[^\s]+)/g;
+    const extractLinks = (text) => text.match(URL_RE) || [];
+    const shortUrl = (u) => u.replace(/^https?:\/\//, '').slice(0, 34) + (u.length > 42 ? '...' : '');
 
     /* ============================================================
        useRoom — เชื่อม MQTT, ดูแล presence, ส่ง/รับ event
@@ -328,8 +414,8 @@
       const publish = useCallback((type, payload) => {
         const client = clientRef.current;
         if (!client || !client.connected || !room) return;
-        const { id, name, pet, mood, points } = meRef.current;
-        const envelope = { type, payload, ts: Date.now(), from: { id, name, pet, mood, points } };
+        const { id, name, pet, mood, points, focusUntil } = meRef.current;
+        const envelope = { type, payload, ts: Date.now(), from: { id, name, pet, mood, points, focusUntil } };
         client.publish(TOPIC_PREFIX + room, JSON.stringify(envelope));
       }, [room]);
 
@@ -388,11 +474,24 @@
        UI ชิ้นเล็ก
        ============================================================ */
 
-    function Card({ className = '', children }) {
+    function Panel({ title, emoji, badge, badgeClass = 'bg-slate-100 text-slate-500', className = '', children }) {
       return (
-        <div className={'rounded-2xl border backdrop-blur-sm bg-white/10 border-white/20 p-4 sm:p-5 ' + className}>
+        <section className={'rounded-2xl bg-white/95 shadow-lg shadow-black/10 p-4 ' + className}>
+          {title && (
+            <div className="flex items-center gap-2 mb-3">
+              <h2 className="text-sm font-bold text-slate-700 flex items-center gap-1.5 min-w-0">
+                <span>{emoji}</span>
+                <span className="truncate">{title}</span>
+              </h2>
+              {badge && (
+                <span className={'ml-auto shrink-0 text-[10px] rounded-full px-2 py-0.5 font-medium ' + badgeClass}>
+                  {badge}
+                </span>
+              )}
+            </div>
+          )}
           {children}
-        </div>
+        </section>
       );
     }
 
@@ -413,12 +512,22 @@
 
     function Toasts({ toasts }) {
       return (
-        <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 items-end pointer-events-none">
+        <div className="fixed bottom-4 left-4 z-50 flex flex-col gap-2 items-start pointer-events-none">
           {toasts.map((t) => (
             <div key={t.id} className="animate-scaleUp bg-slate-900/90 text-white text-sm px-4 py-2.5 rounded-xl shadow-xl max-w-[80vw]">
               {t.text}
             </div>
           ))}
+        </div>
+      );
+    }
+
+    function EmptyState({ emoji, title, hint }) {
+      return (
+        <div className="text-center py-8 px-3">
+          <div className="text-3xl mb-2 opacity-40">{emoji}</div>
+          <p className="text-sm font-medium text-slate-500">{title}</p>
+          {hint && <p className="text-xs text-slate-400 mt-1">{hint}</p>}
         </div>
       );
     }
@@ -457,7 +566,7 @@
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   maxLength={20}
-                  placeholder="เช่น มิ้ง"
+                  placeholder="เช่น ฟีฟ่า"
                   className="w-full rounded-xl bg-white/90 text-slate-900 px-4 py-2.5 outline-none focus:ring-2 focus:ring-fuchsia-400 placeholder:text-slate-400"
                 />
               </div>
@@ -512,193 +621,712 @@
     }
 
     /* ============================================================
-       แท็บ: ห้องนั่งเล่น
+       HEADER
        ============================================================ */
 
-    function LobbyTab({ theme, me, members, onPoke, onMood }) {
+    function Header({ theme, me, houseLevel, houseExp, status, room, memberCount, onName, onMood, onTheme, onLeave }) {
+      const pet = PETS_CONFIG[me.pet] || PETS_CONFIG.dog;
+      return (
+        <header className={'sticky top-0 z-30 border-b backdrop-blur-md shadow-lg ' + theme.headerClass}>
+          <div className="max-w-[1800px] mx-auto px-4 py-2.5 flex flex-wrap items-center gap-x-4 gap-y-2">
+
+            {/* ซ้าย: โลโก้ + ชื่อ */}
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="text-3xl shrink-0">{pet.emoji}</span>
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <h1 className="text-xl font-black leading-none shrink-0">Pawmate</h1>
+                  <span className="text-lg">{theme.bannerEmoji}</span>
+                </div>
+                <div className="flex items-center gap-1.5 mt-1">
+                  <span className="text-[10px] rounded-full bg-white/20 px-2 py-0.5 shrink-0">คุณ: {me.name}</span>
+                  <input
+                    value={me.name}
+                    onChange={(e) => onName(e.target.value)}
+                    maxLength={20}
+                    title="แก้ชื่อได้เลย"
+                    className="w-24 rounded-md bg-white/90 text-slate-900 text-[11px] px-2 py-0.5 outline-none focus:ring-2 focus:ring-white/60"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* กลาง: บ้าน + EXP */}
+            <div className="flex-1 min-w-[240px] order-last lg:order-none">
+              <div className="text-center text-sm font-bold flex items-center justify-center gap-2">
+                <span>🏡</span>
+                <span>บ้าน PAWMATE LV.{houseLevel}</span>
+              </div>
+              <div className="mt-1 mx-auto max-w-lg h-4 rounded-full bg-black/30 overflow-hidden relative">
+                <div
+                  className="h-full bg-gradient-to-r from-emerald-400 to-green-500 transition-all duration-700"
+                  style={{ width: (houseExp / HOUSE_EXP_PER_LEVEL * 100) + '%' }}
+                ></div>
+                <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold tracking-wide">
+                  EXP {houseExp}/{HOUSE_EXP_PER_LEVEL}
+                </span>
+              </div>
+              <div className="flex items-center justify-center gap-2 mt-1">
+                <span className="text-[10px] opacity-70">ห้อง {room} · {memberCount} ตัว</span>
+                <StatusDot status={status} />
+              </div>
+            </div>
+
+            {/* ขวา: mood + ธีม + ออก */}
+            <div className="flex items-start gap-2 ml-auto">
+              <div className="rounded-xl bg-white/95 p-1.5 grid grid-cols-3 gap-1">
+                {MOODS_CONFIG.map((m) => (
+                  <button
+                    key={m.text}
+                    onClick={() => onMood(m)}
+                    title={m.text}
+                    className={'rounded-lg px-2 py-1 text-[10px] whitespace-nowrap transition-all max-w-[100px] truncate ' +
+                      (me.mood && me.mood.text === m.text
+                        ? 'text-white font-medium ' + theme.primaryButton
+                        : 'text-slate-600 hover:bg-slate-100')}
+                  >
+                    {m.emoji} {m.text}
+                  </button>
+                ))}
+              </div>
+
+              <div className="rounded-xl bg-white/95 p-1.5 grid grid-cols-4 gap-1">
+                {Object.values(THEMES_CONFIG).map((t) => (
+                  <button
+                    key={t.id}
+                    onClick={() => onTheme(t.id)}
+                    title={t.name}
+                    className={'rounded-lg px-2 py-1 text-[10px] transition-all ' + (t.id === theme.id
+                      ? t.swatch + ' text-white font-medium'
+                      : 'text-slate-600 hover:bg-slate-100')}
+                  >
+                    {t.shortName}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                onClick={onLeave}
+                title="ออกจากห้อง"
+                className="rounded-xl border border-white/25 bg-white/10 hover:bg-white/20 px-2.5 py-2 text-sm transition-colors"
+              >
+                🚪
+              </button>
+            </div>
+          </div>
+        </header>
+      );
+    }
+
+    /* ============================================================
+       ซ้าย: งานในมือของแต่ละคน
+       ============================================================ */
+
+    function WorkloadPanel({ me, members, tasks }) {
       const roster = useMemo(() => {
         const list = Object.values(members);
         list.sort((a, b) => a.name.localeCompare(b.name, 'th'));
         return [me, ...list];
       }, [me, members]);
 
+      const activeCount = (id) => tasks.filter((t) => !t.done && t.ownerId === id).length;
+
       return (
-        <div className="space-y-5 animate-fadeIn">
-          <Card>
-            <div className="text-center py-2">
-              <div className="text-4xl mb-2">{theme.bannerEmoji}</div>
-              <p className="text-sm sm:text-base font-medium">{theme.illustrationText}</p>
-            </div>
-          </Card>
-
-          <div>
-            <h2 className="text-sm font-semibold mb-2 opacity-80">อารมณ์ตอนนี้ของคุณ</h2>
-            <div className="flex flex-wrap gap-2">
-              {MOODS_CONFIG.map((m) => (
-                <button
-                  key={m.text}
-                  onClick={() => onMood(m)}
-                  className={'rounded-full px-3.5 py-1.5 text-xs border-2 transition-all ' + (me.mood && me.mood.text === m.text
-                    ? 'bg-white/95 text-slate-900 border-white scale-105 font-medium'
-                    : 'bg-white/10 border-white/20 hover:bg-white/20')}
-                >
-                  {m.emoji} {m.text}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <h2 className="text-sm font-semibold mb-2 opacity-80">เพื่อนร่วมบ้าน ({roster.length} ตัว)</h2>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {roster.map((m) => {
-                const pet = PETS_CONFIG[m.pet] || PETS_CONFIG.dog;
-                const isMe = m.id === me.id;
-                return (
-                  <div key={m.id} className="rounded-2xl border border-white/20 bg-white/10 backdrop-blur-sm p-4 animate-scaleUp">
-                    <div className="flex items-start gap-3">
-                      <button
-                        onClick={() => onPoke(m)}
-                        title={isMe ? 'ส่งเสียงทักทายทุกคน' : 'ทัก ' + m.name}
-                        className="text-4xl hover:animate-wiggle transition-transform active:scale-90 leading-none"
-                      >
-                        {pet.emoji}
-                      </button>
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-1.5">
-                          <span className="font-semibold truncate">{m.name}</span>
-                          {isMe && <span className="text-[10px] rounded-full bg-white/25 px-1.5 py-0.5 shrink-0">คุณ</span>}
-                        </div>
-                        <div className="text-[11px] opacity-70 mt-0.5">
-                          Lv.{levelOf(m.points)} · {m.points || 0} แต้ม
-                        </div>
-                        <div className="mt-2 h-1.5 rounded-full bg-black/25 overflow-hidden">
-                          <div className="h-full bg-white/70 rounded-full transition-all duration-500" style={{ width: levelProgress(m.points) + '%' }}></div>
-                        </div>
-                      </div>
-                    </div>
-                    {m.mood && (
-                      <div className={'mt-3 text-xs rounded-xl border px-3 py-1.5 ' + pet.bubbleColor}>
-                        {m.mood.emoji} {m.mood.text}
-                      </div>
+        <Panel
+          title="งานในมือของแต่ละคน"
+          emoji="📊"
+          badge="เรียลไทม์"
+          badgeClass="bg-emerald-100 text-emerald-700"
+        >
+          <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
+            {roster.map((m) => {
+              const pet = PETS_CONFIG[m.pet] || PETS_CONFIG.dog;
+              const n = activeCount(m.id);
+              const free = clamp(1 - n / WORKLOAD_CAPACITY, 0, 1) * 100;
+              const busy = n >= WORKLOAD_CAPACITY;
+              return (
+                <div key={m.id} className={'rounded-xl border p-2.5 animate-scaleUp ' +
+                  (m.id === me.id ? 'border-slate-300 bg-slate-50' : 'border-slate-200 bg-white')}>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl shrink-0">{pet.emoji}</span>
+                    <span className="text-sm font-semibold text-slate-700 truncate min-w-0">{m.name}</span>
+                    {m.focusUntil && m.focusUntil > Date.now() && (
+                      <span className="text-[9px] rounded-full bg-indigo-100 text-indigo-700 px-1.5 py-0.5 shrink-0">🕐 โฟกัส</span>
                     )}
+                    <span className={'ml-auto text-[11px] shrink-0 ' + (busy ? 'text-rose-600 font-medium' : 'text-slate-500')}>
+                      {n === 0 ? '👍 ว่างงาน' : 'ทำอยู่ ' + n + ' งาน'}
+                    </span>
                   </div>
-                );
-              })}
-            </div>
+                  <div className="mt-1.5 h-1.5 rounded-full bg-slate-200 overflow-hidden">
+                    <div
+                      className={'h-full rounded-full transition-all duration-500 ' +
+                        (free > 60 ? 'bg-emerald-500' : free > 20 ? 'bg-amber-500' : 'bg-rose-500')}
+                      style={{ width: free + '%' }}
+                    ></div>
+                  </div>
+                  {m.mood && (
+                    <div className={'mt-2 text-[10px] rounded-lg border px-2 py-1 ' + pet.bubbleColor}>
+                      {m.mood.emoji} {m.mood.text}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
-        </div>
+          <p className="text-[10px] text-slate-400 mt-2">แถบสีคือความว่าง — เต็มมือที่ {WORKLOAD_CAPACITY} งานค้าง</p>
+        </Panel>
       );
     }
 
     /* ============================================================
-       แท็บ: กระดานงาน
+       ซ้าย: เลือกประเภทงาน
        ============================================================ */
 
-    function TasksTab({ theme, tasks, onAdd, onToggle, onDelete }) {
+    function CategoryPanel({ theme, tasks, selected, onSelect }) {
+      const countOf = (id) => tasks.filter((t) => !t.done && t.category === id).length;
+
+      return (
+        <Panel title="เลือกประเภทงาน" emoji="🗂" badge={CATEGORIES.length + ' ส่วน'}>
+          <div className="space-y-2">
+            {CATEGORIES.map((c) => {
+              const n = countOf(c.id);
+              const active = selected === c.id;
+              const base = 'w-full flex items-center gap-2.5 rounded-xl px-3.5 py-2.5 text-sm transition-all border';
+              let cls;
+              if (active) cls = theme.primaryButton + ' text-white border-transparent shadow-md scale-[1.02] font-semibold';
+              else if (c.urgent) cls = 'bg-rose-50 text-rose-700 border-rose-200 border-dashed hover:bg-rose-100';
+              else cls = 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50';
+              return (
+                <button key={c.id} onClick={() => onSelect(c.id)} className={base + ' ' + cls}>
+                  <span className="text-base">{c.emoji}</span>
+                  <span className="truncate">{c.name}</span>
+                  <span className={'ml-auto shrink-0 text-xs rounded-full w-6 h-6 flex items-center justify-center ' +
+                    (active ? 'bg-white/25' : c.urgent ? 'bg-rose-100' : 'bg-slate-100')}>
+                    {n}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </Panel>
+      );
+    }
+
+    /* ============================================================
+       ซ้าย: สร้างงานใหม่
+       ============================================================ */
+
+    function CreateTaskPanel({ theme, category, date, me, members, onAdd }) {
       const [text, setText] = useState('');
+      const [taskDate, setTaskDate] = useState(date);
       const [points, setPoints] = useState(10);
+      const [ownerId, setOwnerId] = useState(me.id);
+
+      useEffect(() => { setTaskDate(date); }, [date]);
+
+      const cat = CATEGORIES.find((c) => c.id === category) || CATEGORIES[0];
+      const roster = [me, ...Object.values(members)];
 
       const submit = (e) => {
         e.preventDefault();
         const t = text.trim();
         if (!t) return;
-        onAdd(t, points);
+        const owner = roster.find((m) => m.id === ownerId) || me;
+        onAdd({ text: t, category, date: taskDate, points, ownerId: owner.id, ownerName: owner.name });
         setText('');
       };
 
-      const open = tasks.filter((t) => !t.done);
-      const done = tasks.filter((t) => t.done);
-
-      const row = (t) => (
-        <div key={t.id} className="flex items-center gap-3 rounded-xl border border-white/20 bg-white/10 px-3 py-2.5 animate-scaleUp">
-          <button
-            onClick={() => onToggle(t)}
-            className={'w-6 h-6 shrink-0 rounded-lg border-2 flex items-center justify-center text-xs transition-all ' +
-              (t.done ? 'bg-emerald-400 border-emerald-300 text-emerald-950' : 'border-white/50 hover:border-white')}
-          >
-            {t.done ? '✓' : ''}
-          </button>
-          <div className="min-w-0 flex-1">
-            <div className={'text-sm truncate ' + (t.done ? 'line-through opacity-50' : '')}>{t.text}</div>
-            <div className="text-[11px] opacity-60">
-              +{t.points} แต้ม · เพิ่มโดย {t.byName}
-              {t.done && t.doneByName ? ' · เสร็จโดย ' + t.doneByName : ''}
+      return (
+        <Panel className="pb-5">
+          <h2 className="text-sm font-bold text-slate-700 mb-3">
+            + สร้างงานใหม่ใน: <span className="font-black text-slate-900">{cat.emoji} {cat.name}</span>
+          </h2>
+          <form onSubmit={submit} className="space-y-3">
+            <div>
+              <label className="block text-[11px] text-slate-500 mb-1">ชื่องานของคุณ</label>
+              <input
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                maxLength={80}
+                placeholder="เช่น ออกแบบ Banner ด่วนมาก!"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300 placeholder:text-slate-400"
+              />
             </div>
-          </div>
-          <button
-            onClick={() => onDelete(t)}
-            className="shrink-0 text-xs opacity-50 hover:opacity-100 hover:text-rose-300 px-1.5 transition-opacity"
-            title="ลบงานนี้"
-          >
-            ✕
-          </button>
-        </div>
+
+            <div>
+              <label className="block text-[11px] text-slate-500 mb-1">เลือกวันที่ทำงาน</label>
+              <input
+                type="date"
+                value={taskDate}
+                onChange={(e) => setTaskDate(e.target.value)}
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[11px] text-slate-500 mb-1">มอบงานให้</label>
+              <select
+                value={ownerId}
+                onChange={(e) => setOwnerId(e.target.value)}
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+              >
+                {roster.map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {(PETS_CONFIG[m.pet] || PETS_CONFIG.dog).emoji} {m.name}{m.id === me.id ? ' (คุณ)' : ''}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-[11px] text-slate-500 mb-1">แต้มที่ได้เมื่อปิดงาน</label>
+              <div className="flex gap-1.5">
+                {[5, 10, 20, 50].map((p) => (
+                  <button
+                    type="button"
+                    key={p}
+                    onClick={() => setPoints(p)}
+                    className={'flex-1 rounded-lg py-1.5 text-xs border transition-all ' + (points === p
+                      ? theme.primaryButton + ' text-white border-transparent font-semibold'
+                      : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50')}
+                  >
+                    +{p}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={!text.trim()}
+              className={'w-full rounded-xl py-2.5 text-sm font-semibold text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors focus:outline-none focus:ring-2 ' + theme.primaryButton}
+            >
+              เพิ่มงานเข้าปฏิทิน 🐾
+            </button>
+          </form>
+        </Panel>
       );
+    }
+
+    /* ============================================================
+       กลาง: ปฏิทินสัปดาห์
+       ============================================================ */
+
+    function WeekStrip({ theme, anchor, selected, tasks, onSelect, onShift }) {
+      const start = startOfWeek(fromISO(anchor));
+      const days = Array.from({ length: 7 }, (_, i) => addDays(start, i));
+      const today = toISO(new Date());
 
       return (
-        <div className="space-y-5 animate-fadeIn">
-          <form onSubmit={submit} className="rounded-2xl border border-white/20 bg-white/10 backdrop-blur-sm p-4 space-y-3">
-            <input
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              maxLength={80}
-              placeholder="งานที่ต้องปั่นวันนี้..."
-              className="w-full rounded-xl bg-white/90 text-slate-900 px-4 py-2.5 outline-none focus:ring-2 focus:ring-white/60 placeholder:text-slate-400"
-            />
-            <div className="flex items-center gap-2">
-              <span className="text-xs opacity-70 shrink-0">แต้ม</span>
-              {[5, 10, 20, 50].map((p) => (
-                <button
-                  type="button"
-                  key={p}
-                  onClick={() => setPoints(p)}
-                  className={'rounded-lg px-3 py-1.5 text-xs border-2 transition-all ' + (points === p
-                    ? 'bg-white/95 text-slate-900 border-white font-medium'
-                    : 'bg-white/10 border-white/20 hover:bg-white/20')}
-                >
-                  +{p}
-                </button>
-              ))}
-              <button
-                type="submit"
-                disabled={!text.trim()}
-                className={'ml-auto rounded-xl px-4 py-2 text-sm font-semibold text-white disabled:opacity-40 transition-colors focus:outline-none focus:ring-2 ' + theme.primaryButton}
-              >
-                เพิ่มงาน
-              </button>
-            </div>
-          </form>
+        <div className="flex items-stretch gap-2">
+          <button
+            onClick={() => onShift(-7)}
+            className="shrink-0 rounded-xl bg-white/95 hover:bg-white px-3 text-xs font-medium text-slate-600 shadow-md transition-colors"
+          >
+            ◀ เลื่อนกลับ
+          </button>
 
-          <div>
-            <h2 className="text-sm font-semibold mb-2 opacity-80">ยังไม่เสร็จ ({open.length})</h2>
-            <div className="space-y-2">
-              {open.length === 0
-                ? <p className="text-xs opacity-50 py-4 text-center">โล่งงงง ไม่มีงานค้าง 🎉</p>
-                : open.map(row)}
-            </div>
+          <div className="flex-1 grid grid-cols-7 gap-1.5 sm:gap-2">
+            {days.map((d) => {
+              const iso = toISO(d);
+              const active = iso === selected;
+              const n = tasks.filter((t) => t.date === iso && !t.done).length;
+              return (
+                <button
+                  key={iso}
+                  onClick={() => onSelect(iso)}
+                  className={'relative rounded-xl py-2.5 shadow-md transition-all ' + (active
+                    ? theme.primaryButton + ' text-white scale-105 font-bold'
+                    : 'bg-white/95 text-slate-600 hover:bg-white hover:scale-[1.03]')}
+                >
+                  <div className="text-[10px] sm:text-[11px] opacity-80">{THAI_DAYS[d.getDay()]}</div>
+                  <div className="text-lg sm:text-2xl font-black leading-tight">{d.getDate()}</div>
+                  {iso === today && (
+                    <div className={'text-[8px] ' + (active ? 'text-white/80' : 'text-emerald-600 font-medium')}>วันนี้</div>
+                  )}
+                  {n > 0 && (
+                    <span className={'absolute top-1 right-1 text-[9px] rounded-full w-4 h-4 flex items-center justify-center font-bold ' +
+                      (active ? 'bg-white/30 text-white' : 'bg-rose-500 text-white')}>
+                      {n}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
 
-          {done.length > 0 && (
-            <div>
-              <h2 className="text-sm font-semibold mb-2 opacity-80">เสร็จแล้ว ({done.length})</h2>
-              <div className="space-y-2">{done.map(row)}</div>
-            </div>
-          )}
+          <button
+            onClick={() => onShift(7)}
+            className="shrink-0 rounded-xl bg-white/95 hover:bg-white px-3 text-xs font-medium text-slate-600 shadow-md transition-colors"
+          >
+            เลื่อนต่อ ▶
+          </button>
         </div>
       );
     }
 
     /* ============================================================
-       แท็บ: แชท
+       กลาง: ปฏิทินทั้งเดือน (modal)
        ============================================================ */
 
-    function ChatTab({ theme, me, messages, onSend }) {
+    function MonthModal({ theme, anchor, selected, tasks, onSelect, onClose }) {
+      const [cursor, setCursor] = useState(() => {
+        const d = fromISO(anchor);
+        return new Date(d.getFullYear(), d.getMonth(), 1);
+      });
+
+      const firstDay = new Date(cursor.getFullYear(), cursor.getMonth(), 1);
+      const daysInMonth = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 0).getDate();
+      const lead = firstDay.getDay();
+      const cells = [];
+      for (let i = 0; i < lead; i++) cells.push(null);
+      for (let i = 1; i <= daysInMonth; i++) cells.push(new Date(cursor.getFullYear(), cursor.getMonth(), i));
+      const today = toISO(new Date());
+
+      const shiftMonth = (n) => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() + n, 1));
+
+      return (
+        <div
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={onClose}
+        >
+          <div
+            className="w-full max-w-2xl rounded-2xl bg-white p-5 shadow-2xl animate-scaleUp"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <button onClick={() => shiftMonth(-1)} className="rounded-lg bg-slate-100 hover:bg-slate-200 px-3 py-1.5 text-sm transition-colors">◀</button>
+              <h2 className="flex-1 text-center font-bold text-slate-700">
+                {THAI_MONTHS[cursor.getMonth()]} {cursor.getFullYear()}
+              </h2>
+              <button onClick={() => shiftMonth(1)} className="rounded-lg bg-slate-100 hover:bg-slate-200 px-3 py-1.5 text-sm transition-colors">▶</button>
+              <button onClick={onClose} className="rounded-lg bg-slate-100 hover:bg-slate-200 px-3 py-1.5 text-sm transition-colors">✕</button>
+            </div>
+
+            <div className="grid grid-cols-7 gap-1 mb-1">
+              {THAI_DAYS_SHORT.map((d) => (
+                <div key={d} className="text-center text-[11px] font-medium text-slate-400 py-1">{d}</div>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-7 gap-1">
+              {cells.map((d, i) => {
+                if (!d) return <div key={'empty' + i}></div>;
+                const iso = toISO(d);
+                const active = iso === selected;
+                const open = tasks.filter((t) => t.date === iso && !t.done).length;
+                const done = tasks.filter((t) => t.date === iso && t.done).length;
+                return (
+                  <button
+                    key={iso}
+                    onClick={() => { onSelect(iso); onClose(); }}
+                    className={'relative aspect-square rounded-xl text-sm transition-all flex flex-col items-center justify-center ' +
+                      (active ? theme.primaryButton + ' text-white font-bold scale-105'
+                        : iso === today ? 'bg-emerald-50 text-emerald-700 font-semibold hover:bg-emerald-100'
+                        : 'bg-slate-50 text-slate-600 hover:bg-slate-100')}
+                  >
+                    <span>{d.getDate()}</span>
+                    {(open > 0 || done > 0) && (
+                      <span className="flex gap-0.5 mt-0.5">
+                        {open > 0 && <span className={'w-1.5 h-1.5 rounded-full ' + (active ? 'bg-white' : 'bg-rose-500')}></span>}
+                        {done > 0 && <span className={'w-1.5 h-1.5 rounded-full ' + (active ? 'bg-white/60' : 'bg-emerald-500')}></span>}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="flex items-center justify-center gap-4 mt-4 text-[11px] text-slate-400">
+              <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-rose-500"></span> มีงานค้าง</span>
+              <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> มีงานที่เสร็จแล้ว</span>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    /* ============================================================
+       กลาง: รายการงานประจำวัน
+       ============================================================ */
+
+    function DayTaskList({ theme, date, tasks, me, selectedTaskId, onPick, onToggle, onDelete }) {
+      const list = tasks.filter((t) => t.date === date);
+
+      return (
+        <Panel
+          title={'รายชื่อภารกิจประจำวัน (' + date + ')'}
+          emoji="📝"
+          badge={'ทั้งหมด ' + list.length + ' รายการ'}
+          badgeClass={'font-bold ' + (list.length ? 'bg-slate-100 text-slate-600' : 'bg-slate-100 text-slate-400')}
+          className="min-h-[240px]"
+        >
+          {list.length === 0 ? (
+            <EmptyState
+              emoji="🐾"
+              title="ยังไม่มีงานในวันที่เลือก"
+              hint="สร้างงานใหม่ที่กล่องสร้างงานทางด้านซ้ายได้เลย!"
+            />
+          ) : (
+            <div className="space-y-2">
+              {list.map((t) => {
+                const cat = CATEGORIES.find((c) => c.id === t.category) || CATEGORIES[0];
+                const owner = t.ownerName || t.byName;
+                return (
+                  <div
+                    key={t.id}
+                    onClick={() => onPick(t.id)}
+                    className={'flex items-center gap-3 rounded-xl border px-3 py-2.5 cursor-pointer transition-all animate-scaleUp ' +
+                      (selectedTaskId === t.id ? 'border-slate-400 bg-slate-50 shadow-sm' : 'border-slate-200 bg-white hover:bg-slate-50')}
+                  >
+                    <button
+                      onClick={(e) => { e.stopPropagation(); onToggle(t); }}
+                      className={'w-6 h-6 shrink-0 rounded-lg border-2 flex items-center justify-center text-xs transition-all ' +
+                        (t.done ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-300 hover:border-slate-500')}
+                    >
+                      {t.done ? '✓' : ''}
+                    </button>
+
+                    <div className="min-w-0 flex-1">
+                      <div className={'text-sm font-medium truncate ' + (t.done ? 'line-through text-slate-400' : 'text-slate-700')}>
+                        {t.text}
+                      </div>
+                      <div className="text-[11px] text-slate-400 truncate">
+                        {cat.emoji} {cat.name} · +{t.points} แต้ม · ของ {owner}
+                        {t.done && t.doneByName ? ' · เสร็จโดย ' + t.doneByName : ''}
+                      </div>
+                    </div>
+
+                    {t.category === 'urgent' && !t.done && (
+                      <span className="shrink-0 text-[9px] rounded-full bg-rose-100 text-rose-600 px-2 py-0.5 font-medium">ด่วน</span>
+                    )}
+
+                    <button
+                      onClick={(e) => { e.stopPropagation(); onDelete(t); }}
+                      className="shrink-0 text-xs text-slate-300 hover:text-rose-500 px-1 transition-colors"
+                      title="ลบงานนี้"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </Panel>
+      );
+    }
+
+    /* ============================================================
+       กลาง: สนามวิ่งเล่นของสัตว์เลี้ยง
+       ============================================================ */
+
+    const IDLE_LINES = [
+      'วันนี้งานเยอะไหม? เดี๋ยวช่วยเชียร์! 📣',
+      'เดินเล่นรอบสนามครบ 3 รอบแล้ว! 🏃',
+      'อย่าลืมดื่มน้ำด้วยนะ 💧',
+      'พักสายตาบ้างก็ดีนะ 👀',
+      'เก่งมากที่ยังสู้อยู่! 💪'
+    ];
+
+    function PetYard({ theme, me, fullness, sleeping, message, onWake, onFeed, onPinch }) {
+      const pet = PETS_CONFIG[me.pet] || PETS_CONFIG.dog;
+
+      return (
+        <section className="rounded-2xl bg-gradient-to-b from-sky-50 to-emerald-100 border-2 border-emerald-200 shadow-lg p-4 relative overflow-hidden">
+          <div className="flex items-start justify-between gap-3 flex-wrap relative z-10">
+            <div className="min-w-0">
+              <h2 className="text-sm font-bold text-emerald-900 flex items-center gap-1.5">
+                <span>🏡</span>
+                <span className="truncate">สนามวิ่งเล่นและกิจกรรมของ{pet.name} ({me.name})</span>
+              </h2>
+              {message && (
+                <div className="mt-2 inline-block rounded-2xl bg-white border-2 border-emerald-300 px-3.5 py-1.5 text-xs text-emerald-900 shadow-sm animate-scaleUp max-w-md">
+                  {message}
+                </div>
+              )}
+            </div>
+
+            <div className="flex gap-2 shrink-0">
+              <button
+                onClick={onFeed}
+                className="rounded-xl bg-amber-400 hover:bg-amber-500 text-amber-950 px-3.5 py-2 text-xs font-semibold shadow-md transition-colors"
+              >
+                🍖 ให้อาหาร
+              </button>
+              <button
+                onClick={onPinch}
+                className="rounded-xl bg-rose-400 hover:bg-rose-500 text-white px-3.5 py-2 text-xs font-semibold shadow-md transition-colors"
+              >
+                🤏 หยิกแก้ม
+              </button>
+            </div>
+          </div>
+
+          {/* ตัวสัตว์ */}
+          <div className="flex items-center justify-center py-6 relative">
+            <span className="absolute left-6 bottom-3 text-lg opacity-50">🌼</span>
+            <span className="absolute right-8 bottom-4 text-lg opacity-50">🌷</span>
+            <span className="absolute left-1/4 top-2 text-sm opacity-40">☁️</span>
+
+            <button
+              onClick={onWake}
+              title={sleeping ? 'คลิกเพื่อปลุก' : 'คลิกเพื่อเล่นด้วย'}
+              className={'relative text-7xl transition-transform active:scale-90 ' + (sleeping ? '' : 'animate-float')}
+            >
+              <span className={sleeping ? 'opacity-80' : ''}>{pet.emoji}</span>
+              {sleeping && (
+                <>
+                  <span className="absolute -top-1 right-0 text-xl animate-zzz">z</span>
+                  <span className="absolute -top-1 right-2 text-base animate-zzz" style={{ animationDelay: '0.8s' }}>z</span>
+                  <span className="absolute -top-1 right-4 text-sm animate-zzz" style={{ animationDelay: '1.6s' }}>z</span>
+                </>
+              )}
+            </button>
+          </div>
+
+          {/* แถบความอิ่ม */}
+          <div className="relative z-10">
+            <div className="flex items-center justify-between text-[10px] text-emerald-800 mb-1">
+              <span>ความอิ่ม</span>
+              <span className="font-bold">{Math.round(fullness)}%</span>
+            </div>
+            <div className="h-3 rounded-full bg-white/70 overflow-hidden shadow-inner">
+              <div
+                className={'h-full rounded-full transition-all duration-700 ' +
+                  (fullness > 60 ? 'bg-gradient-to-r from-emerald-400 to-green-500'
+                    : fullness > 25 ? 'bg-gradient-to-r from-amber-400 to-orange-500'
+                    : 'bg-gradient-to-r from-rose-400 to-red-500')}
+                style={{ width: fullness + '%' }}
+              ></div>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    /* ============================================================
+       ขวา: งานประจำวันที่เลือก
+       ============================================================ */
+
+    function TaskDetailPanel({ theme, task, onToggle }) {
+      if (!task) {
+        return (
+          <Panel title="งานประจำวัน" emoji="📋" badge="อัปเดตสด" badgeClass="bg-emerald-100 text-emerald-700">
+            <EmptyState
+              emoji="📭"
+              title="ไม่มีงานที่กำลังเลือก"
+              hint="สลับวันหรือสร้างงานใหม่ ๆ ในแผนกต่าง ๆ"
+            />
+          </Panel>
+        );
+      }
+
+      const cat = CATEGORIES.find((c) => c.id === task.category) || CATEGORIES[0];
+      return (
+        <Panel title="งานประจำวัน" emoji="📋" badge="อัปเดตสด" badgeClass="bg-emerald-100 text-emerald-700">
+          <div className="rounded-xl border border-slate-200 bg-slate-50 p-3.5 animate-scaleUp">
+            <div className="flex items-center gap-1.5 flex-wrap mb-2">
+              <span className="text-[10px] rounded-full bg-white border border-slate-200 px-2 py-0.5 text-slate-500">
+                {cat.emoji} {cat.name}
+              </span>
+              <span className="text-[10px] rounded-full bg-white border border-slate-200 px-2 py-0.5 text-slate-500">
+                📅 {task.date}
+              </span>
+              <span className={'text-[10px] rounded-full px-2 py-0.5 font-medium ' +
+                (task.done ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700')}>
+                {task.done ? '✅ เสร็จแล้ว' : '⏳ ยังไม่เสร็จ'}
+              </span>
+            </div>
+
+            <p className={'text-sm font-semibold ' + (task.done ? 'line-through text-slate-400' : 'text-slate-800')}>
+              {task.text}
+            </p>
+
+            <dl className="mt-3 space-y-1 text-[11px] text-slate-500">
+              <div className="flex gap-2"><dt className="w-16 shrink-0">เจ้าของ</dt><dd className="font-medium text-slate-700">{task.ownerName || task.byName}</dd></div>
+              <div className="flex gap-2"><dt className="w-16 shrink-0">สร้างโดย</dt><dd className="font-medium text-slate-700">{task.byName}</dd></div>
+              <div className="flex gap-2"><dt className="w-16 shrink-0">แต้ม</dt><dd className="font-medium text-slate-700">+{task.points}</dd></div>
+              {task.done && task.doneByName && (
+                <div className="flex gap-2"><dt className="w-16 shrink-0">ปิดโดย</dt><dd className="font-medium text-emerald-700">{task.doneByName}</dd></div>
+              )}
+            </dl>
+
+            <button
+              onClick={() => onToggle(task)}
+              className={'mt-3 w-full rounded-xl py-2 text-xs font-semibold text-white transition-colors focus:outline-none focus:ring-2 ' +
+                (task.done ? 'bg-slate-400 hover:bg-slate-500 focus:ring-slate-300' : theme.primaryButton)}
+            >
+              {task.done ? '↩︎ เปิดงานนี้ใหม่' : '✓ ปิดงานนี้ รับ +' + task.points + ' แต้ม'}
+            </button>
+          </div>
+        </Panel>
+      );
+    }
+
+    /* ============================================================
+       ขวา: คลังไฟล์และลิงก์ของวันนี้
+       ============================================================ */
+
+    function LinkVaultPanel({ date, messages }) {
+      const links = useMemo(() => {
+        const out = [];
+        messages.filter((m) => m.pinDate === date).forEach((m) => {
+          extractLinks(m.text).forEach((url) => {
+            out.push({ url, name: m.name, pet: m.pet, ts: m.ts, id: m.id + url });
+          });
+        });
+        return out;
+      }, [date, messages]);
+
+      return (
+        <Panel
+          title="คลังไฟล์และลิงก์ของวันนี้"
+          emoji="🗃"
+          badge="ดึงข้อมูลอัตโนมัติจากแชท 🔄"
+          badgeClass="bg-emerald-100 text-emerald-700"
+        >
+          {links.length === 0 ? (
+            <EmptyState
+              emoji="🔗"
+              title="ยังไม่มีรูปภาพ คลิป หรือลิงก์ที่แชร์ของวันนี้"
+              hint="💡 ลองพิมพ์ลิงก์ในแชทโดยปักหมุดวันที่นี้ดูสิ!"
+            />
+          ) : (
+            <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
+              {links.map((l) => (
+                <a
+                  key={l.id}
+                  href={l.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block rounded-xl border border-amber-200 bg-amber-50 p-2.5 hover:bg-amber-100 transition-colors animate-scaleUp"
+                >
+                  <div className="text-[10px] text-amber-700 flex items-center gap-1">
+                    <span>🔗</span>
+                    <span className="truncate">แชร์โดย {l.name} · {timeLabel(l.ts)}</span>
+                  </div>
+                  <div className="text-xs font-medium text-amber-900 underline break-all mt-0.5">
+                    {shortUrl(l.url)}
+                  </div>
+                </a>
+              ))}
+            </div>
+          )}
+        </Panel>
+      );
+    }
+
+    /* ============================================================
+       ขวา: แชทอัปเดตกลุ่ม
+       ============================================================ */
+
+    function ChatPanel({ theme, me, messages, pinDate, onSend }) {
       const [text, setText] = useState('');
       const endRef = useRef(null);
 
       useEffect(() => {
-        if (endRef.current) endRef.current.scrollIntoView({ behavior: 'smooth' });
+        if (endRef.current) endRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }, [messages.length]);
 
       const submit = (e) => {
@@ -710,163 +1338,101 @@
       };
 
       return (
-        <div className="flex flex-col h-[calc(100vh-13rem)] animate-fadeIn">
-          <div className="flex-1 overflow-y-auto space-y-3 pr-1">
+        <Panel title="แชทอัปเดตกลุ่ม" emoji="🐾" badge={'📌 ' + pinDate} badgeClass="bg-rose-100 text-rose-600">
+          <div className="space-y-3 max-h-[26rem] overflow-y-auto pr-1">
             {messages.length === 0 && (
-              <p className="text-xs opacity-50 py-8 text-center">ยังไม่มีใครพูดอะไร เริ่มทักก่อนเลย 💬</p>
+              <EmptyState emoji="💬" title="ยังไม่มีใครพูดอะไร" hint="เริ่มทักก่อนเลย!" />
             )}
             {messages.map((m) => {
               const pet = PETS_CONFIG[m.pet] || PETS_CONFIG.dog;
-              const isMe = m.fromId === me.id;
+              const links = extractLinks(m.text);
               return (
-                <div key={m.id} className={'flex gap-2 items-end animate-scaleUp ' + (isMe ? 'flex-row-reverse' : '')}>
-                  <span className="text-2xl shrink-0">{pet.emoji}</span>
-                  <div className={'max-w-[75%] ' + (isMe ? 'text-right' : '')}>
-                    <div className="text-[10px] opacity-60 mb-0.5 px-1">{m.name} · {timeLabel(m.ts)}</div>
-                    <div className={'rounded-2xl border px-3.5 py-2 text-sm break-words text-left ' + pet.bubbleColor}>
-                      {m.text}
-                    </div>
+                <div key={m.id} className="animate-scaleUp">
+                  <div className="flex items-center gap-1.5 flex-wrap mb-1">
+                    <span className="text-base">{pet.emoji}</span>
+                    <span className="text-[11px] font-semibold text-slate-600">{m.name}</span>
+                    <span className="text-[10px] text-slate-400">({pet.name})</span>
+                    {m.pinDate && (
+                      <span className="text-[9px] rounded-full bg-rose-50 text-rose-500 px-1.5 py-0.5">
+                        📌 ปักหมุดวันที่ {m.pinDate}
+                      </span>
+                    )}
+                    <span className="text-[9px] text-slate-300 ml-auto">{timeLabel(m.ts)}</span>
                   </div>
+
+                  <div className={'rounded-2xl border px-3 py-2 text-xs break-words ' +
+                    (m.fromId === me.id ? 'bg-slate-100 border-slate-200 text-slate-700' : pet.bubbleColor)}>
+                    {m.text}
+                  </div>
+
+                  {links.map((url) => (
+                    <a
+                      key={url}
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-1 block rounded-xl border border-amber-200 bg-amber-50 px-2.5 py-1.5 hover:bg-amber-100 transition-colors"
+                    >
+                      <div className="text-[9px] text-amber-700">🔗 แชร์ลิงก์ด่วน</div>
+                      <div className="text-[11px] text-amber-900 underline break-all">{shortUrl(url)}</div>
+                    </a>
+                  ))}
                 </div>
               );
             })}
             <div ref={endRef}></div>
           </div>
 
-          <form onSubmit={submit} className="mt-3 flex gap-2">
+          <form onSubmit={submit} className="mt-3 flex gap-1.5">
             <input
               value={text}
               onChange={(e) => setText(e.target.value)}
               maxLength={200}
-              placeholder="พิมพ์ข้อความ..."
-              className="flex-1 rounded-xl bg-white/90 text-slate-900 px-4 py-2.5 outline-none focus:ring-2 focus:ring-white/60 placeholder:text-slate-400"
+              placeholder="พิมพ์ข้อความหรือวางลิงก์..."
+              className="flex-1 min-w-0 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs outline-none focus:ring-2 focus:ring-slate-300 placeholder:text-slate-400"
             />
             <button
               type="submit"
               disabled={!text.trim()}
-              className={'rounded-xl px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-40 transition-colors focus:outline-none focus:ring-2 ' + theme.primaryButton}
+              className={'shrink-0 rounded-xl px-3.5 py-2 text-xs font-semibold text-white disabled:opacity-40 transition-colors focus:outline-none focus:ring-2 ' + theme.primaryButton}
             >
               ส่ง
             </button>
           </form>
-        </div>
+          <p className="text-[10px] text-slate-400 mt-1.5">ข้อความจะถูกปักหมุดที่วันที่ {pinDate} และลิงก์จะเข้าคลังอัตโนมัติ</p>
+        </Panel>
       );
     }
 
     /* ============================================================
-       แท็บ: อันดับดาวเด่น
+       ปุ่มลอย: Focus Time
        ============================================================ */
 
-    function BoardTab({ me, members }) {
-      const ranked = useMemo(() => {
-        const list = [me, ...Object.values(members)];
-        return list.sort((a, b) => (b.points || 0) - (a.points || 0));
-      }, [me, members]);
+    function FocusButton({ theme, focusUntil, onStart, onStop }) {
+      const [now, setNow] = useState(Date.now());
 
-      const medals = ['🥇', '🥈', '🥉'];
+      useEffect(() => {
+        if (!focusUntil) return;
+        const t = setInterval(() => setNow(Date.now()), 500);
+        return () => clearInterval(t);
+      }, [focusUntil]);
 
-      return (
-        <div className="space-y-3 animate-fadeIn">
-          <Card className="text-center">
-            <div className="text-3xl mb-1">🏆</div>
-            <p className="text-sm opacity-80">ปิดงานได้แต้ม ยิ่งแต้มเยอะยิ่งเลเวลสูง (50 แต้ม = 1 เลเวล)</p>
-          </Card>
-
-          {ranked.map((m, i) => {
-            const pet = PETS_CONFIG[m.pet] || PETS_CONFIG.dog;
-            return (
-              <div key={m.id} className={'flex items-center gap-3 rounded-2xl border p-3.5 animate-scaleUp ' +
-                (m.id === me.id ? 'border-white/60 bg-white/20' : 'border-white/20 bg-white/10')}>
-                <span className="w-8 text-center text-lg shrink-0">{medals[i] || (i + 1)}</span>
-                <span className="text-3xl shrink-0">{pet.emoji}</span>
-                <div className="min-w-0 flex-1">
-                  <div className="font-semibold text-sm truncate">{m.name}</div>
-                  <div className="mt-1.5 h-2 rounded-full bg-black/25 overflow-hidden">
-                    <div className="h-full bg-white/70 rounded-full transition-all duration-500" style={{ width: levelProgress(m.points) + '%' }}></div>
-                  </div>
-                </div>
-                <div className="text-right shrink-0">
-                  <div className="font-black">{m.points || 0}</div>
-                  <div className="text-[10px] opacity-60">Lv.{levelOf(m.points)}</div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      );
-    }
-
-    /* ============================================================
-       แท็บ: สุ่มข้าวเที่ยง
-       ============================================================ */
-
-    function FoodTab({ theme, foods, result, spinning, onSpin, onAddFood }) {
-      const [text, setText] = useState('');
-      const [emoji, setEmoji] = useState('🍚');
-
-      const add = (e) => {
-        e.preventDefault();
-        const t = text.trim();
-        if (!t) return;
-        onAddFood({ name: t, emoji: emoji.trim() || '🍚' });
-        setText('');
-      };
+      const running = focusUntil && focusUntil > now;
+      const left = running ? Math.max(0, focusUntil - now) : 0;
+      const mm = String(Math.floor(left / 60000)).padStart(2, '0');
+      const ss = String(Math.floor((left % 60000) / 1000)).padStart(2, '0');
 
       return (
-        <div className="space-y-5 animate-fadeIn">
-          <Card className="text-center">
-            <div className={'text-7xl mb-3 ' + (spinning ? 'animate-bounce' : '')}>
-              {spinning ? '🎰' : (result ? result.emoji : '🍽️')}
-            </div>
-            <p className="text-lg font-bold min-h-[1.75rem]">
-              {spinning ? 'กำลังสุ่ม...' : (result ? result.name : 'กดปุ่มให้ฟ้าลิขิตมื้อเที่ยง')}
-            </p>
-            {result && !spinning && result.byName && (
-              <p className="text-[11px] opacity-60 mt-1">สุ่มโดย {result.byName}</p>
-            )}
-            <button
-              onClick={onSpin}
-              disabled={spinning || foods.length === 0}
-              className={'mt-4 rounded-xl px-6 py-3 font-semibold text-white disabled:opacity-40 transition-colors focus:outline-none focus:ring-2 ' + theme.primaryButton}
-            >
-              สุ่มเลย! 🎲
-            </button>
-          </Card>
-
-          <div>
-            <h2 className="text-sm font-semibold mb-2 opacity-80">ตัวเลือกในโถ ({foods.length})</h2>
-            <div className="flex flex-wrap gap-2">
-              {foods.map((f, i) => (
-                <span key={f.name + i} className="rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-xs">
-                  {f.emoji} {f.name}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          <form onSubmit={add} className="flex gap-2">
-            <input
-              value={emoji}
-              onChange={(e) => setEmoji(e.target.value)}
-              maxLength={4}
-              className="w-16 text-center rounded-xl bg-white/90 text-slate-900 px-2 py-2.5 outline-none focus:ring-2 focus:ring-white/60"
-            />
-            <input
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              maxLength={30}
-              placeholder="เพิ่มเมนูใหม่..."
-              className="flex-1 rounded-xl bg-white/90 text-slate-900 px-4 py-2.5 outline-none focus:ring-2 focus:ring-white/60 placeholder:text-slate-400"
-            />
-            <button
-              type="submit"
-              disabled={!text.trim()}
-              className={'rounded-xl px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-40 transition-colors focus:outline-none focus:ring-2 ' + theme.primaryButton}
-            >
-              เพิ่ม
-            </button>
-          </form>
-        </div>
+        <button
+          onClick={running ? onStop : onStart}
+          className={'fixed bottom-5 right-5 z-40 rounded-full px-6 py-3.5 font-bold text-white shadow-2xl transition-all hover:scale-105 active:scale-95 flex items-center gap-2 ' +
+            (running ? 'bg-gradient-to-r from-rose-500 to-red-600' : theme.primaryButton)}
+        >
+          <span className={running ? 'animate-pulse' : ''}>🕐</span>
+          {running
+            ? <span>โฟกัสอยู่ {mm}:{ss} — กดเพื่อหยุด</span>
+            : <span>Focus Time ({FOCUS_MINUTES} นาที)</span>}
+        </button>
       );
     }
 
@@ -885,7 +1451,8 @@
           name: saved ? saved.name : '',
           pet: saved ? saved.pet : 'dog',
           mood: null,
-          points: readStore('pawmate.points', 0)
+          points: readStore('pawmate.points', 0),
+          focusUntil: null
         };
       });
 
@@ -893,17 +1460,23 @@
       const [tasks, setTasks] = useState([]);
       const [messages, setMessages] = useState([]);
       const [themeId, setThemeId] = useState('purple');
-      const [foods, setFoods] = useState(DEFAULT_FOODS);
-      const [foodResult, setFoodResult] = useState(null);
-      const [spinning, setSpinning] = useState(false);
-      const [tab, setTab] = useState('lobby');
       const [toasts, setToasts] = useState([]);
-      const [showThemes, setShowThemes] = useState(false);
+
+      const [selectedDate, setSelectedDate] = useState(() => toISO(new Date()));
+      const [weekAnchor, setWeekAnchor] = useState(() => toISO(new Date()));
+      const [category, setCategory] = useState('marketing');
+      const [selectedTaskId, setSelectedTaskId] = useState(null);
+      const [showMonth, setShowMonth] = useState(false);
+
+      const [fullness, setFullness] = useState(() => readStore('pawmate.fullness', 70));
+      const [petMsg, setPetMsg] = useState('');
+      const [lastPoke, setLastPoke] = useState(() => Date.now());
+      const [tick, setTick] = useState(0);   // เดินเวลาให้สัตว์เลี้ยงหลับเองได้แม้ไม่มีใครแตะจอ
 
       const syncedRef = useRef(false);
       const publishRef = useRef(() => {});
-      const stateRef = useRef({ tasks, messages, themeId, foods });
-      stateRef.current = { tasks, messages, themeId, foods };
+      const stateRef = useRef({ tasks, messages, themeId });
+      stateRef.current = { tasks, messages, themeId };
 
       const theme = THEMES_CONFIG[themeId] || THEMES_CONFIG.purple;
 
@@ -945,9 +1518,8 @@
                 publishRef.current('sync-state', {
                   to: from.id,
                   tasks: s.tasks,
-                  messages: s.messages.slice(-30),
-                  themeId: s.themeId,
-                  foods: s.foods
+                  messages: s.messages.slice(-40),
+                  themeId: s.themeId
                 });
               }, 300 + Math.random() * 400);
             }
@@ -961,13 +1533,13 @@
             setTasks(payload.tasks || []);
             setMessages(payload.messages || []);
             if (payload.themeId && THEMES_CONFIG[payload.themeId]) setThemeId(payload.themeId);
-            if (payload.foods && payload.foods.length) setFoods(payload.foods);
             break;
           }
 
           case 'chat':
             setMessages((prev) => [...prev.slice(-99), {
-              id: payload.id, text: payload.text, fromId: from.id, name: from.name, pet: from.pet, ts
+              id: payload.id, text: payload.text, pinDate: payload.pinDate,
+              fromId: from.id, name: from.name, pet: from.pet, ts
             }]);
             break;
 
@@ -983,12 +1555,13 @@
 
           case 'task-delete':
             setTasks((prev) => prev.filter((t) => t.id !== payload.id));
+            setSelectedTaskId((cur) => (cur === payload.id ? null : cur));
             break;
 
           case 'poke': {
             const pet = PETS_CONFIG[payload.pet] || PETS_CONFIG.dog;
             playSynthesizedSound(pet.sound);
-            toast(from.name + ' ทัก ' + payload.targetName + ' ' + pet.emoji);
+            toast(from.name + ' ' + payload.action + ' ' + pet.emoji);
             break;
           }
 
@@ -999,14 +1572,10 @@
             }
             break;
 
-          case 'food-add':
-            setFoods((prev) => prev.some((f) => f.name === payload.food.name) ? prev : [...prev, payload.food]);
-            break;
-
-          case 'food-result':
-            setSpinning(true);
-            setFoodResult(null);
-            setTimeout(() => { setSpinning(false); setFoodResult(payload.food); }, 900);
+          case 'focus':
+            toast(payload.on
+              ? from.name + ' เข้าโหมด Focus Time — อย่าเพิ่งกวนนะ 🕐'
+              : from.name + ' ออกจากโหมดโฟกัสแล้ว ✨');
             break;
 
           case 'presence':
@@ -1034,8 +1603,50 @@
         return () => clearInterval(timer);
       }, []);
 
-      /* ---------- เก็บแต้มไว้ในเครื่อง ---------- */
+      /* ---------- เก็บค่าไว้ในเครื่อง ---------- */
       useEffect(() => { writeStore('pawmate.points', me.points); }, [me.points]);
+      useEffect(() => { writeStore('pawmate.fullness', fullness); }, [fullness]);
+
+      /* ---------- สัตว์เลี้ยงหิวลงเรื่อย ๆ ---------- */
+      useEffect(() => {
+        const t = setInterval(() => setFullness((f) => clamp(f - 1, 0, 100)), 15000);
+        return () => clearInterval(t);
+      }, []);
+
+      /* ---------- นาฬิกาเดินทุก 5 วิ ให้สถานะหลับ/ตื่นอัปเดตเอง ---------- */
+      useEffect(() => {
+        const t = setInterval(() => setTick((n) => n + 1), 5000);
+        return () => clearInterval(t);
+      }, []);
+
+      /* ---------- Focus Time หมดเวลา ---------- */
+      useEffect(() => {
+        if (!me.focusUntil) return;
+        const left = me.focusUntil - Date.now();
+        if (left <= 0) return;
+        const t = setTimeout(() => {
+          playSynthesizedSound('chime');
+          toast('หมดเวลาโฟกัสแล้ว! พักสายตาหน่อยนะ 🎉');
+          setMe((prev) => ({ ...prev, focusUntil: null }));
+          publishRef.current('focus', { on: false });
+        }, left);
+        return () => clearTimeout(t);
+      }, [me.focusUntil, toast]);
+
+      // อ้าง tick เพื่อให้ค่านี้คำนวณใหม่ทุก 5 วิ ไม่ใช่รอ state อื่นเปลี่ยน
+      const sleeping = tick >= 0 && !me.focusUntil && Date.now() - lastPoke > 45000;
+
+      /* ---------- ข้อมูลที่คำนวณ ---------- */
+      const houseTotal = useMemo(() => {
+        return [me, ...Object.values(members)].reduce((sum, m) => sum + (m.points || 0), 0);
+      }, [me, members]);
+      const houseLevel = Math.floor(houseTotal / HOUSE_EXP_PER_LEVEL) + 1;
+      const houseExp = houseTotal % HOUSE_EXP_PER_LEVEL;
+
+      const selectedTask = useMemo(
+        () => tasks.find((t) => t.id === selectedTaskId) || null,
+        [tasks, selectedTaskId]
+      );
 
       /* ---------- actions ---------- */
       const join = (data) => {
@@ -1057,21 +1668,29 @@
         syncedRef.current = false;
       };
 
+      const renameMe = (name) => {
+        setMe((prev) => ({ ...prev, name }));
+        const s = { ...session, name };
+        writeStore('pawmate.session', s);
+        setSession(s);
+        setTimeout(() => publishRef.current('presence', null), 0);
+      };
+
       const setMood = (mood) => {
         setMe((prev) => ({ ...prev, mood }));
         setTimeout(() => publishRef.current('presence', null), 0);
       };
 
-      const poke = (target) => {
-        const pet = PETS_CONFIG[target.pet] || PETS_CONFIG.dog;
-        playSynthesizedSound(pet.sound);
-        publish('poke', { targetId: target.id, targetName: target.name, pet: target.pet });
-      };
-
-      const addTask = (text, points) => {
-        const task = { id: uid(), text, points, done: false, byId: me.id, byName: me.name, ts: Date.now() };
+      const addTask = ({ text, category, date, points, ownerId, ownerName }) => {
+        const task = {
+          id: uid(), text, category, date, points, done: false,
+          byId: me.id, byName: me.name, ownerId, ownerName, ts: Date.now()
+        };
         setTasks((prev) => [...prev, task]);
+        setSelectedTaskId(task.id);
+        setSelectedDate(date);
         publish('task-add', { task });
+        playSynthesizedSound(PETS_CONFIG[me.pet].sound);
       };
 
       const toggleTask = (task) => {
@@ -1086,6 +1705,8 @@
           setMe((prev) => ({ ...prev, points: (prev.points || 0) + task.points }));
           playSynthesizedSound(PETS_CONFIG[me.pet].sound);
           toast('เก่งมาก! +' + task.points + ' แต้ม 🎉');
+          setPetMsg('เย้! ปิดงานได้อีกชิ้น เก่งที่สุดเลย! 🎉');
+          setLastPoke(Date.now());
         } else if (task.doneById === me.id) {
           setMe((prev) => ({ ...prev, points: Math.max(0, (prev.points || 0) - task.points) }));
         }
@@ -1094,123 +1715,192 @@
 
       const deleteTask = (task) => {
         setTasks((prev) => prev.filter((t) => t.id !== task.id));
+        if (selectedTaskId === task.id) setSelectedTaskId(null);
         publish('task-delete', { id: task.id });
       };
 
       const sendChat = (text) => {
-        const m = { id: uid(), text, fromId: me.id, name: me.name, pet: me.pet, ts: Date.now() };
+        const m = {
+          id: uid(), text, pinDate: selectedDate,
+          fromId: me.id, name: me.name, pet: me.pet, ts: Date.now()
+        };
         setMessages((prev) => [...prev.slice(-99), m]);
-        publish('chat', { id: m.id, text });
+        publish('chat', { id: m.id, text, pinDate: selectedDate });
       };
 
       const changeTheme = (id) => {
         setThemeId(id);
-        setShowThemes(false);
         publish('theme', { id });
       };
 
-      const addFood = (food) => {
-        setFoods((prev) => prev.some((f) => f.name === food.name) ? prev : [...prev, food]);
-        publish('food-add', { food });
+      const wakePet = () => {
+        playSynthesizedSound(PETS_CONFIG[me.pet].sound);
+        setLastPoke(Date.now());
+        setPetMsg(sleeping
+          ? 'หวัดดี! ตื่นแล้ววว ตัวเบาโหวงเลย ✨'
+          : IDLE_LINES[Math.floor(Math.random() * IDLE_LINES.length)]);
+        publish('poke', { action: 'ปลุกสัตว์เลี้ยงของตัวเอง', pet: me.pet });
       };
 
-      const spinFood = () => {
-        if (foods.length === 0) return;
-        setSpinning(true);
-        setFoodResult(null);
-        setTimeout(() => {
-          const picked = Object.assign({}, foods[Math.floor(Math.random() * foods.length)], { byName: me.name });
-          setSpinning(false);
-          setFoodResult(picked);
-          playSynthesizedSound(PETS_CONFIG[me.pet].sound);
-          publish('food-result', { food: picked });
-        }, 900);
+      const feedPet = () => {
+        const food = DEFAULT_FOODS[Math.floor(Math.random() * DEFAULT_FOODS.length)];
+        playSynthesizedSound(PETS_CONFIG[me.pet].sound);
+        setFullness((f) => clamp(f + 20, 0, 100));
+        setLastPoke(Date.now());
+        setPetMsg('อร่อยจัง! ' + food.emoji + ' ' + food.name + ' อิ่มขึ้นอีก 20% แล้ว');
+        publish('poke', { action: 'ป้อน ' + food.name + ' ให้', pet: me.pet });
       };
+
+      const pinchPet = () => {
+        playSynthesizedSound(PETS_CONFIG[me.pet].sound);
+        setLastPoke(Date.now());
+        setPetMsg('โอ๊ย! เจ็บนะ 😾 หยิกแรงไปแล้ววว');
+        publish('poke', { action: 'หยิกแก้ม', pet: me.pet });
+      };
+
+      const startFocus = () => {
+        const until = Date.now() + FOCUS_MINUTES * 60000;
+        setMe((prev) => ({ ...prev, focusUntil: until }));
+        setLastPoke(Date.now());
+        setPetMsg('โหมดโฟกัส! เดี๋ยวเฝ้าให้ ห้ามใครกวน 🔕');
+        publish('focus', { on: true });
+        setTimeout(() => publishRef.current('presence', null), 0);
+      };
+
+      const stopFocus = () => {
+        setMe((prev) => ({ ...prev, focusUntil: null }));
+        publish('focus', { on: false });
+        setTimeout(() => publishRef.current('presence', null), 0);
+      };
+
+      /* ---------- ข้อความสัตว์เลี้ยงตามสถานะ ---------- */
+      useEffect(() => {
+        if (!petMsg) return;
+        const t = setTimeout(() => setPetMsg(''), 6000);
+        return () => clearTimeout(t);
+      }, [petMsg]);
+
+      const petLine = petMsg
+        || (sleeping ? 'ฟี้... Zzz... 😴 (หลับปุ๋ย... คลิกที่ตัวเค้าเพื่อปลุกสิ)' : '')
+        || (fullness < 25 ? 'ท้องร้องแล้วนะ... 🥺 ขออาหารหน่อยได้ไหม' : '');
 
       /* ---------- render ---------- */
       if (!session) {
         return <JoinScreen onJoin={join} initial={{ name: me.name, pet: me.pet, room: '' }} />;
       }
 
-      const memberCount = Object.keys(members).length + 1;
-
       return (
-        <div className={'min-h-screen ' + theme.bgClass}>
-          <header className={'sticky top-0 z-30 border-b backdrop-blur-md shadow-lg ' + theme.headerClass}>
-            <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
-              <span className="text-2xl shrink-0">{theme.bannerEmoji}</span>
-              <div className="min-w-0 flex-1">
-                <h1 className="font-black leading-tight">Pawmate</h1>
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-[11px] opacity-70">ห้อง {session.room} · {memberCount} ตัว</span>
-                  <StatusDot status={status} />
-                </div>
-              </div>
+        <div className={'min-h-screen pb-24 ' + theme.bgClass}>
+          <Header
+            theme={theme}
+            me={me}
+            houseLevel={houseLevel}
+            houseExp={houseExp}
+            status={status}
+            room={session.room}
+            memberCount={Object.keys(members).length + 1}
+            onName={renameMe}
+            onMood={setMood}
+            onTheme={changeTheme}
+            onLeave={leave}
+          />
 
-              <div className="relative shrink-0">
-                <button
-                  onClick={() => setShowThemes((v) => !v)}
-                  className="rounded-xl border border-white/25 bg-white/10 hover:bg-white/20 px-3 py-2 text-sm transition-colors"
-                  title="เปลี่ยนธีม (เปลี่ยนให้ทุกคนในห้อง)"
-                >
-                  🎨
-                </button>
-                {showThemes && (
-                  <div className="absolute right-0 mt-2 w-60 rounded-2xl border border-white/20 bg-slate-900/95 backdrop-blur-md p-1.5 shadow-2xl animate-scaleUp">
-                    {Object.values(THEMES_CONFIG).map((t) => (
-                      <button
-                        key={t.id}
-                        onClick={() => changeTheme(t.id)}
-                        className={'w-full text-left text-xs rounded-xl px-3 py-2 transition-colors ' +
-                          (t.id === themeId ? 'bg-white/20 text-white font-medium' : 'text-white/80 hover:bg-white/10')}
-                      >
-                        {t.name}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
+          <div className="max-w-[1800px] mx-auto px-3 py-4 grid gap-4 grid-cols-1 lg:grid-cols-[280px_minmax(0,1fr)] xl:grid-cols-[280px_minmax(0,1fr)_340px]">
 
-              <button
-                onClick={leave}
-                className="shrink-0 rounded-xl border border-white/25 bg-white/10 hover:bg-white/20 px-3 py-2 text-sm transition-colors"
-                title="ออกจากห้อง"
-              >
-                🚪
-              </button>
+            {/* ---------- ซ้าย ---------- */}
+            <div className="space-y-4 animate-fadeIn">
+              <WorkloadPanel me={me} members={members} tasks={tasks} />
+              <CategoryPanel theme={theme} tasks={tasks} selected={category} onSelect={setCategory} />
+              <CreateTaskPanel
+                theme={theme}
+                category={category}
+                date={selectedDate}
+                me={me}
+                members={members}
+                onAdd={addTask}
+              />
             </div>
-          </header>
 
-          <div className="max-w-6xl mx-auto px-4 py-5 flex flex-col md:flex-row gap-5">
-            <nav className="md:w-52 shrink-0 flex md:flex-col gap-1.5 overflow-x-auto pb-1 md:pb-0">
-              {TABS.map((t) => (
+            {/* ---------- กลาง ---------- */}
+            <div className="space-y-4 animate-fadeIn">
+              <div className="flex items-end justify-between gap-3 flex-wrap">
+                <div>
+                  <h2 className="text-xl font-black flex items-center gap-2">
+                    <span>🗓</span> แผงควบคุมและปฏิทินของทีม
+                  </h2>
+                  <p className="text-xs opacity-60 mt-0.5">เลือกดูหัวข้องานของแต่ละวันอย่างเป็นระบบ</p>
+                </div>
                 <button
-                  key={t.id}
-                  onClick={() => setTab(t.id)}
-                  className={'whitespace-nowrap rounded-xl px-4 py-2.5 text-sm text-left transition-all ' +
-                    (tab === t.id ? theme.activeTabClass : 'border-l-4 border-transparent hover:bg-white/10 opacity-80')}
+                  onClick={() => setShowMonth(true)}
+                  className={'rounded-xl px-4 py-2.5 text-sm font-semibold text-white shadow-lg transition-colors focus:outline-none focus:ring-2 ' + theme.primaryButton}
                 >
-                  {t.emoji} {t.label}
+                  📝 ดูปฏิทินทั้งเดือน
                 </button>
-              ))}
-            </nav>
+              </div>
 
-            <main className="flex-1 min-w-0">
-              {tab === 'lobby' && <LobbyTab theme={theme} me={me} members={members} onPoke={poke} onMood={setMood} />}
-              {tab === 'tasks' && <TasksTab theme={theme} tasks={tasks} onAdd={addTask} onToggle={toggleTask} onDelete={deleteTask} />}
-              {tab === 'chat' && <ChatTab theme={theme} me={me} messages={messages} onSend={sendChat} />}
-              {tab === 'board' && <BoardTab me={me} members={members} />}
-              {tab === 'food' && <FoodTab theme={theme} foods={foods} result={foodResult} spinning={spinning} onSpin={spinFood} onAddFood={addFood} />}
-            </main>
+              <WeekStrip
+                theme={theme}
+                anchor={weekAnchor}
+                selected={selectedDate}
+                tasks={tasks}
+                onSelect={setSelectedDate}
+                onShift={(n) => {
+                  const next = toISO(addDays(fromISO(weekAnchor), n));
+                  setWeekAnchor(next);
+                  setSelectedDate(next);
+                }}
+              />
+
+              <DayTaskList
+                theme={theme}
+                date={selectedDate}
+                tasks={tasks}
+                me={me}
+                selectedTaskId={selectedTaskId}
+                onPick={setSelectedTaskId}
+                onToggle={toggleTask}
+                onDelete={deleteTask}
+              />
+
+              <PetYard
+                theme={theme}
+                me={me}
+                fullness={fullness}
+                sleeping={sleeping}
+                message={petLine}
+                onWake={wakePet}
+                onFeed={feedPet}
+                onPinch={pinchPet}
+              />
+            </div>
+
+            {/* ---------- ขวา ---------- */}
+            <div className="space-y-4 animate-fadeIn">
+              <TaskDetailPanel theme={theme} task={selectedTask} onToggle={toggleTask} />
+              <LinkVaultPanel date={selectedDate} messages={messages} />
+              <ChatPanel theme={theme} me={me} messages={messages} pinDate={selectedDate} onSend={sendChat} />
+            </div>
           </div>
 
-          <footer className="max-w-6xl mx-auto px-4 pb-6 text-center">
+          {showMonth && (
+            <MonthModal
+              theme={theme}
+              anchor={weekAnchor}
+              selected={selectedDate}
+              tasks={tasks}
+              onSelect={(iso) => { setSelectedDate(iso); setWeekAnchor(iso); }}
+              onClose={() => setShowMonth(false)}
+            />
+          )}
+
+          <FocusButton theme={theme} focusUntil={me.focusUntil} onStart={startFocus} onStop={stopFocus} />
+          <Toasts toasts={toasts} />
+
+          <footer className="max-w-[1800px] mx-auto px-4 pb-4 text-center">
             <p className="text-[10px] opacity-40">
               sync ผ่าน MQTT broker สาธารณะแบบไม่เข้ารหัส — อย่าใส่ข้อมูลลับ
             </p>
           </footer>
-
-          <Toasts toasts={toasts} />
         </div>
       );
     }
