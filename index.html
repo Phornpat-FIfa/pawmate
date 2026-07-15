@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pawmate - Realtime Teamwork Workspace & Gamification App</title>
+
+  <!-- Tailwind CSS (JIT ในบราวเซอร์) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Families (Mitr & Inter) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Mitr:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- MQTT.js สำหรับ sync เรียลไทม์ข้ามเครื่อง/มือถือผ่านอินเทอร์เน็ต -->
+  <script src="https://cdn.jsdelivr.net/npm/mqtt@4.3.7/dist/mqtt.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Mitr', 'Inter', sans-serif;
+    }
+
+    /* Smooth transition animations for panels and buttons */
+    .animate-fadeIn {
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+    .animate-scaleUp {
+      animation: scaleUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+    .animate-wiggle {
+      animation: wiggle 0.5s ease-in-out infinite;
+    }
+    .animate-bounce-slow {
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scaleUp {
+      from { opacity: 0; transform: scale(0.94); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(-3deg); }
+      50% { transform: rotate(3deg); }
+    }
+
+    /* Scrollbar customization */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0,0,0,0.03);
+      border-radius: 12px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(0,0,0,0.12);
+      border-radius: 12px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(0,0,0,0.25);
+    }
+  </style>
+
+  <!-- React 18, React DOM and Babel Standalone for live JSX transpilation -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-900 antialiased overflow-x-hidden selection:bg-indigo-100">
+
+  <div id="root" class="min-h-screen flex flex-col justify-between">
+    <div class="flex flex-col items-center justify-center min-h-screen p-6 text-center">
+      <span class="text-7xl animate-bounce-slow">🏡🐶🐱</span>
+      <h1 class="text-2xl font-black text-indigo-700 mt-5">Pawmate กำลังเตรียมเปิดบ้าน...</h1>
+      <p class="text-xs text-slate-400 mt-2">บราวเซอร์กำลังประมวลผลสคริปต์ React, Tailwind และเครื่องมือจำลองสื่อการทำงานเรียลไทม์</p>
+    </div>
+  </div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef, useMemo, useCallback } = React;
+
+    /* ============================================================
+       CONFIG
+       ============================================================ */
+
+    const PETS_CONFIG = {
+      dog: { emoji: '🐶', name: 'สุนัข', sound: 'dog', color: 'bg-blue-100 text-blue-800 border-blue-300', bubbleColor: 'bg-blue-50 text-blue-900 border-blue-200' },
+      cat: { emoji: '🐱', name: 'แมว', sound: 'cat', color: 'bg-orange-100 text-orange-800 border-orange-300', bubbleColor: 'bg-orange-50 text-orange-900 border-orange-200' },
+      duck: { emoji: '🦆', name: 'เป็ด', sound: 'duck', color: 'bg-yellow-100 text-yellow-800 border-yellow-300', bubbleColor: 'bg-yellow-50 text-yellow-900 border-yellow-200' },
+      panda: { emoji: '🐼', name: 'แพนด้า', sound: 'dog', color: 'bg-slate-100 text-slate-800 border-slate-300', bubbleColor: 'bg-slate-50 text-slate-900 border-slate-200' },
+      koala: { emoji: '🐨', name: 'โคอาล่า', sound: 'cat', color: 'bg-stone-100 text-stone-800 border-stone-300', bubbleColor: 'bg-stone-50 text-stone-900 border-stone-200' },
+      mouse: { emoji: '🐭', name: 'หนู', sound: 'duck', color: 'bg-purple-100 text-purple-800 border-purple-300', bubbleColor: 'bg-purple-50 text-purple-900 border-purple-200' }
+    };
+
+    const THEMES_CONFIG = {
+      purple: {
+        id: 'purple',
+        name: 'ธีมสีม่วง สัตว์กินองุ่น 🍇',
+        bgClass: 'bg-gradient-to-br from-indigo-900 via-purple-800 to-fuchsia-900 text-white',
+        headerClass: 'bg-purple-950/90 border-purple-800 shadow-purple-900/50 text-white',
+        primaryButton: 'bg-fuchsia-600 hover:bg-fuchsia-700 focus:ring-fuchsia-500',
+        activeTabClass: 'bg-purple-900/75 text-white border-l-4 border-fuchsia-500 shadow-sm',
+        accentText: 'text-purple-300',
+        bannerEmoji: '🍇',
+        illustrationText: '🐨🍇 แก๊งคู่ซี้แวะมาปิคนิคเก็บองุ่นหวานฉ่ำ! 🐼🍇'
+      },
+      lightblue: {
+        id: 'lightblue',
+        name: 'ธีมสีฟ้า สัตว์ว่ายน้ำ 🏊‍♂️',
+        bgClass: 'bg-gradient-to-br from-sky-800 via-cyan-800 to-blue-900 text-white',
+        headerClass: 'bg-cyan-950/95 border-cyan-800 shadow-cyan-900/50 text-white',
+        primaryButton: 'bg-sky-500 hover:bg-sky-600 focus:ring-sky-400',
+        activeTabClass: 'bg-cyan-900/80 text-white border-l-4 border-cyan-400 shadow-sm',
+        accentText: 'text-cyan-200',
+        bannerEmoji: '🏊‍♂️',
+        illustrationText: '🦆🌊 ชวนกันเล่นน้ำคลายร้อนริมหาดทรายขาว! 🐨🏊‍♂️'
+      },
+      blue: {
+        id: 'blue',
+        name: 'ธีมน้ำเงิน สัตว์ตั้งใจทำงาน 💻',
+        bgClass: 'bg-gradient-to-br from-blue-900 via-indigo-950 to-indigo-900 text-white',
+        headerClass: 'bg-indigo-950/90 border-indigo-800 shadow-indigo-950/50 text-white',
+        primaryButton: 'bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500',
+        activeTabClass: 'bg-indigo-900/80 text-white border-l-4 border-indigo-400 shadow-sm',
+        accentText: 'text-indigo-300',
+        bannerEmoji: '💻',
+        illustrationText: '🐹💻 แก๊งตัวการ์ตูนปั่นงานร่วมใจสู้ชีวิตเสร็จทันเวลา! 🐨💼'
+      },
+      green: {
+        id: 'green',
+        name: 'ธีมสีเขียว สัตว์กินชาเขียว 🍵',
+        bgClass: 'bg-gradient-to-br from-emerald-950 via-green-800 to-teal-950 text-white',
+        headerClass: 'bg-emerald-950/95 border-emerald-800 shadow-emerald-900/50 text-white',
+        primaryButton: 'bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-500',
+        activeTabClass: 'bg-emerald-900/80 text-white border-l-4 border-emerald-400 shadow-sm',
+        accentText: 'text-emerald-200',
+        bannerEmoji: '🍵',
+        illustrationText: '🐼🍵 จิบมัทฉะอุ่น ๆ กินดังโงะหนึบหนับผ่อนคลาย! 🐭🍡'
+      },
+      yellow: {
+        id: 'yellow',
+        name: 'ธีมเหลือง เลม่อนโซดา 🍋',
+        bgClass: 'bg-gradient-to-br from-yellow-100 via-amber-200 to-orange-300 text-amber-950',
+        headerClass: 'bg-yellow-100/90 border-yellow-300 shadow-yellow-300/50 text-amber-950',
+        primaryButton: 'bg-amber-600 hover:bg-amber-700 focus:ring-amber-500',
+        activeTabClass: 'bg-yellow-100 text-amber-900 border-l-4 border-amber-600 shadow-sm',
+        accentText: 'text-amber-700',
+        bannerEmoji: '🍋',
+        illustrationText: '🦆🍋 ดูดเลม่อนโซดาซ่าส์สะใจ ปลดล็อกความเหนื่อยล้า! 🐭🥤'
+      },
+      orange: {
+        id: 'orange',
+        name: 'ธีมสีส้ม สัตว์กินส้ม 🍊',
+        bgClass: 'bg-gradient-to-br from-orange-400 via-amber-400 to-red-600 text-white',
+        headerClass: 'bg-orange-950/90 border-orange-800 shadow-orange-900/50 text-white',
+        primaryButton: 'bg-orange-600 hover:bg-orange-700 focus:ring-orange-500',
+        activeTabClass: 'bg-orange-800/80 text-white border-l-4 border-orange-400 shadow-sm',
+        accentText: 'text-orange-200',
+        bannerEmoji: '🍊',
+        illustrationText: '🐱🍊 ปอกส้มสีทองแสนอร่อยแบ่งปันเพื่อนรัก! 🦆🍊'
+      },
+      pink: {
+        id: 'pink',
+        name: 'ธีมชมพู สัตว์รักกัน กินขนม 💖',
+        bgClass: 'bg-gradient-to-br from-pink-300 via-rose-300 to-purple-400 text-pink-950',
+        headerClass: 'bg-pink-50/90 border-pink-200 shadow-pink-200/50 text-pink-950',
+        primaryButton: 'bg-pink-600 hover:bg-pink-700 focus:ring-pink-500',
+        activeTabClass: 'bg-pink-100 text-pink-900 border-l-4 border-pink-600 shadow-sm',
+        accentText: 'text-pink-700',
+        bannerEmoji: '💖',
+        illustrationText: '🐨🍰 มอบหัวใจบอกรักแบ่งเค้กก้อนโตแสนหวาน! 🐰💕'
+      }
+    };
+
+    const DEFAULT_FOODS = [
+      { name: 'ก๋วยเตี๋ยว', emoji: '🍜' },
+      { name: 'ส้มตำแซ่บๆ', emoji: '🥗' },
+      { name: 'ชานมพ่นไฟ', emoji: '🧋' },
+      { name: 'พิซซ่าถาดโต', emoji: '🍕' },
+      { name: 'ไก่ทอดกรอบๆ', emoji: '🍗' },
+      { name: 'ราเมนอุ่นๆ', emoji: '🍜' }
+    ];
+
+    const MOODS_CONFIG = [
+      { emoji: '🥳', text: 'แฮปปี้จะตาย' },
+      { emoji: '💤', text: 'ง่วงซึมงีบหลับ' },
+      { emoji: '🚽', text: 'แอบแว๊บเข้าห้องน้ำ' },
+      { emoji: '🍕', text: 'หิวข้าวหน้ามืด' },
+      { emoji: '🧠', text: 'งานทับหัวสมองตึง' },
+      { emoji: '🔥', text: 'ปั่นงานเร่งด่วนสุดๆ' }
+    ];
+
+    const TABS = [
+      { id: 'lobby', label: 'ห้องนั่งเล่น', emoji: '🏡' },
+      { id: 'tasks', label: 'กระดานงาน', emoji: '📋' },
+      { id: 'chat', label: 'แชท', emoji: '💬' },
+      { id: 'board', label: 'อันดับดาวเด่น', emoji: '🏆' },
+      { id: 'food', label: 'สุ่มข้าวเที่ยง', emoji: '🍽️' }
+    ];
+
+    // Public MQTT broker (WebSocket over TLS) — ทุกคนที่รู้รหัสห้องเข้าถึงข้อความได้
+    const MQTT_BROKER = 'wss://broker.emqx.io:8084/mqtt';
+    const TOPIC_PREFIX = 'pawmate/v1/';
+    const HEARTBEAT_MS = 4000;
+    const MEMBER_TIMEOUT_MS = 13000;
+
+    /* ============================================================
+       SOUND — สังเคราะห์เสียงสัตว์ด้วย Web Audio API
+       ============================================================ */
+
+    let audioCtx = null;
+    const getAudioContext = () => {
+      const Ctor = window.AudioContext || window.webkitAudioContext;
+      if (!Ctor) return null;
+      if (!audioCtx) audioCtx = new Ctor();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      return audioCtx;
+    };
+
+    const playSynthesizedSound = (type) => {
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+
+        if (type === 'dog') {
+          const playBark = (offset) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain); gain.connect(ctx.destination);
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(120, now + offset);
+            osc.frequency.exponentialRampToValueAtTime(320, now + offset + 0.05);
+            osc.frequency.exponentialRampToValueAtTime(80, now + offset + 0.12);
+            gain.gain.setValueAtTime(0.4, now + offset);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + offset + 0.12);
+            osc.start(now + offset);
+            osc.stop(now + offset + 0.13);
+          };
+          playBark(0); playBark(0.18);
+
+        } else if (type === 'cat') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          const filter = ctx.createBiquadFilter();
+          osc.connect(filter); filter.connect(gain); gain.connect(ctx.destination);
+          osc.type = 'sawtooth';
+          filter.type = 'bandpass';
+          filter.frequency.setValueAtTime(900, now);
+          filter.Q.value = 4;
+          // เสียง "เมี้ยว" — ไล่ขึ้นเร็วแล้วลากเสียงลง
+          osc.frequency.setValueAtTime(520, now);
+          osc.frequency.exponentialRampToValueAtTime(880, now + 0.14);
+          osc.frequency.exponentialRampToValueAtTime(430, now + 0.55);
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.exponentialRampToValueAtTime(0.3, now + 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+          osc.start(now);
+          osc.stop(now + 0.62);
+
+        } else if (type === 'duck') {
+          const playQuack = (offset) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            const filter = ctx.createBiquadFilter();
+            osc.connect(filter); filter.connect(gain); gain.connect(ctx.destination);
+            osc.type = 'square';
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(1400, now + offset);
+            filter.Q.value = 8;
+            osc.frequency.setValueAtTime(420, now + offset);
+            osc.frequency.exponentialRampToValueAtTime(180, now + offset + 0.16);
+            gain.gain.setValueAtTime(0.28, now + offset);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + offset + 0.17);
+            osc.start(now + offset);
+            osc.stop(now + offset + 0.18);
+          };
+          playQuack(0); playQuack(0.22);
+        }
+      } catch (err) {
+        // เสียงเล่นไม่ได้ ไม่ควรทำให้ทั้งแอปพัง
+        console.warn('playSynthesizedSound failed:', err);
+      }
+    };
+
+    /* ============================================================
+       HELPERS
+       ============================================================ */
+
+    const uid = () => Math.random().toString(36).slice(2, 10);
+
+    const readStore = (key, fallback) => {
+      try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+      } catch (err) {
+        return fallback;
+      }
+    };
+
+    const writeStore = (key, value) => {
+      try { localStorage.setItem(key, JSON.stringify(value)); } catch (err) { /* โควตาเต็ม — ข้ามไป */ }
+    };
+
+    const levelOf = (points) => Math.floor((points || 0) / 50) + 1;
+    const levelProgress = (points) => ((points || 0) % 50) / 50 * 100;
+
+    const timeLabel = (ts) => {
+      const d = new Date(ts);
+      return d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0');
+    };
+
+    /* ============================================================
+       useRoom — เชื่อม MQTT, ดูแล presence, ส่ง/รับ event
+       ============================================================ */
+
+    function useRoom({ room, me, onMessage }) {
+      const [status, setStatus] = useState('connecting'); // connecting | online | offline
+      const clientRef = useRef(null);
+      const meRef = useRef(me);
+      const onMessageRef = useRef(onMessage);
+      meRef.current = me;
+      onMessageRef.current = onMessage;
+
+      const publish = useCallback((type, payload) => {
+        const client = clientRef.current;
+        if (!client || !client.connected || !room) return;
+        const { id, name, pet, mood, points } = meRef.current;
+        const envelope = { type, payload, ts: Date.now(), from: { id, name, pet, mood, points } };
+        client.publish(TOPIC_PREFIX + room, JSON.stringify(envelope));
+      }, [room]);
+
+      useEffect(() => {
+        if (!room) return;
+        const topic = TOPIC_PREFIX + room;
+        let client;
+        try {
+          client = mqtt.connect(MQTT_BROKER, {
+            clientId: 'pawmate_' + meRef.current.id + '_' + uid(),
+            clean: true,
+            reconnectPeriod: 3000,
+            connectTimeout: 10000,
+            keepalive: 30
+          });
+        } catch (err) {
+          setStatus('offline');
+          return;
+        }
+        clientRef.current = client;
+
+        client.on('connect', () => {
+          setStatus('online');
+          client.subscribe(topic, { qos: 0 }, (err) => {
+            if (err) setStatus('offline');
+          });
+          publish('hello', null);
+        });
+        client.on('reconnect', () => setStatus('connecting'));
+        client.on('offline', () => setStatus('offline'));
+        client.on('error', () => setStatus('offline'));
+        client.on('message', (_topic, buf) => {
+          let msg;
+          try { msg = JSON.parse(buf.toString()); } catch (err) { return; }
+          if (!msg || !msg.from || msg.from.id === meRef.current.id) return; // ข้าม echo ของตัวเอง
+          onMessageRef.current(msg);
+        });
+
+        const beat = setInterval(() => publish('presence', null), HEARTBEAT_MS);
+        const sayBye = () => publish('bye', null);
+        window.addEventListener('beforeunload', sayBye);
+
+        return () => {
+          clearInterval(beat);
+          window.removeEventListener('beforeunload', sayBye);
+          sayBye();
+          try { client.end(true); } catch (err) { /* ปิดไปแล้ว */ }
+          clientRef.current = null;
+        };
+      }, [room, publish]);
+
+      return { status, publish };
+    }
+
+    /* ============================================================
+       UI ชิ้นเล็ก
+       ============================================================ */
+
+    function Card({ className = '', children }) {
+      return (
+        <div className={'rounded-2xl border backdrop-blur-sm bg-white/10 border-white/20 p-4 sm:p-5 ' + className}>
+          {children}
+        </div>
+      );
+    }
+
+    function StatusDot({ status }) {
+      const map = {
+        online: { color: 'bg-emerald-400', label: 'เชื่อมต่อแล้ว' },
+        connecting: { color: 'bg-amber-400 animate-pulse', label: 'กำลังเชื่อมต่อ...' },
+        offline: { color: 'bg-rose-500', label: 'หลุดการเชื่อมต่อ' }
+      };
+      const s = map[status] || map.connecting;
+      return (
+        <span className="inline-flex items-center gap-1.5 text-[11px] font-medium opacity-90">
+          <span className={'w-2 h-2 rounded-full ' + s.color}></span>
+          {s.label}
+        </span>
+      );
+    }
+
+    function Toasts({ toasts }) {
+      return (
+        <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 items-end pointer-events-none">
+          {toasts.map((t) => (
+            <div key={t.id} className="animate-scaleUp bg-slate-900/90 text-white text-sm px-4 py-2.5 rounded-xl shadow-xl max-w-[80vw]">
+              {t.text}
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    /* ============================================================
+       หน้าเข้าห้อง
+       ============================================================ */
+
+    function JoinScreen({ onJoin, initial }) {
+      const [name, setName] = useState(initial.name || '');
+      const [pet, setPet] = useState(initial.pet || 'dog');
+      const [room, setRoom] = useState(initial.room || '');
+
+      const submit = (e) => {
+        e.preventDefault();
+        const trimmedName = name.trim();
+        const trimmedRoom = room.trim().toLowerCase().replace(/[^a-z0-9ก-๙-]/g, '');
+        if (!trimmedName || !trimmedRoom) return;
+        playSynthesizedSound(PETS_CONFIG[pet].sound); // ปลดล็อก AudioContext ด้วย user gesture
+        onJoin({ name: trimmedName, pet, room: trimmedRoom });
+      };
+
+      return (
+        <div className="min-h-screen w-full bg-gradient-to-br from-indigo-900 via-purple-800 to-fuchsia-900 text-white flex items-center justify-center p-4">
+          <form onSubmit={submit} className="w-full max-w-md animate-fadeIn">
+            <div className="text-center mb-6">
+              <div className="text-6xl mb-2">🏡🐶🐱</div>
+              <h1 className="text-3xl font-black">Pawmate</h1>
+              <p className="text-xs text-white/60 mt-1.5">ห้องทำงานเรียลไทม์ของแก๊งสัตว์ขี้เกียจ (แต่งานเสร็จ)</p>
+            </div>
+
+            <div className="rounded-2xl border border-white/20 bg-white/10 backdrop-blur-sm p-5 space-y-5">
+              <div>
+                <label className="block text-sm font-medium mb-1.5">ชื่อเล่นของคุณ</label>
+                <input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  maxLength={20}
+                  placeholder="เช่น มิ้ง"
+                  className="w-full rounded-xl bg-white/90 text-slate-900 px-4 py-2.5 outline-none focus:ring-2 focus:ring-fuchsia-400 placeholder:text-slate-400"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">เลือกร่างอวตาร</label>
+                <div className="grid grid-cols-3 gap-2">
+                  {Object.entries(PETS_CONFIG).map(([key, p]) => (
+                    <button
+                      type="button"
+                      key={key}
+                      onClick={() => { setPet(key); playSynthesizedSound(p.sound); }}
+                      className={'rounded-xl py-3 border-2 transition-all ' + (pet === key
+                        ? 'bg-white/95 border-fuchsia-400 scale-105 shadow-lg text-slate-900'
+                        : 'bg-white/10 border-white/20 hover:bg-white/20')}
+                    >
+                      <div className="text-3xl leading-none">{p.emoji}</div>
+                      <div className="text-[11px] mt-1">{p.name}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1.5">รหัสห้อง</label>
+                <input
+                  value={room}
+                  onChange={(e) => setRoom(e.target.value)}
+                  maxLength={24}
+                  placeholder="เช่น ming-team-2026"
+                  className="w-full rounded-xl bg-white/90 text-slate-900 px-4 py-2.5 outline-none focus:ring-2 focus:ring-fuchsia-400 placeholder:text-slate-400"
+                />
+                <p className="text-[11px] text-white/50 mt-1.5">ใครพิมพ์รหัสห้องเดียวกันจะเจอกัน แม้อยู่คนละเครื่อง</p>
+              </div>
+
+              <button
+                type="submit"
+                disabled={!name.trim() || !room.trim()}
+                className="w-full rounded-xl bg-fuchsia-600 hover:bg-fuchsia-700 disabled:opacity-40 disabled:cursor-not-allowed py-3 font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-fuchsia-400"
+              >
+                เข้าบ้าน Pawmate 🐾
+              </button>
+            </div>
+
+            <div className="mt-4 rounded-xl border border-amber-300/30 bg-amber-400/10 p-3 text-[11px] text-amber-100/90 leading-relaxed">
+              ⚠️ แอปนี้ sync ผ่าน MQTT broker สาธารณะ (broker.emqx.io) โดยไม่เข้ารหัสเนื้อหา
+              ใครก็ตามที่เดารหัสห้องถูกจะอ่านแชทและงานของคุณได้ — อย่าใส่ข้อมูลลับหรือข้อมูลส่วนตัวจริง
+            </div>
+          </form>
+        </div>
+      );
+    }
+
+    /* ============================================================
+       แท็บ: ห้องนั่งเล่น
+       ============================================================ */
+
+    function LobbyTab({ theme, me, members, onPoke, onMood }) {
+      const roster = useMemo(() => {
+        const list = Object.values(members);
+        list.sort((a, b) => a.name.localeCompare(b.name, 'th'));
+        return [me, ...list];
+      }, [me, members]);
+
+      return (
+        <div className="space-y-5 animate-fadeIn">
+          <Card>
+            <div className="text-center py-2">
+              <div className="text-4xl mb-2">{theme.bannerEmoji}</div>
+              <p className="text-sm sm:text-base font-medium">{theme.illustrationText}</p>
+            </div>
+          </Card>
+
+          <div>
+            <h2 className="text-sm font-semibold mb-2 opacity-80">อารมณ์ตอนนี้ของคุณ</h2>
+            <div className="flex flex-wrap gap-2">
+              {MOODS_CONFIG.map((m) => (
+                <button
+                  key={m.text}
+                  onClick={() => onMood(m)}
+                  className={'rounded-full px-3.5 py-1.5 text-xs border-2 transition-all ' + (me.mood && me.mood.text === m.text
+                    ? 'bg-white/95 text-slate-900 border-white scale-105 font-medium'
+                    : 'bg-white/10 border-white/20 hover:bg-white/20')}
+                >
+                  {m.emoji} {m.text}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <h2 className="text-sm font-semibold mb-2 opacity-80">เพื่อนร่วมบ้าน ({roster.length} ตัว)</h2>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {roster.map((m) => {
+                const pet = PETS_CONFIG[m.pet] || PETS_CONFIG.dog;
+                const isMe = m.id === me.id;
+                return (
+                  <div key={m.id} className="rounded-2xl border border-white/20 bg-white/10 backdrop-blur-sm p-4 animate-scaleUp">
+                    <div className="flex items-start gap-3">
+                      <button
+                        onClick={() => onPoke(m)}
+                        title={isMe ? 'ส่งเสียงทักทายทุกคน' : 'ทัก ' + m.name}
+                        className="text-4xl hover:animate-wiggle transition-transform active:scale-90 leading-none"
+                      >
+                        {pet.emoji}
+                      </button>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-semibold truncate">{m.name}</span>
+                          {isMe && <span className="text-[10px] rounded-full bg-white/25 px-1.5 py-0.5 shrink-0">คุณ</span>}
+                        </div>
+                        <div className="text-[11px] opacity-70 mt-0.5">
+                          Lv.{levelOf(m.points)} · {m.points || 0} แต้ม
+                        </div>
+                        <div className="mt-2 h-1.5 rounded-full bg-black/25 overflow-hidden">
+                          <div className="h-full bg-white/70 rounded-full transition-all duration-500" style={{ width: levelProgress(m.points) + '%' }}></div>
+                        </div>
+                      </div>
+                    </div>
+                    {m.mood && (
+                      <div className={'mt-3 text-xs rounded-xl border px-3 py-1.5 ' + pet.bubbleColor}>
+                        {m.mood.emoji} {m.mood.text}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    /* ============================================================
+       แท็บ: กระดานงาน
+       ============================================================ */
+
+    function TasksTab({ theme, tasks, onAdd, onToggle, onDelete }) {
+      const [text, setText] = useState('');
+      const [points, setPoints] = useState(10);
+
+      const submit = (e) => {
+        e.preventDefault();
+        const t = text.trim();
+        if (!t) return;
+        onAdd(t, points);
+        setText('');
+      };
+
+      const open = tasks.filter((t) => !t.done);
+      const done = tasks.filter((t) => t.done);
+
+      const row = (t) => (
+        <div key={t.id} className="flex items-center gap-3 rounded-xl border border-white/20 bg-white/10 px-3 py-2.5 animate-scaleUp">
+          <button
+            onClick={() => onToggle(t)}
+            className={'w-6 h-6 shrink-0 rounded-lg border-2 flex items-center justify-center text-xs transition-all ' +
+              (t.done ? 'bg-emerald-400 border-emerald-300 text-emerald-950' : 'border-white/50 hover:border-white')}
+          >
+            {t.done ? '✓' : ''}
+          </button>
+          <div className="min-w-0 flex-1">
+            <div className={'text-sm truncate ' + (t.done ? 'line-through opacity-50' : '')}>{t.text}</div>
+            <div className="text-[11px] opacity-60">
+              +{t.points} แต้ม · เพิ่มโดย {t.byName}
+              {t.done && t.doneByName ? ' · เสร็จโดย ' + t.doneByName : ''}
+            </div>
+          </div>
+          <button
+            onClick={() => onDelete(t)}
+            className="shrink-0 text-xs opacity-50 hover:opacity-100 hover:text-rose-300 px-1.5 transition-opacity"
+            title="ลบงานนี้"
+          >
+            ✕
+          </button>
+        </div>
+      );
+
+      return (
+        <div className="space-y-5 animate-fadeIn">
+          <form onSubmit={submit} className="rounded-2xl border border-white/20 bg-white/10 backdrop-blur-sm p-4 space-y-3">
+            <input
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              maxLength={80}
+              placeholder="งานที่ต้องปั่นวันนี้..."
+              className="w-full rounded-xl bg-white/90 text-slate-900 px-4 py-2.5 outline-none focus:ring-2 focus:ring-white/60 placeholder:text-slate-400"
+            />
+            <div className="flex items-center gap-2">
+              <span className="text-xs opacity-70 shrink-0">แต้ม</span>
+              {[5, 10, 20, 50].map((p) => (
+                <button
+                  type="button"
+                  key={p}
+                  onClick={() => setPoints(p)}
+                  className={'rounded-lg px-3 py-1.5 text-xs border-2 transition-all ' + (points === p
+                    ? 'bg-white/95 text-slate-900 border-white font-medium'
+                    : 'bg-white/10 border-white/20 hover:bg-white/20')}
+                >
+                  +{p}
+                </button>
+              ))}
+              <button
+                type="submit"
+                disabled={!text.trim()}
+                className={'ml-auto rounded-xl px-4 py-2 text-sm font-semibold text-white disabled:opacity-40 transition-colors focus:outline-none focus:ring-2 ' + theme.primaryButton}
+              >
+                เพิ่มงาน
+              </button>
+            </div>
+          </form>
+
+          <div>
+            <h2 className="text-sm font-semibold mb-2 opacity-80">ยังไม่เสร็จ ({open.length})</h2>
+            <div className="space-y-2">
+              {open.length === 0
+                ? <p className="text-xs opacity-50 py-4 text-center">โล่งงงง ไม่มีงานค้าง 🎉</p>
+                : open.map(row)}
+            </div>
+          </div>
+
+          {done.length > 0 && (
+            <div>
+              <h2 className="text-sm font-semibold mb-2 opacity-80">เสร็จแล้ว ({done.length})</h2>
+              <div className="space-y-2">{done.map(row)}</div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    /* ============================================================
+       แท็บ: แชท
+       ============================================================ */
+
+    function ChatTab({ theme, me, messages, onSend }) {
+      const [text, setText] = useState('');
+      const endRef = useRef(null);
+
+      useEffect(() => {
+        if (endRef.current) endRef.current.scrollIntoView({ behavior: 'smooth' });
+      }, [messages.length]);
+
+      const submit = (e) => {
+        e.preventDefault();
+        const t = text.trim();
+        if (!t) return;
+        onSend(t);
+        setText('');
+      };
+
+      return (
+        <div className="flex flex-col h-[calc(100vh-13rem)] animate-fadeIn">
+          <div className="flex-1 overflow-y-auto space-y-3 pr-1">
+            {messages.length === 0 && (
+              <p className="text-xs opacity-50 py-8 text-center">ยังไม่มีใครพูดอะไร เริ่มทักก่อนเลย 💬</p>
+            )}
+            {messages.map((m) => {
+              const pet = PETS_CONFIG[m.pet] || PETS_CONFIG.dog;
+              const isMe = m.fromId === me.id;
+              return (
+                <div key={m.id} className={'flex gap-2 items-end animate-scaleUp ' + (isMe ? 'flex-row-reverse' : '')}>
+                  <span className="text-2xl shrink-0">{pet.emoji}</span>
+                  <div className={'max-w-[75%] ' + (isMe ? 'text-right' : '')}>
+                    <div className="text-[10px] opacity-60 mb-0.5 px-1">{m.name} · {timeLabel(m.ts)}</div>
+                    <div className={'rounded-2xl border px-3.5 py-2 text-sm break-words text-left ' + pet.bubbleColor}>
+                      {m.text}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+            <div ref={endRef}></div>
+          </div>
+
+          <form onSubmit={submit} className="mt-3 flex gap-2">
+            <input
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              maxLength={200}
+              placeholder="พิมพ์ข้อความ..."
+              className="flex-1 rounded-xl bg-white/90 text-slate-900 px-4 py-2.5 outline-none focus:ring-2 focus:ring-white/60 placeholder:text-slate-400"
+            />
+            <button
+              type="submit"
+              disabled={!text.trim()}
+              className={'rounded-xl px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-40 transition-colors focus:outline-none focus:ring-2 ' + theme.primaryButton}
+            >
+              ส่ง
+            </button>
+          </form>
+        </div>
+      );
+    }
+
+    /* ============================================================
+       แท็บ: อันดับดาวเด่น
+       ============================================================ */
+
+    function BoardTab({ me, members }) {
+      const ranked = useMemo(() => {
+        const list = [me, ...Object.values(members)];
+        return list.sort((a, b) => (b.points || 0) - (a.points || 0));
+      }, [me, members]);
+
+      const medals = ['🥇', '🥈', '🥉'];
+
+      return (
+        <div className="space-y-3 animate-fadeIn">
+          <Card className="text-center">
+            <div className="text-3xl mb-1">🏆</div>
+            <p className="text-sm opacity-80">ปิดงานได้แต้ม ยิ่งแต้มเยอะยิ่งเลเวลสูง (50 แต้ม = 1 เลเวล)</p>
+          </Card>
+
+          {ranked.map((m, i) => {
+            const pet = PETS_CONFIG[m.pet] || PETS_CONFIG.dog;
+            return (
+              <div key={m.id} className={'flex items-center gap-3 rounded-2xl border p-3.5 animate-scaleUp ' +
+                (m.id === me.id ? 'border-white/60 bg-white/20' : 'border-white/20 bg-white/10')}>
+                <span className="w-8 text-center text-lg shrink-0">{medals[i] || (i + 1)}</span>
+                <span className="text-3xl shrink-0">{pet.emoji}</span>
+                <div className="min-w-0 flex-1">
+                  <div className="font-semibold text-sm truncate">{m.name}</div>
+                  <div className="mt-1.5 h-2 rounded-full bg-black/25 overflow-hidden">
+                    <div className="h-full bg-white/70 rounded-full transition-all duration-500" style={{ width: levelProgress(m.points) + '%' }}></div>
+                  </div>
+                </div>
+                <div className="text-right shrink-0">
+                  <div className="font-black">{m.points || 0}</div>
+                  <div className="text-[10px] opacity-60">Lv.{levelOf(m.points)}</div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      );
+    }
+
+    /* ============================================================
+       แท็บ: สุ่มข้าวเที่ยง
+       ============================================================ */
+
+    function FoodTab({ theme, foods, result, spinning, onSpin, onAddFood }) {
+      const [text, setText] = useState('');
+      const [emoji, setEmoji] = useState('🍚');
+
+      const add = (e) => {
+        e.preventDefault();
+        const t = text.trim();
+        if (!t) return;
+        onAddFood({ name: t, emoji: emoji.trim() || '🍚' });
+        setText('');
+      };
+
+      return (
+        <div className="space-y-5 animate-fadeIn">
+          <Card className="text-center">
+            <div className={'text-7xl mb-3 ' + (spinning ? 'animate-bounce' : '')}>
+              {spinning ? '🎰' : (result ? result.emoji : '🍽️')}
+            </div>
+            <p className="text-lg font-bold min-h-[1.75rem]">
+              {spinning ? 'กำลังสุ่ม...' : (result ? result.name : 'กดปุ่มให้ฟ้าลิขิตมื้อเที่ยง')}
+            </p>
+            {result && !spinning && result.byName && (
+              <p className="text-[11px] opacity-60 mt-1">สุ่มโดย {result.byName}</p>
+            )}
+            <button
+              onClick={onSpin}
+              disabled={spinning || foods.length === 0}
+              className={'mt-4 rounded-xl px-6 py-3 font-semibold text-white disabled:opacity-40 transition-colors focus:outline-none focus:ring-2 ' + theme.primaryButton}
+            >
+              สุ่มเลย! 🎲
+            </button>
+          </Card>
+
+          <div>
+            <h2 className="text-sm font-semibold mb-2 opacity-80">ตัวเลือกในโถ ({foods.length})</h2>
+            <div className="flex flex-wrap gap-2">
+              {foods.map((f, i) => (
+                <span key={f.name + i} className="rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-xs">
+                  {f.emoji} {f.name}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <form onSubmit={add} className="flex gap-2">
+            <input
+              value={emoji}
+              onChange={(e) => setEmoji(e.target.value)}
+              maxLength={4}
+              className="w-16 text-center rounded-xl bg-white/90 text-slate-900 px-2 py-2.5 outline-none focus:ring-2 focus:ring-white/60"
+            />
+            <input
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              maxLength={30}
+              placeholder="เพิ่มเมนูใหม่..."
+              className="flex-1 rounded-xl bg-white/90 text-slate-900 px-4 py-2.5 outline-none focus:ring-2 focus:ring-white/60 placeholder:text-slate-400"
+            />
+            <button
+              type="submit"
+              disabled={!text.trim()}
+              className={'rounded-xl px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-40 transition-colors focus:outline-none focus:ring-2 ' + theme.primaryButton}
+            >
+              เพิ่ม
+            </button>
+          </form>
+        </div>
+      );
+    }
+
+    /* ============================================================
+       APP
+       ============================================================ */
+
+    function App() {
+      const [session, setSession] = useState(() => readStore('pawmate.session', null));
+      const [me, setMe] = useState(() => {
+        const saved = readStore('pawmate.session', null);
+        let id = readStore('pawmate.id', null);
+        if (!id) { id = uid(); writeStore('pawmate.id', id); }
+        return {
+          id,
+          name: saved ? saved.name : '',
+          pet: saved ? saved.pet : 'dog',
+          mood: null,
+          points: readStore('pawmate.points', 0)
+        };
+      });
+
+      const [members, setMembers] = useState({});      // id -> member (+lastSeen)
+      const [tasks, setTasks] = useState([]);
+      const [messages, setMessages] = useState([]);
+      const [themeId, setThemeId] = useState('purple');
+      const [foods, setFoods] = useState(DEFAULT_FOODS);
+      const [foodResult, setFoodResult] = useState(null);
+      const [spinning, setSpinning] = useState(false);
+      const [tab, setTab] = useState('lobby');
+      const [toasts, setToasts] = useState([]);
+      const [showThemes, setShowThemes] = useState(false);
+
+      const syncedRef = useRef(false);
+      const publishRef = useRef(() => {});
+      const stateRef = useRef({ tasks, messages, themeId, foods });
+      stateRef.current = { tasks, messages, themeId, foods };
+
+      const theme = THEMES_CONFIG[themeId] || THEMES_CONFIG.purple;
+
+      const toast = useCallback((text) => {
+        const id = uid();
+        setToasts((prev) => [...prev.slice(-3), { id, text }]);
+        setTimeout(() => setToasts((prev) => prev.filter((t) => t.id !== id)), 3500);
+      }, []);
+
+      const touchMember = useCallback((from) => {
+        if (!from) return;
+        setMembers((prev) => ({ ...prev, [from.id]: { ...from, lastSeen: Date.now() } }));
+      }, []);
+
+      /* ---------- รับข้อความจากห้อง ---------- */
+      const handleMessage = useCallback((msg) => {
+        const { type, payload, from, ts } = msg;
+
+        if (type === 'bye') {
+          setMembers((prev) => {
+            const next = { ...prev };
+            delete next[from.id];
+            return next;
+          });
+          toast(from.name + ' ออกจากบ้านไปแล้ว 👋');
+          return;
+        }
+
+        touchMember(from);
+
+        switch (type) {
+          case 'hello': {
+            toast(from.name + ' เข้าบ้านมาแล้ว ' + (PETS_CONFIG[from.pet] || PETS_CONFIG.dog).emoji);
+            // ตอบ presence ให้คนใหม่เห็นเรา แล้วส่ง state ปัจจุบันให้ (หน่วงแบบสุ่มกันตอบชนกัน)
+            setTimeout(() => publishRef.current('presence', null), 120);
+            const s = stateRef.current;
+            if (s.tasks.length > 0 || s.messages.length > 0) {
+              setTimeout(() => {
+                publishRef.current('sync-state', {
+                  to: from.id,
+                  tasks: s.tasks,
+                  messages: s.messages.slice(-30),
+                  themeId: s.themeId,
+                  foods: s.foods
+                });
+              }, 300 + Math.random() * 400);
+            }
+            break;
+          }
+
+          case 'sync-state': {
+            // รับเฉพาะรอบแรกหลังเข้าห้อง และเฉพาะที่ส่งถึงเรา
+            if (syncedRef.current || (payload.to && payload.to !== me.id)) break;
+            syncedRef.current = true;
+            setTasks(payload.tasks || []);
+            setMessages(payload.messages || []);
+            if (payload.themeId && THEMES_CONFIG[payload.themeId]) setThemeId(payload.themeId);
+            if (payload.foods && payload.foods.length) setFoods(payload.foods);
+            break;
+          }
+
+          case 'chat':
+            setMessages((prev) => [...prev.slice(-99), {
+              id: payload.id, text: payload.text, fromId: from.id, name: from.name, pet: from.pet, ts
+            }]);
+            break;
+
+          case 'task-add':
+            setTasks((prev) => prev.some((t) => t.id === payload.task.id) ? prev : [...prev, payload.task]);
+            break;
+
+          case 'task-toggle':
+            setTasks((prev) => prev.map((t) => t.id === payload.id
+              ? { ...t, done: payload.done, doneById: payload.done ? from.id : null, doneByName: payload.done ? from.name : null }
+              : t));
+            break;
+
+          case 'task-delete':
+            setTasks((prev) => prev.filter((t) => t.id !== payload.id));
+            break;
+
+          case 'poke': {
+            const pet = PETS_CONFIG[payload.pet] || PETS_CONFIG.dog;
+            playSynthesizedSound(pet.sound);
+            toast(from.name + ' ทัก ' + payload.targetName + ' ' + pet.emoji);
+            break;
+          }
+
+          case 'theme':
+            if (THEMES_CONFIG[payload.id]) {
+              setThemeId(payload.id);
+              toast(from.name + ' เปลี่ยนธีมเป็น ' + THEMES_CONFIG[payload.id].name);
+            }
+            break;
+
+          case 'food-add':
+            setFoods((prev) => prev.some((f) => f.name === payload.food.name) ? prev : [...prev, payload.food]);
+            break;
+
+          case 'food-result':
+            setSpinning(true);
+            setFoodResult(null);
+            setTimeout(() => { setSpinning(false); setFoodResult(payload.food); }, 900);
+            break;
+
+          case 'presence':
+          default:
+            break;
+        }
+      }, [me.id, toast, touchMember]);
+
+      const { status, publish } = useRoom({ room: session ? session.room : null, me, onMessage: handleMessage });
+      publishRef.current = publish;
+
+      /* ---------- ตัดคนที่เงียบหายไปเกินเวลา ---------- */
+      useEffect(() => {
+        const timer = setInterval(() => {
+          const cutoff = Date.now() - MEMBER_TIMEOUT_MS;
+          setMembers((prev) => {
+            const next = {};
+            let changed = false;
+            Object.values(prev).forEach((m) => {
+              if (m.lastSeen >= cutoff) next[m.id] = m; else changed = true;
+            });
+            return changed ? next : prev;
+          });
+        }, 3000);
+        return () => clearInterval(timer);
+      }, []);
+
+      /* ---------- เก็บแต้มไว้ในเครื่อง ---------- */
+      useEffect(() => { writeStore('pawmate.points', me.points); }, [me.points]);
+
+      /* ---------- actions ---------- */
+      const join = (data) => {
+        const s = { name: data.name, pet: data.pet, room: data.room };
+        writeStore('pawmate.session', s);
+        setMe((prev) => ({ ...prev, name: data.name, pet: data.pet }));
+        setSession(s);
+        // ถ้าไม่มีใครส่ง state มาใน 3 วิ ถือว่าเราเป็นคนแรกของห้อง
+        setTimeout(() => { syncedRef.current = true; }, 3000);
+      };
+
+      const leave = () => {
+        publish('bye', null);
+        localStorage.removeItem('pawmate.session');
+        setSession(null);
+        setMembers({});
+        setTasks([]);
+        setMessages([]);
+        syncedRef.current = false;
+      };
+
+      const setMood = (mood) => {
+        setMe((prev) => ({ ...prev, mood }));
+        setTimeout(() => publishRef.current('presence', null), 0);
+      };
+
+      const poke = (target) => {
+        const pet = PETS_CONFIG[target.pet] || PETS_CONFIG.dog;
+        playSynthesizedSound(pet.sound);
+        publish('poke', { targetId: target.id, targetName: target.name, pet: target.pet });
+      };
+
+      const addTask = (text, points) => {
+        const task = { id: uid(), text, points, done: false, byId: me.id, byName: me.name, ts: Date.now() };
+        setTasks((prev) => [...prev, task]);
+        publish('task-add', { task });
+      };
+
+      const toggleTask = (task) => {
+        const done = !task.done;
+        setTasks((prev) => prev.map((t) => t.id === task.id
+          ? { ...t, done, doneById: done ? me.id : null, doneByName: done ? me.name : null }
+          : t));
+        publish('task-toggle', { id: task.id, done });
+
+        // แต้มเป็นของคนที่กดปิดงาน — คืนแต้มถ้าคนเดิมกดเปิดใหม่
+        if (done) {
+          setMe((prev) => ({ ...prev, points: (prev.points || 0) + task.points }));
+          playSynthesizedSound(PETS_CONFIG[me.pet].sound);
+          toast('เก่งมาก! +' + task.points + ' แต้ม 🎉');
+        } else if (task.doneById === me.id) {
+          setMe((prev) => ({ ...prev, points: Math.max(0, (prev.points || 0) - task.points) }));
+        }
+        setTimeout(() => publishRef.current('presence', null), 0);
+      };
+
+      const deleteTask = (task) => {
+        setTasks((prev) => prev.filter((t) => t.id !== task.id));
+        publish('task-delete', { id: task.id });
+      };
+
+      const sendChat = (text) => {
+        const m = { id: uid(), text, fromId: me.id, name: me.name, pet: me.pet, ts: Date.now() };
+        setMessages((prev) => [...prev.slice(-99), m]);
+        publish('chat', { id: m.id, text });
+      };
+
+      const changeTheme = (id) => {
+        setThemeId(id);
+        setShowThemes(false);
+        publish('theme', { id });
+      };
+
+      const addFood = (food) => {
+        setFoods((prev) => prev.some((f) => f.name === food.name) ? prev : [...prev, food]);
+        publish('food-add', { food });
+      };
+
+      const spinFood = () => {
+        if (foods.length === 0) return;
+        setSpinning(true);
+        setFoodResult(null);
+        setTimeout(() => {
+          const picked = Object.assign({}, foods[Math.floor(Math.random() * foods.length)], { byName: me.name });
+          setSpinning(false);
+          setFoodResult(picked);
+          playSynthesizedSound(PETS_CONFIG[me.pet].sound);
+          publish('food-result', { food: picked });
+        }, 900);
+      };
+
+      /* ---------- render ---------- */
+      if (!session) {
+        return <JoinScreen onJoin={join} initial={{ name: me.name, pet: me.pet, room: '' }} />;
+      }
+
+      const memberCount = Object.keys(members).length + 1;
+
+      return (
+        <div className={'min-h-screen ' + theme.bgClass}>
+          <header className={'sticky top-0 z-30 border-b backdrop-blur-md shadow-lg ' + theme.headerClass}>
+            <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
+              <span className="text-2xl shrink-0">{theme.bannerEmoji}</span>
+              <div className="min-w-0 flex-1">
+                <h1 className="font-black leading-tight">Pawmate</h1>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-[11px] opacity-70">ห้อง {session.room} · {memberCount} ตัว</span>
+                  <StatusDot status={status} />
+                </div>
+              </div>
+
+              <div className="relative shrink-0">
+                <button
+                  onClick={() => setShowThemes((v) => !v)}
+                  className="rounded-xl border border-white/25 bg-white/10 hover:bg-white/20 px-3 py-2 text-sm transition-colors"
+                  title="เปลี่ยนธีม (เปลี่ยนให้ทุกคนในห้อง)"
+                >
+                  🎨
+                </button>
+                {showThemes && (
+                  <div className="absolute right-0 mt-2 w-60 rounded-2xl border border-white/20 bg-slate-900/95 backdrop-blur-md p-1.5 shadow-2xl animate-scaleUp">
+                    {Object.values(THEMES_CONFIG).map((t) => (
+                      <button
+                        key={t.id}
+                        onClick={() => changeTheme(t.id)}
+                        className={'w-full text-left text-xs rounded-xl px-3 py-2 transition-colors ' +
+                          (t.id === themeId ? 'bg-white/20 text-white font-medium' : 'text-white/80 hover:bg-white/10')}
+                      >
+                        {t.name}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <button
+                onClick={leave}
+                className="shrink-0 rounded-xl border border-white/25 bg-white/10 hover:bg-white/20 px-3 py-2 text-sm transition-colors"
+                title="ออกจากห้อง"
+              >
+                🚪
+              </button>
+            </div>
+          </header>
+
+          <div className="max-w-6xl mx-auto px-4 py-5 flex flex-col md:flex-row gap-5">
+            <nav className="md:w-52 shrink-0 flex md:flex-col gap-1.5 overflow-x-auto pb-1 md:pb-0">
+              {TABS.map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => setTab(t.id)}
+                  className={'whitespace-nowrap rounded-xl px-4 py-2.5 text-sm text-left transition-all ' +
+                    (tab === t.id ? theme.activeTabClass : 'border-l-4 border-transparent hover:bg-white/10 opacity-80')}
+                >
+                  {t.emoji} {t.label}
+                </button>
+              ))}
+            </nav>
+
+            <main className="flex-1 min-w-0">
+              {tab === 'lobby' && <LobbyTab theme={theme} me={me} members={members} onPoke={poke} onMood={setMood} />}
+              {tab === 'tasks' && <TasksTab theme={theme} tasks={tasks} onAdd={addTask} onToggle={toggleTask} onDelete={deleteTask} />}
+              {tab === 'chat' && <ChatTab theme={theme} me={me} messages={messages} onSend={sendChat} />}
+              {tab === 'board' && <BoardTab me={me} members={members} />}
+              {tab === 'food' && <FoodTab theme={theme} foods={foods} result={foodResult} spinning={spinning} onSpin={spinFood} onAddFood={addFood} />}
+            </main>
+          </div>
+
+          <footer className="max-w-6xl mx-auto px-4 pb-6 text-center">
+            <p className="text-[10px] opacity-40">
+              sync ผ่าน MQTT broker สาธารณะแบบไม่เข้ารหัส — อย่าใส่ข้อมูลลับ
+            </p>
+          </footer>
+
+          <Toasts toasts={toasts} />
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
