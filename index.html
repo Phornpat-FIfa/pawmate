@@ -281,8 +281,12 @@
     const db = firebase.firestore();
     const auth = firebase.auth();
 
-    const HEARTBEAT_MS = 10000;        // Firestore คิดเงินตามจำนวน write เลยเต้นช้ากว่า MQTT
-    const MEMBER_TIMEOUT_MS = 32000;   // เงียบเกินนี้ถือว่าออกไปแล้ว
+    /* heartbeat 1 ครั้ง = 1 write. Firestore ฟรีให้ 20,000 writes/วัน
+       ถ้าเต้นทุก 10 วิ = 8,640/วัน/คน → แค่ 3 คนก็โควตาหมดแล้ว
+       30 วิ = 2,880/วัน/คน → 5 คนเปิดค้างทั้งวันยังอยู่ในโควตา
+       แลกกับคนที่ปิดแท็บหนีจะค้างในรายชื่อนานขึ้น (สูงสุด ~75 วิ) */
+    const HEARTBEAT_MS = 30000;
+    const MEMBER_TIMEOUT_MS = 75000;   // ต้องมากกว่า heartbeat หลายเท่า กันเน็ตกระตุกแล้วหลุด
     const EVENT_TTL_MS = 120000;       // event ทัก/โฟกัส เก่ากว่านี้ให้เก็บกวาดทิ้ง
 
     const WORKLOAD_CAPACITY = 5;   // งานค้างกี่ชิ้นถึงเรียกว่าเต็มมือ
@@ -576,17 +580,23 @@
         return () => unsubs.forEach((u) => u());
       }, [roomRef]);
 
-      /* ---------- เขียน presence + เต้นหัวใจ ---------- */
+      /* ---------- เขียน presence + เต้นหัวใจ ----------
+         อ่านค่าจาก meRef เสมอ เพื่อให้ heartbeat หยิบค่าล่าสุดไปโดยไม่ต้องผูก effect
+         deps มีเฉพาะค่าที่ "เปลี่ยนแล้วคนอื่นควรเห็นทันที" — fullness ไม่อยู่ในนั้น
+         เพราะมันลดลงเองทุก 15 วิ ถ้าใส่จะกลายเป็น write ทุก 15 วิ กินโควตาฟรี */
       useEffect(() => {
         if (!roomRef || !me.id) return;
         const doc = roomRef.collection('members').doc(me.id);
         const write = () => {
+          const m = meRef.current;
           doc.set({
-            name: me.name,
-            pet: me.pet,
-            mood: me.mood || null,
-            points: me.points || 0,
-            focusUntil: me.focusUntil || null,
+            name: m.name,
+            pet: m.pet,
+            mood: m.mood || null,
+            points: m.points || 0,
+            focusUntil: m.focusUntil || null,
+            fullness: typeof m.fullness === 'number' ? m.fullness : 100,
+            sleeping: !!m.sleeping,
             lastSeen: Date.now()
           }, { merge: true }).catch((e) => console.warn('presence write failed:', e));
         };
@@ -598,7 +608,7 @@
           clearInterval(beat);
           window.removeEventListener('beforeunload', bye);
         };
-      }, [roomRef, me.id, me.name, me.pet, me.mood, me.points, me.focusUntil]);
+      }, [roomRef, me.id, me.name, me.pet, me.mood, me.points, me.focusUntil, me.sleeping]);
 
       /* ---------- เก็บกวาด event เก่า (best-effort) ---------- */
       useEffect(() => {
@@ -1293,8 +1303,61 @@
       'เก่งมากที่ยังสู้อยู่! 💪'
     ];
 
-    function PetYard({ theme, me, fullness, sleeping, message, onWake, onFeed, onPinch }) {
-      const pet = PETS_CONFIG[me.pet] || PETS_CONFIG.dog;
+    function YardPet({ member, isMe, onClick }) {
+      const pet = PETS_CONFIG[member.pet] || PETS_CONFIG.dog;
+      const full = typeof member.fullness === 'number' ? member.fullness : 100;
+      const asleep = !!member.sleeping;
+      const focusing = member.focusUntil && member.focusUntil > Date.now();
+
+      return (
+        <div className="flex flex-col items-center gap-1 animate-scaleUp">
+          <button
+            onClick={onClick}
+            title={isMe
+              ? (asleep ? 'คลิกเพื่อปลุกตัวเอง' : 'คลิกเพื่อเล่นด้วย')
+              : 'ทัก ' + member.name}
+            className={'relative transition-transform active:scale-90 hover:scale-110 ' +
+              (isMe ? 'text-6xl sm:text-7xl' : 'text-4xl sm:text-5xl') +
+              (asleep ? '' : ' animate-float')}
+          >
+            <span className={asleep ? 'opacity-70' : ''}>{pet.emoji}</span>
+            {asleep && (
+              <>
+                <span className="absolute -top-1 right-0 text-sm animate-zzz">z</span>
+                <span className="absolute -top-1 right-2 text-xs animate-zzz" style={{ animationDelay: '0.8s' }}>z</span>
+              </>
+            )}
+            {focusing && (
+              <span className="absolute -top-1 -left-2 text-sm" title="กำลังโฟกัส">🔕</span>
+            )}
+            {member.mood && (
+              <span className="absolute -bottom-1 -right-1 text-base" title={member.mood.text}>{member.mood.emoji}</span>
+            )}
+          </button>
+
+          <div className={'text-[10px] font-medium truncate max-w-[72px] text-center ' +
+            (isMe ? 'text-emerald-900 font-bold' : 'text-emerald-800/70')}>
+            {member.name}{isMe ? ' (คุณ)' : ''}
+          </div>
+
+          <div className="w-14 h-1 rounded-full bg-white/70 overflow-hidden">
+            <div
+              className={'h-full rounded-full transition-all duration-700 ' +
+                (full > 60 ? 'bg-emerald-500' : full > 25 ? 'bg-amber-500' : 'bg-rose-500')}
+              style={{ width: full + '%' }}
+            ></div>
+          </div>
+        </div>
+      );
+    }
+
+    function PetYard({ me, members, fullness, sleeping, message, onWake, onFeed, onPinch, onPokeOther }) {
+      // เอาค่า fullness/sleeping ของตัวเองจาก state ตรง ๆ จะได้เห็นผลทันทีไม่ต้องรอ heartbeat
+      const roster = useMemo(() => {
+        const others = Object.values(members);
+        others.sort((a, b) => a.name.localeCompare(b.name, 'th'));
+        return [{ ...me, fullness, sleeping }, ...others];
+      }, [me, members, fullness, sleeping]);
 
       return (
         <section className="rounded-2xl bg-gradient-to-b from-sky-50 to-emerald-100 border-2 border-emerald-200 shadow-lg p-4 relative overflow-hidden">
@@ -1302,7 +1365,7 @@
             <div className="min-w-0">
               <h2 className="text-sm font-bold text-emerald-900 flex items-center gap-1.5">
                 <span>🏡</span>
-                <span className="truncate">สนามวิ่งเล่นและกิจกรรมของ{pet.name} ({me.name})</span>
+                <span className="truncate">สนามวิ่งเล่นและกิจกรรมของทีม ({roster.length} ตัว)</span>
               </h2>
               {message && (
                 <div className="mt-2 inline-block rounded-2xl bg-white border-2 border-emerald-300 px-3.5 py-1.5 text-xs text-emerald-900 shadow-sm animate-scaleUp max-w-md">
@@ -1327,32 +1390,29 @@
             </div>
           </div>
 
-          {/* ตัวสัตว์ */}
-          <div className="flex items-center justify-center py-6 relative">
-            <span className="absolute left-6 bottom-3 text-lg opacity-50">🌼</span>
-            <span className="absolute right-8 bottom-4 text-lg opacity-50">🌷</span>
-            <span className="absolute left-1/4 top-2 text-sm opacity-40">☁️</span>
+          {/* สนาม — ทุกตัวในห้อง */}
+          <div className="relative py-5">
+            <span className="absolute left-4 bottom-2 text-lg opacity-50">🌼</span>
+            <span className="absolute right-6 bottom-3 text-lg opacity-50">🌷</span>
+            <span className="absolute left-1/4 top-0 text-sm opacity-40">☁️</span>
+            <span className="absolute right-1/3 top-1 text-xs opacity-30">☁️</span>
 
-            <button
-              onClick={onWake}
-              title={sleeping ? 'คลิกเพื่อปลุก' : 'คลิกเพื่อเล่นด้วย'}
-              className={'relative text-7xl transition-transform active:scale-90 ' + (sleeping ? '' : 'animate-float')}
-            >
-              <span className={sleeping ? 'opacity-80' : ''}>{pet.emoji}</span>
-              {sleeping && (
-                <>
-                  <span className="absolute -top-1 right-0 text-xl animate-zzz">z</span>
-                  <span className="absolute -top-1 right-2 text-base animate-zzz" style={{ animationDelay: '0.8s' }}>z</span>
-                  <span className="absolute -top-1 right-4 text-sm animate-zzz" style={{ animationDelay: '1.6s' }}>z</span>
-                </>
-              )}
-            </button>
+            <div className="flex items-end justify-center gap-4 sm:gap-6 flex-wrap relative z-10 min-h-[110px]">
+              {roster.map((m) => (
+                <YardPet
+                  key={m.id}
+                  member={m}
+                  isMe={m.id === me.id}
+                  onClick={() => (m.id === me.id ? onWake() : onPokeOther(m))}
+                />
+              ))}
+            </div>
           </div>
 
-          {/* แถบความอิ่ม */}
+          {/* แถบความอิ่มของตัวเอง */}
           <div className="relative z-10">
             <div className="flex items-center justify-between text-[10px] text-emerald-800 mb-1">
-              <span>ความอิ่ม</span>
+              <span>ความอิ่มของคุณ</span>
               <span className="font-bold">{Math.round(fullness)}%</span>
             </div>
             <div className="h-3 rounded-full bg-white/70 overflow-hidden shadow-inner">
@@ -1364,6 +1424,9 @@
                 style={{ width: fullness + '%' }}
               ></div>
             </div>
+            <p className="text-[10px] text-emerald-700/60 mt-1">
+              คลิกตัวเพื่อนเพื่อทัก — เสียงจะดังทุกเครื่องในห้อง · ความอิ่มของคนอื่นอัปเดตทุก {HEARTBEAT_MS / 1000} วิ
+            </p>
           </div>
         </section>
       );
@@ -1778,9 +1841,16 @@
         }
       }, [toast]);
 
+      // sleeping/fullness ต้องไปกับ presence ด้วย เพื่อนถึงจะเห็นว่าเราหลับอยู่หรือหิว
+      const sleeping = tick >= 0 && !me.focusUntil && Date.now() - lastPoke > 45000;
+      const meWithPet = useMemo(
+        () => ({ ...me, fullness, sleeping }),
+        [me, fullness, sleeping]
+      );
+
       const { status, allMembers, tasks, messages, roomTheme, emit, api } = useRoom({
         room: session ? session.room : null,
-        me,
+        me: meWithPet,
         ready: !!authUid,
         onEvent: handleEvent
       });
@@ -1831,9 +1901,6 @@
         }, left);
         return () => clearTimeout(t);
       }, [me.focusUntil, toast, emit]);
-
-      // อ้าง tick เพื่อให้ค่านี้คำนวณใหม่ทุก 5 วิ ไม่ใช่รอ state อื่นเปลี่ยน
-      const sleeping = tick >= 0 && !me.focusUntil && Date.now() - lastPoke > 45000;
 
       /* ---------- ข้อมูลที่คำนวณ ---------- */
       const houseTotal = useMemo(() => {
@@ -1947,6 +2014,14 @@
         setLastPoke(Date.now());
         setPetMsg('โอ๊ย! เจ็บนะ 😾 หยิกแรงไปแล้ววว');
         emit('poke', { action: 'หยิกแก้ม', pet: me.pet });
+      };
+
+      const pokeOther = (m) => {
+        const pet = PETS_CONFIG[m.pet] || PETS_CONFIG.dog;
+        playSynthesizedSound(pet.sound);   // เสียงของ "ตัวที่ถูกทัก" ไม่ใช่ของเรา
+        setLastPoke(Date.now());
+        setPetMsg('ไปทัก ' + m.name + ' มาแล้ว ' + pet.emoji);
+        emit('poke', { action: 'ทัก ' + m.name + ' ที่สนาม', pet: m.pet });
       };
 
       const startFocus = () => {
@@ -2077,14 +2152,15 @@
               />
 
               <PetYard
-                theme={theme}
                 me={me}
+                members={members}
                 fullness={fullness}
                 sleeping={sleeping}
                 message={petLine}
                 onWake={wakePet}
                 onFeed={feedPet}
                 onPinch={pinchPet}
+                onPokeOther={pokeOther}
               />
             </div>
 
