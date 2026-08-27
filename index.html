@@ -289,6 +289,10 @@
     const MEMBER_TIMEOUT_MS = 75000;   // ต้องมากกว่า heartbeat หลายเท่า กันเน็ตกระตุกแล้วหลุด
     const EVENT_TTL_MS = 120000;       // event ทัก/โฟกัส เก่ากว่านี้ให้เก็บกวาดทิ้ง
 
+    // รูปเก่าเกินนี้ถูกลบออกจากข้อความอัตโนมัติ (ตัวหนังสือยังอยู่ถาวร) — ต้องตรงกับเลขใน firestore.rules
+    const IMAGE_TTL_MS = 21 * 24 * 60 * 60 * 1000;   // 21 วัน (~3 อาทิตย์)
+    const IMAGE_SWEEP_INTERVAL_MS = 60 * 60 * 1000;  // เช็คทุก 1 ชม. ขณะมีคนเปิดแอปอยู่
+
     const WORKLOAD_CAPACITY = 5;   // งานค้างกี่ชิ้นถึงเรียกว่าเต็มมือ
     const HOUSE_EXP_PER_LEVEL = 100;
     const FOCUS_MINUTES = 25;
@@ -620,6 +624,27 @@
         };
         const t = setInterval(sweep, EVENT_TTL_MS);
         sweep();
+        return () => clearInterval(t);
+      }, [roomRef]);
+
+      /* ---------- เก็บกวาดรูปเก่าในแชทอัตโนมัติ (best-effort, เก็บตัวหนังสือไว้เสมอ) ---------- */
+      useEffect(() => {
+        if (!roomRef) return;
+        const sweepImages = () => {
+          roomRef.collection('messages').where('ts', '<', Date.now() - IMAGE_TTL_MS).limit(20).get()
+            .then((snap) => snap.forEach((d) => {
+              const data = d.data();
+              if (!data.image) return;
+              if (data.text) {
+                d.ref.update({ image: firebase.firestore.FieldValue.delete(), imageRemoved: true }).catch(() => {});
+              } else {
+                d.ref.delete().catch(() => {});
+              }
+            }))
+            .catch(() => {});
+        };
+        const t = setInterval(sweepImages, IMAGE_SWEEP_INTERVAL_MS);
+        sweepImages();
         return () => clearInterval(t);
       }, [roomRef]);
 
@@ -1711,6 +1736,10 @@
                         className="rounded-xl border border-slate-200 max-h-52 w-auto hover:opacity-90 transition-opacity"
                       />
                     </a>
+                  )}
+
+                  {!m.image && m.imageRemoved && (
+                    <div className="text-[10px] text-slate-400 mt-1">🗑 รูปถูกลบอัตโนมัติ (เก็บไว้เกิน 3 อาทิตย์)</div>
                   )}
 
                   {links.map((url) => (

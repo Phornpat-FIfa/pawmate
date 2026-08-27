@@ -48,6 +48,13 @@ service cloud.firestore {
              && (d.text.size() > 0 || d.keys().hasAny(['image']));
     }
 
+    // ข้อความเก่าเกิน 21 วัน (~3 อาทิตย์) — เลขนี้ต้องตรงกับ IMAGE_TTL_MS ในเว็บ
+    // ให้ระบบเก็บกวาดรูปออกได้เอง (ตัวหนังสือไม่ถูกลบ อยู่ถาวรเสมอ)
+    function messageImageExpired() {
+      return resource.data.ts is number
+             && resource.data.ts < request.time.toMillis() - 1814400000;
+    }
+
     match /rooms/{room} {
 
       allow read: if isSignedIn();
@@ -66,14 +73,23 @@ service cloud.firestore {
         allow delete: if isSignedIn();
       }
 
-      // แชท — เขียนใหม่ได้, แก้ข้อความ/รูปเดิมไม่ได้ (แก้ได้แค่ติ๊กสำคัญ), ลบได้เฉพาะข้อความของตัวเอง
+      // แชท — เขียนใหม่ได้, แก้ตัวหนังสือ/รูปเดิมไม่ได้ (แก้ได้แค่ติ๊กสำคัญ หรือระบบลบรูปเก่าออกอัตโนมัติ)
+      // ลบได้เฉพาะข้อความของตัวเอง หรือข้อความรูปล้วน (ไม่มีตัวหนังสือ) ที่เก่าเกิน 21 วัน (เก็บกวาดอัตโนมัติ)
       match /messages/{msgId} {
         allow read: if isSignedIn();
         allow create: if isSignedIn() && validMessage();
         allow update: if isSignedIn()
-                      && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['important'])
-                      && request.resource.data.important is bool;
-        allow delete: if isSignedIn() && request.auth.uid == resource.data.fromId;
+                      && (
+                           (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['important'])
+                            && request.resource.data.important is bool)
+                           || (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['image', 'imageRemoved'])
+                               && !request.resource.data.keys().hasAny(['image'])
+                               && request.resource.data.imageRemoved == true
+                               && messageImageExpired())
+                         );
+        allow delete: if isSignedIn()
+                      && (request.auth.uid == resource.data.fromId
+                          || (resource.data.text.size() == 0 && messageImageExpired()));
       }
 
       // event ชั่วคราว (ทัก/โฟกัส) — ลบได้เพื่อให้แอปเก็บกวาดของเก่า
