@@ -637,6 +637,8 @@
         updateTask: (id, patch) => roomRef && roomRef.collection('tasks').doc(id).update(patch),
         deleteTask: (id) => roomRef && roomRef.collection('tasks').doc(id).delete(),
         sendChat: (msg) => roomRef && roomRef.collection('messages').doc(msg.id).set(msg),
+        setMessageImportant: (id, important) => roomRef && roomRef.collection('messages').doc(id).update({ important }),
+        deleteMessage: (id) => roomRef && roomRef.collection('messages').doc(id).delete(),
         setTheme: (themeId) => roomRef && roomRef.collection('meta').doc('state').set({ themeId, ts: Date.now() }),
         removeMe: (id) => roomRef && roomRef.collection('members').doc(id).delete()
       }), [roomRef]);
@@ -1143,7 +1145,7 @@
        กลาง: ปฏิทินทั้งเดือน (modal)
        ============================================================ */
 
-    function MonthModal({ theme, anchor, selected, tasks, onSelect, onClose }) {
+    function MonthModal({ theme, anchor, selected, tasks, messages, onSelect, onClose }) {
       const [cursor, setCursor] = useState(() => {
         const d = fromISO(anchor);
         return new Date(d.getFullYear(), d.getMonth(), 1);
@@ -1190,20 +1192,27 @@
                 const active = iso === selected;
                 const open = tasks.filter((t) => t.date === iso && !t.done).length;
                 const done = tasks.filter((t) => t.date === iso && t.done).length;
+                const msgCount = messages ? messages.filter((m) => m.pinDate === iso).length : 0;
+                const important = messages ? messages.some((m) => m.pinDate === iso && m.important) : false;
                 return (
                   <button
                     key={iso}
                     onClick={() => { onSelect(iso); onClose(); }}
+                    title={msgCount > 0 ? msgCount + ' ข้อความปักหมุดวันนี้' : undefined}
                     className={'relative aspect-square rounded-xl text-sm transition-all flex flex-col items-center justify-center ' +
                       (active ? theme.primaryButton + ' text-white font-bold scale-105'
                         : iso === today ? 'bg-emerald-50 text-emerald-700 font-semibold hover:bg-emerald-100'
                         : 'bg-slate-50 text-slate-600 hover:bg-slate-100')}
                   >
+                    {important && (
+                      <span className={'absolute top-0.5 right-0.5 text-[9px] ' + (active ? '' : '')}>⭐</span>
+                    )}
                     <span>{d.getDate()}</span>
-                    {(open > 0 || done > 0) && (
+                    {(open > 0 || done > 0 || msgCount > 0) && (
                       <span className="flex gap-0.5 mt-0.5">
                         {open > 0 && <span className={'w-1.5 h-1.5 rounded-full ' + (active ? 'bg-white' : 'bg-rose-500')}></span>}
                         {done > 0 && <span className={'w-1.5 h-1.5 rounded-full ' + (active ? 'bg-white/60' : 'bg-emerald-500')}></span>}
+                        {msgCount > 0 && <span className={'w-1.5 h-1.5 rounded-full ' + (active ? 'bg-white/80' : 'bg-sky-500')}></span>}
                       </span>
                     )}
                   </button>
@@ -1211,9 +1220,11 @@
               })}
             </div>
 
-            <div className="flex items-center justify-center gap-4 mt-4 text-[11px] text-slate-400">
+            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 mt-4 text-[11px] text-slate-400">
               <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-rose-500"></span> มีงานค้าง</span>
               <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> มีงานที่เสร็จแล้ว</span>
+              <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-sky-500"></span> มีข้อความปักหมุด</span>
+              <span className="flex items-center gap-1">⭐ มีข้อความสำคัญ</span>
             </div>
           </div>
         </div>
@@ -1579,16 +1590,26 @@
        ขวา: แชทอัปเดตกลุ่ม
        ============================================================ */
 
-    function ChatPanel({ theme, me, messages, pinDate, onSend, onError }) {
+    function ChatPanel({ theme, me, messages, pinDate, onSend, onToggleImportant, onDelete, onError }) {
       const [text, setText] = useState('');
       const [pendingImage, setPendingImage] = useState(null);
       const [busy, setBusy] = useState(false);
+      const [query, setQuery] = useState('');
+      const [importantOnly, setImportantOnly] = useState(false);
       const endRef = useRef(null);
       const fileRef = useRef(null);
 
       useEffect(() => {
         if (endRef.current) endRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }, [messages.length]);
+
+      const q = query.trim().toLowerCase();
+      const shown = messages.filter((m) => {
+        if (importantOnly && !m.important) return false;
+        if (q && !((m.text || '').toLowerCase().includes(q) || (m.name || '').toLowerCase().includes(q))) return false;
+        return true;
+      });
+      const filtering = !!q || importantOnly;
 
       const pickFile = (e) => {
         const file = e.target.files && e.target.files[0];
@@ -1616,15 +1637,36 @@
 
       return (
         <Panel title="แชทอัปเดตกลุ่ม" emoji="🐾" badge={'📌 ' + pinDate} badgeClass="bg-rose-100 text-rose-600">
+          <div className="flex gap-1.5 mb-2">
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="🔎 ค้นข้อความ (100 อันล่าสุด)..."
+              className="flex-1 min-w-0 rounded-xl border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs outline-none focus:ring-2 focus:ring-slate-300 placeholder:text-slate-400"
+            />
+            <button
+              type="button"
+              onClick={() => setImportantOnly((v) => !v)}
+              title="โชว์เฉพาะข้อความสำคัญ"
+              className={'shrink-0 rounded-xl border px-2.5 py-1.5 text-xs transition-colors ' +
+                (importantOnly ? 'bg-amber-100 border-amber-300 text-amber-700' : 'border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-500')}
+            >
+              ⭐
+            </button>
+          </div>
+
           <div className="space-y-3 max-h-[26rem] overflow-y-auto pr-1">
             {messages.length === 0 && (
               <EmptyState emoji="💬" title="ยังไม่มีใครพูดอะไร" hint="เริ่มทักก่อนเลย!" />
             )}
-            {messages.map((m) => {
+            {messages.length > 0 && shown.length === 0 && (
+              <EmptyState emoji="🔎" title="ไม่พบข้อความที่ตรงกัน" hint="ลองเปลี่ยนคำค้นหรือปิดตัวกรองดู" />
+            )}
+            {shown.map((m) => {
               const pet = PETS_CONFIG[m.pet] || PETS_CONFIG.dog;
               const links = extractLinks(m.text);
               return (
-                <div key={m.id} className="animate-scaleUp">
+                <div key={m.id} className={'animate-scaleUp rounded-2xl -mx-1 px-1 py-0.5 ' + (m.important ? 'bg-amber-50/70 ring-1 ring-amber-200' : '')}>
                   <div className="flex items-center gap-1.5 flex-wrap mb-1">
                     <span className="text-base">{pet.emoji}</span>
                     <span className="text-[11px] font-semibold text-slate-600">{m.name}</span>
@@ -1635,6 +1677,22 @@
                       </span>
                     )}
                     <span className="text-[9px] text-slate-300 ml-auto">{timeLabel(m.ts)}</span>
+                    <button
+                      onClick={() => onToggleImportant(m)}
+                      title={m.important ? 'เอาออกจากข้อความสำคัญ' : 'ติ๊กเป็นข้อความสำคัญ'}
+                      className={'shrink-0 text-xs px-1 transition-colors ' + (m.important ? 'text-amber-500' : 'text-slate-300 hover:text-amber-400')}
+                    >
+                      {m.important ? '⭐' : '☆'}
+                    </button>
+                    {m.fromId === me.id && (
+                      <button
+                        onClick={() => onDelete(m)}
+                        title="ลบข้อความนี้"
+                        className="shrink-0 text-xs text-slate-300 hover:text-rose-500 px-1 transition-colors"
+                      >
+                        ✕
+                      </button>
+                    )}
                   </div>
 
                   {m.text && (
@@ -1670,7 +1728,7 @@
                 </div>
               );
             })}
-            <div ref={endRef}></div>
+            {!filtering && <div ref={endRef}></div>}
           </div>
 
           {pendingImage && (
@@ -1985,6 +2043,14 @@
         guard(api.sendChat(msg), image ? 'ส่งรูป' : 'ส่งข้อความ');
       };
 
+      const toggleImportant = (msg) => {
+        guard(api.setMessageImportant(msg.id, !msg.important), 'ติ๊กสำคัญ');
+      };
+
+      const deleteMessage = (msg) => {
+        guard(api.deleteMessage(msg.id), 'ลบข้อความ');
+      };
+
       const changeTheme = (id) => {
         setThemeId(id);
         guard(api.setTheme(id), 'เปลี่ยนธีม');
@@ -2168,7 +2234,16 @@
             <div className="space-y-4 animate-fadeIn">
               <TaskDetailPanel theme={theme} task={selectedTask} onToggle={toggleTask} />
               <LinkVaultPanel date={selectedDate} messages={messages} />
-              <ChatPanel theme={theme} me={me} messages={messages} pinDate={selectedDate} onSend={sendChat} onError={toast} />
+              <ChatPanel
+                theme={theme}
+                me={me}
+                messages={messages}
+                pinDate={selectedDate}
+                onSend={sendChat}
+                onToggleImportant={toggleImportant}
+                onDelete={deleteMessage}
+                onError={toast}
+              />
             </div>
           </div>
 
@@ -2178,6 +2253,7 @@
               anchor={weekAnchor}
               selected={selectedDate}
               tasks={tasks}
+              messages={messages}
               onSelect={(iso) => { setSelectedDate(iso); setWeekAnchor(iso); }}
               onClose={() => setShowMonth(false)}
             />

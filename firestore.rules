@@ -66,11 +66,14 @@ service cloud.firestore {
         allow delete: if isSignedIn();
       }
 
-      // แชท — เขียนได้อย่างเดียว แก้/ลบข้อความย้อนหลังไม่ได้
+      // แชท — เขียนใหม่ได้, แก้ข้อความ/รูปเดิมไม่ได้ (แก้ได้แค่ติ๊กสำคัญ), ลบได้เฉพาะข้อความของตัวเอง
       match /messages/{msgId} {
         allow read: if isSignedIn();
         allow create: if isSignedIn() && validMessage();
-        allow update, delete: if false;
+        allow update: if isSignedIn()
+                      && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['important'])
+                      && request.resource.data.important is bool;
+        allow delete: if isSignedIn() && request.auth.uid == resource.data.fromId;
       }
 
       // event ชั่วคราว (ทัก/โฟกัส) — ลบได้เพื่อให้แอปเก็บกวาดของเก่า
