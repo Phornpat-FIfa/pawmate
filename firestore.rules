@@ -100,12 +100,22 @@ service cloud.firestore {
       }
 
       // สถานะร่วมของห้อง เช่น ธีม
-      match /meta/{docId} {
+      match /meta/state {
         allow read: if isSignedIn();
         allow write: if isSignedIn()
                      && request.resource.data.keys().hasOnly(['themeId', 'ts'])
                      && request.resource.data.themeId is string
                      && request.resource.data.themeId.size() <= 20;
+      }
+
+      // ประเภทงานของห้อง (ไม่รวม "งานด่วน" ที่ตายตัวอยู่ในโค้ด) — ใครในห้องก็แก้ไขได้
+      match /meta/categories {
+        allow read: if isSignedIn();
+        allow write: if isSignedIn()
+                     && request.resource.data.keys().hasOnly(['list', 'ts'])
+                     && request.resource.data.list is list
+                     && request.resource.data.list.size() <= 20
+                     && request.resource.data.ts is number;
       }
     }
   }

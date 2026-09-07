@@ -126,7 +126,10 @@
       duck: { emoji: '🦆', name: 'เป็ด', sound: 'duck', color: 'bg-yellow-100 text-yellow-800 border-yellow-300', bubbleColor: 'bg-yellow-50 text-yellow-900 border-yellow-200' },
       panda: { emoji: '🐼', name: 'แพนด้า', sound: 'dog', color: 'bg-slate-100 text-slate-800 border-slate-300', bubbleColor: 'bg-slate-50 text-slate-900 border-slate-200' },
       koala: { emoji: '🐨', name: 'โคอาล่า', sound: 'cat', color: 'bg-stone-100 text-stone-800 border-stone-300', bubbleColor: 'bg-stone-50 text-stone-900 border-stone-200' },
-      mouse: { emoji: '🐭', name: 'หนู', sound: 'duck', color: 'bg-purple-100 text-purple-800 border-purple-300', bubbleColor: 'bg-purple-50 text-purple-900 border-purple-200' }
+      mouse: { emoji: '🐭', name: 'หนู', sound: 'duck', color: 'bg-purple-100 text-purple-800 border-purple-300', bubbleColor: 'bg-purple-50 text-purple-900 border-purple-200' },
+      // ร่างอวตารพิเศษ — ปลดล็อกเมื่อบ้านของห้องถึงเลเวลที่กำหนด (unlockLevel)
+      dragon: { emoji: '🐉', name: 'มังกร', sound: 'dog', color: 'bg-emerald-100 text-emerald-800 border-emerald-300', bubbleColor: 'bg-emerald-50 text-emerald-900 border-emerald-200', unlockLevel: 8 },
+      unicorn: { emoji: '🦄', name: 'ยูนิคอร์น', sound: 'cat', color: 'bg-pink-100 text-pink-800 border-pink-300', bubbleColor: 'bg-pink-50 text-pink-900 border-pink-200', unlockLevel: 15 }
     };
 
     const THEMES_CONFIG = {
@@ -233,8 +236,50 @@
         accentText: 'text-pink-700',
         bannerEmoji: '💖',
         illustrationText: '🐨🍰 มอบหัวใจบอกรักแบ่งเค้กก้อนโตแสนหวาน! 🐰💕'
+      },
+      // ธีมพิเศษ — ปลดล็อกเมื่อบ้านของห้องถึงเลเวลที่กำหนด (unlockLevel) ดู HOUSE_EXP_PER_LEVEL
+      rainbow: {
+        id: 'rainbow',
+        name: 'ธีมสายรุ้ง ปลดล็อกพิเศษ 🌈',
+        shortName: 'รุ้ง',
+        swatch: 'bg-gradient-to-r from-red-500 via-yellow-400 to-purple-500',
+        bgClass: 'bg-gradient-to-br from-red-500 via-amber-400 via-emerald-400 via-sky-500 to-purple-600 text-white',
+        headerClass: 'bg-purple-950/80 border-white/30 shadow-lg shadow-purple-900/40 text-white',
+        primaryButton: 'bg-gradient-to-r from-pink-500 to-amber-400 hover:opacity-90 focus:ring-pink-400',
+        activeTabClass: 'bg-white/20 text-white border-l-4 border-yellow-300 shadow-sm',
+        accentText: 'text-yellow-200',
+        bannerEmoji: '🌈',
+        illustrationText: '🐨🌈 ทีมเก่งมากจนปลดล็อกธีมสายรุ้งสุดพิเศษ!',
+        unlockLevel: 5
+      },
+      galaxy: {
+        id: 'galaxy',
+        name: 'ธีมกาแล็กซี่ ปลดล็อกพิเศษ 🌌',
+        shortName: 'กาแล็กซี่',
+        swatch: 'bg-gradient-to-br from-indigo-950 via-purple-900 to-black',
+        bgClass: 'bg-gradient-to-br from-slate-950 via-indigo-950 to-purple-950 text-white',
+        headerClass: 'bg-black/80 border-indigo-800 shadow-indigo-950/60 text-white',
+        primaryButton: 'bg-indigo-700 hover:bg-indigo-800 focus:ring-indigo-500',
+        activeTabClass: 'bg-indigo-900/70 text-white border-l-4 border-fuchsia-400 shadow-sm',
+        accentText: 'text-fuchsia-300',
+        bannerEmoji: '🌌',
+        illustrationText: '🐼🌌 ล่องลอยท่องกาแล็กซี่กับเพื่อนซี้สุดเจ๋ง!',
+        unlockLevel: 10
       }
     };
+
+    // หน้าตาบ้านเปลี่ยนไปตามเลเวลของห้อง (ทั้งห้องเห็นเหมือนกัน เพราะ EXP รวมทั้งทีม)
+    const HOUSE_STAGES = [
+      { level: 1, emoji: '🏡' },
+      { level: 5, emoji: '🏰' },
+      { level: 10, emoji: '🌈🏰' },
+      { level: 15, emoji: '🌌🏯' }
+    ];
+    function houseEmojiFor(level) {
+      let e = HOUSE_STAGES[0].emoji;
+      for (const s of HOUSE_STAGES) if (level >= s.level) e = s.emoji;
+      return e;
+    }
 
     const DEFAULT_FOODS = [
       { name: 'ก๋วยเตี๋ยว', emoji: '🍜' },
@@ -254,8 +299,9 @@
       { emoji: '🔥', text: 'ปั่นงานเร่งด่วนสุดๆ' }
     ];
 
-    const CATEGORIES = [
-      { id: 'urgent', name: 'งานด่วน!', emoji: '🔥', urgent: true },
+    // "งานด่วน" เป็นหมวดตายตัว แก้ชื่อ/ลบไม่ได้ — หมวดอื่นแก้ไขได้เอง เก็บไว้ที่ rooms/{room}/meta/categories
+    const URGENT_CATEGORY = { id: 'urgent', name: 'งานด่วน!', emoji: '🔥', urgent: true };
+    const DEFAULT_CATEGORIES = [
       { id: 'marketing', name: 'Marketing', emoji: '✨' },
       { id: 'design', name: 'Design', emoji: '🎨' },
       { id: 'production', name: 'Production', emoji: '🎬' }
@@ -530,6 +576,7 @@
       const [tasks, setTasks] = useState([]);
       const [messages, setMessages] = useState([]);
       const [roomTheme, setRoomTheme] = useState(null);
+      const [roomCategories, setRoomCategories] = useState(null); // null = ยังไม่มีใน Firestore, ให้ใช้ DEFAULT_CATEGORIES
 
       const meRef = useRef(me);
       const onEventRef = useRef(onEvent);
@@ -568,6 +615,11 @@
         unsubs.push(roomRef.collection('meta').doc('state').onSnapshot((d) => {
           const data = d.data();
           if (data && data.themeId) setRoomTheme(data.themeId);
+        }, fail('meta')));
+
+        unsubs.push(roomRef.collection('meta').doc('categories').onSnapshot((d) => {
+          const data = d.data();
+          setRoomCategories(data && Array.isArray(data.list) ? data.list : null);
         }, fail('meta')));
 
         // รับเฉพาะ event ที่เกิดหลังเราเข้าห้อง ไม่งั้นจะได้ยินเสียงทักย้อนหลังทั้งกอง
@@ -665,17 +717,18 @@
         setMessageImportant: (id, important) => roomRef && roomRef.collection('messages').doc(id).update({ important }),
         deleteMessage: (id) => roomRef && roomRef.collection('messages').doc(id).delete(),
         setTheme: (themeId) => roomRef && roomRef.collection('meta').doc('state').set({ themeId, ts: Date.now() }),
+        setCategories: (list) => roomRef && roomRef.collection('meta').doc('categories').set({ list, ts: Date.now() }),
         removeMe: (id) => roomRef && roomRef.collection('members').doc(id).delete()
       }), [roomRef]);
 
-      return { status, allMembers, tasks, messages, roomTheme, emit, api };
+      return { status, allMembers, tasks, messages, roomTheme, roomCategories, emit, api };
     }
 
     /* ============================================================
        UI ชิ้นเล็ก
        ============================================================ */
 
-    function Panel({ title, emoji, badge, badgeClass = 'bg-slate-100 text-slate-500', className = '', children }) {
+    function Panel({ title, emoji, badge, badgeClass = 'bg-slate-100 text-slate-500', right, className = '', children }) {
       return (
         <section className={'rounded-2xl bg-white/95 shadow-lg shadow-black/10 p-4 ' + className}>
           {title && (
@@ -685,10 +738,11 @@
                 <span className="truncate">{title}</span>
               </h2>
               {badge && (
-                <span className={'ml-auto shrink-0 text-[10px] rounded-full px-2 py-0.5 font-medium ' + badgeClass}>
+                <span className={'shrink-0 text-[10px] rounded-full px-2 py-0.5 font-medium ' + (right ? '' : 'ml-auto ') + badgeClass}>
                   {badge}
                 </span>
               )}
+              {right && <span className={'shrink-0 ' + (badge ? '' : 'ml-auto')}>{right}</span>}
             </div>
           )}
           {children}
@@ -719,6 +773,34 @@
               {t.text}
             </div>
           ))}
+        </div>
+      );
+    }
+
+    // เปิดรูปเต็มในหน้าเดิม — เดิมใช้ <a target="_blank"> แต่เบราว์เซอร์บล็อกการเปิด data: URL
+    // เป็นแท็บใหม่ (โดยเฉพาะมือถือ) กดแล้วไม่มีอะไรขึ้น จึงเปลี่ยนมาเปิดเป็น lightbox ในหน้าแทน
+    function ImageLightbox({ image, onClose }) {
+      if (!image) return null;
+      return (
+        <div
+          onClick={onClose}
+          className="fixed inset-0 z-[100] bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn"
+        >
+          <button
+            onClick={onClose}
+            title="ปิด"
+            className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/15 hover:bg-white/25 text-white text-lg flex items-center justify-center transition-colors"
+          >
+            ✕
+          </button>
+          <div onClick={(e) => e.stopPropagation()} className="max-w-full max-h-full flex flex-col items-center gap-2">
+            <img src={image.src} alt={image.caption || 'รูปภาพ'} className="max-w-full max-h-[80vh] rounded-xl shadow-2xl object-contain" />
+            {(image.caption || image.name) && (
+              <div className="text-xs text-white/80 text-center px-2">
+                {image.caption ? image.caption + ' — ' : ''}{image.name ? 'โดย ' + image.name : ''}
+              </div>
+            )}
+          </div>
         </div>
       );
     }
@@ -775,7 +857,7 @@
               <div>
                 <label className="block text-sm font-medium mb-2">เลือกร่างอวตาร</label>
                 <div className="grid grid-cols-3 gap-2">
-                  {Object.entries(PETS_CONFIG).map(([key, p]) => (
+                  {Object.entries(PETS_CONFIG).filter(([, p]) => !p.unlockLevel).map(([key, p]) => (
                     <button
                       type="button"
                       key={key}
@@ -825,15 +907,46 @@
        HEADER
        ============================================================ */
 
-    function Header({ theme, me, houseLevel, houseExp, status, room, memberCount, onName, onMood, onTheme, onLeave }) {
+    function Header({ theme, me, houseLevel, houseExp, status, room, memberCount, onName, onMood, onTheme, onLockedTheme, onPet, onLeave }) {
       const pet = PETS_CONFIG[me.pet] || PETS_CONFIG.dog;
+      const [petPickerOpen, setPetPickerOpen] = useState(false);
       return (
         <header className={'sticky top-0 z-30 border-b backdrop-blur-md shadow-lg ' + theme.headerClass}>
           <div className="max-w-[1800px] mx-auto px-4 py-2.5 flex flex-wrap items-center gap-x-4 gap-y-2">
 
             {/* ซ้าย: โลโก้ + ชื่อ */}
             <div className="flex items-center gap-2 min-w-0">
-              <span className="text-3xl shrink-0">{pet.emoji}</span>
+              <div className="relative shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setPetPickerOpen((v) => !v)}
+                  title="เปลี่ยนร่างอวตาร"
+                  className="text-3xl leading-none hover:scale-110 transition-transform"
+                >
+                  {pet.emoji}
+                </button>
+                {petPickerOpen && (
+                  <div className="absolute z-40 top-full left-0 mt-2 w-60 rounded-xl bg-white shadow-2xl border border-slate-200 p-2 grid grid-cols-4 gap-1.5">
+                    {Object.entries(PETS_CONFIG).map(([key, p]) => {
+                      const locked = p.unlockLevel && houseLevel < p.unlockLevel;
+                      return (
+                        <button
+                          key={key}
+                          type="button"
+                          disabled={locked}
+                          onClick={() => { onPet(key); setPetPickerOpen(false); }}
+                          title={locked ? p.name + ' — ปลดล็อกที่ Lv.' + p.unlockLevel : p.name}
+                          className={'rounded-lg py-2 flex flex-col items-center gap-0.5 transition-colors ' +
+                            (key === me.pet ? 'bg-fuchsia-100' : locked ? 'opacity-30 cursor-not-allowed' : 'hover:bg-slate-100')}
+                        >
+                          <span className="text-xl">{locked ? '🔒' : p.emoji}</span>
+                          <span className="text-[9px] text-slate-500 truncate w-full text-center">{p.name}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
                   <h1 className="text-xl font-black leading-none shrink-0">Pawmate</h1>
@@ -855,7 +968,7 @@
             {/* กลาง: บ้าน + EXP */}
             <div className="flex-1 min-w-[240px] order-last lg:order-none">
               <div className="text-center text-sm font-bold flex items-center justify-center gap-2">
-                <span>🏡</span>
+                <span>{houseEmojiFor(houseLevel)}</span>
                 <span>บ้าน PAWMATE LV.{houseLevel}</span>
               </div>
               <div className="mt-1 mx-auto max-w-lg h-4 rounded-full bg-black/30 overflow-hidden relative">
@@ -892,18 +1005,21 @@
               </div>
 
               <div className="rounded-xl bg-white/95 p-1.5 grid grid-cols-4 gap-1">
-                {Object.values(THEMES_CONFIG).map((t) => (
-                  <button
-                    key={t.id}
-                    onClick={() => onTheme(t.id)}
-                    title={t.name}
-                    className={'rounded-lg px-2 py-1 text-[10px] transition-all ' + (t.id === theme.id
-                      ? t.swatch + ' text-white font-medium'
-                      : 'text-slate-600 hover:bg-slate-100')}
-                  >
-                    {t.shortName}
-                  </button>
-                ))}
+                {Object.values(THEMES_CONFIG).map((t) => {
+                  const locked = t.unlockLevel && houseLevel < t.unlockLevel;
+                  return (
+                    <button
+                      key={t.id}
+                      onClick={() => (locked ? onLockedTheme(t) : onTheme(t.id))}
+                      title={locked ? t.name + ' — ปลดล็อกที่ Lv.' + t.unlockLevel : t.name}
+                      className={'rounded-lg px-2 py-1 text-[10px] transition-all ' + (t.id === theme.id
+                        ? t.swatch + ' text-white font-medium'
+                        : locked ? 'text-slate-300' : 'text-slate-600 hover:bg-slate-100')}
+                    >
+                      {locked && '🔒'}{t.shortName}
+                    </button>
+                  );
+                })}
               </div>
 
               <button
@@ -983,13 +1099,47 @@
        ซ้าย: เลือกประเภทงาน
        ============================================================ */
 
-    function CategoryPanel({ theme, tasks, selected, onSelect }) {
+    function CategoryPanel({ theme, tasks, selected, onSelect, categories, onAdd, onRename, onDelete }) {
+      const [managing, setManaging] = useState(false);
+      const [editingId, setEditingId] = useState(null);
+      const [editName, setEditName] = useState('');
+      const [newEmoji, setNewEmoji] = useState('🗂');
+      const [newName, setNewName] = useState('');
       const countOf = (id) => tasks.filter((t) => !t.done && t.category === id).length;
 
+      const startEdit = (c) => { setEditingId(c.id); setEditName(c.name); };
+      const submitEdit = (e) => {
+        e.preventDefault();
+        const n = editName.trim();
+        if (n) onRename(editingId, n);
+        setEditingId(null);
+      };
+      const submitAdd = (e) => {
+        e.preventDefault();
+        const n = newName.trim();
+        if (!n) return;
+        onAdd(n, (newEmoji.trim() || '🗂').slice(0, 4));
+        setNewName('');
+        setNewEmoji('🗂');
+      };
+
       return (
-        <Panel title="เลือกประเภทงาน" emoji="🗂" badge={CATEGORIES.length + ' ส่วน'}>
+        <Panel
+          title="เลือกประเภทงาน"
+          emoji="🗂"
+          badge={categories.length + ' ส่วน'}
+          right={
+            <button
+              type="button"
+              onClick={() => { setManaging((v) => !v); setEditingId(null); }}
+              className="text-[11px] rounded-full px-2.5 py-1 bg-slate-100 text-slate-500 hover:bg-slate-200 transition-colors"
+            >
+              {managing ? '✓ เสร็จแล้ว' : '⚙️ จัดการ'}
+            </button>
+          }
+        >
           <div className="space-y-2">
-            {CATEGORIES.map((c) => {
+            {categories.map((c) => {
               const n = countOf(c.id);
               const active = selected === c.id;
               const base = 'w-full flex items-center gap-2.5 rounded-xl px-3.5 py-2.5 text-sm transition-all border';
@@ -997,17 +1147,73 @@
               if (active) cls = theme.primaryButton + ' text-white border-transparent shadow-md scale-[1.02] font-semibold';
               else if (c.urgent) cls = 'bg-rose-50 text-rose-700 border-rose-200 border-dashed hover:bg-rose-100';
               else cls = 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50';
+
+              if (managing && !c.urgent && editingId === c.id) {
+                return (
+                  <form key={c.id} onSubmit={submitEdit} className="flex items-center gap-1.5">
+                    <span className="text-base shrink-0">{c.emoji}</span>
+                    <input
+                      value={editName}
+                      onChange={(e) => setEditName(e.target.value)}
+                      maxLength={20}
+                      autoFocus
+                      className="flex-1 min-w-0 rounded-lg border border-slate-300 px-2 py-1.5 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+                    />
+                    <button type="submit" title="บันทึก" className="shrink-0 text-xs px-2 py-1.5 rounded-lg bg-emerald-500 text-white">✓</button>
+                    <button type="button" onClick={() => setEditingId(null)} title="ยกเลิก" className="shrink-0 text-xs px-2 py-1.5 rounded-lg bg-slate-200 text-slate-600">✕</button>
+                  </form>
+                );
+              }
+
               return (
-                <button key={c.id} onClick={() => onSelect(c.id)} className={base + ' ' + cls}>
-                  <span className="text-base">{c.emoji}</span>
-                  <span className="truncate">{c.name}</span>
-                  <span className={'ml-auto shrink-0 text-xs rounded-full w-6 h-6 flex items-center justify-center ' +
-                    (active ? 'bg-white/25' : c.urgent ? 'bg-rose-100' : 'bg-slate-100')}>
-                    {n}
-                  </span>
-                </button>
+                <div key={c.id} className={base + ' ' + cls}>
+                  <button type="button" onClick={() => onSelect(c.id)} className="flex items-center gap-2.5 flex-1 min-w-0 text-left">
+                    <span className="text-base">{c.emoji}</span>
+                    <span className="truncate">{c.name}</span>
+                  </button>
+                  {!managing && (
+                    <span className={'ml-auto shrink-0 text-xs rounded-full w-6 h-6 flex items-center justify-center ' +
+                      (active ? 'bg-white/25' : c.urgent ? 'bg-rose-100' : 'bg-slate-100')}>
+                      {n}
+                    </span>
+                  )}
+                  {managing && !c.urgent && (
+                    <div className="ml-auto flex items-center gap-1 shrink-0">
+                      <button type="button" onClick={() => startEdit(c)} title="แก้ชื่อ" className="text-xs px-1.5 py-1 rounded-lg hover:bg-black/5">✏️</button>
+                      <button type="button" onClick={() => onDelete(c.id)} title="ลบหมวดนี้" className="text-xs px-1.5 py-1 rounded-lg hover:bg-black/5">🗑</button>
+                    </div>
+                  )}
+                  {managing && c.urgent && (
+                    <span className="ml-auto shrink-0 text-[9px] text-rose-400">ตายตัว</span>
+                  )}
+                </div>
               );
             })}
+
+            {managing && (
+              <form onSubmit={submitAdd} className="flex items-center gap-1.5 pt-1">
+                <input
+                  value={newEmoji}
+                  onChange={(e) => setNewEmoji(e.target.value)}
+                  maxLength={4}
+                  className="w-11 shrink-0 rounded-lg border border-slate-200 bg-slate-50 px-2 py-1.5 text-sm text-center outline-none focus:ring-2 focus:ring-slate-300"
+                />
+                <input
+                  value={newName}
+                  onChange={(e) => setNewName(e.target.value)}
+                  maxLength={20}
+                  placeholder="ชื่อหมวดใหม่..."
+                  className="flex-1 min-w-0 rounded-lg border border-slate-200 bg-slate-50 px-2 py-1.5 text-sm outline-none focus:ring-2 focus:ring-slate-300 placeholder:text-slate-400"
+                />
+                <button
+                  type="submit"
+                  disabled={!newName.trim()}
+                  className={'shrink-0 text-xs px-2.5 py-1.5 rounded-lg text-white font-semibold disabled:opacity-40 disabled:cursor-not-allowed ' + theme.primaryButton}
+                >
+                  + เพิ่ม
+                </button>
+              </form>
+            )}
           </div>
         </Panel>
       );
@@ -1017,7 +1223,7 @@
        ซ้าย: สร้างงานใหม่
        ============================================================ */
 
-    function CreateTaskPanel({ theme, category, date, me, members, onAdd }) {
+    function CreateTaskPanel({ theme, category, date, me, members, categories, onAdd }) {
       const [text, setText] = useState('');
       const [taskDate, setTaskDate] = useState(date);
       const [points, setPoints] = useState(10);
@@ -1025,7 +1231,7 @@
 
       useEffect(() => { setTaskDate(date); }, [date]);
 
-      const cat = CATEGORIES.find((c) => c.id === category) || CATEGORIES[0];
+      const cat = categories.find((c) => c.id === category) || categories[0];
       const roster = [me, ...Object.values(members)];
 
       const submit = (e) => {
@@ -1260,7 +1466,7 @@
        กลาง: รายการงานประจำวัน
        ============================================================ */
 
-    function DayTaskList({ theme, date, tasks, me, selectedTaskId, onPick, onToggle, onDelete }) {
+    function DayTaskList({ theme, date, tasks, me, categories, selectedTaskId, onPick, onToggle, onDelete }) {
       const list = tasks.filter((t) => t.date === date);
 
       return (
@@ -1280,7 +1486,7 @@
           ) : (
             <div className="space-y-2">
               {list.map((t) => {
-                const cat = CATEGORIES.find((c) => c.id === t.category) || CATEGORIES[0];
+                const cat = categories.find((c) => c.id === t.category) || categories[0];
                 const owner = t.ownerName || t.byName;
                 return (
                   <div
@@ -1388,12 +1594,36 @@
     }
 
     function PetYard({ me, members, fullness, sleeping, message, onWake, onFeed, onPinch, onPokeOther }) {
+      // ย่อเป็นการ์ดเล็กไว้ก่อน กันไม่ให้บ้านสัตว์แย่งพื้นที่งานประจำวัน/แชท — กดเพื่อกางออกเต็ม
+      const [open, setOpen] = useState(false);
+
       // เอาค่า fullness/sleeping ของตัวเองจาก state ตรง ๆ จะได้เห็นผลทันทีไม่ต้องรอ heartbeat
       const roster = useMemo(() => {
         const others = Object.values(members);
         others.sort((a, b) => a.name.localeCompare(b.name, 'th'));
         return [{ ...me, fullness, sleeping }, ...others];
       }, [me, members, fullness, sleeping]);
+
+      if (!open) {
+        return (
+          <section
+            onClick={() => setOpen(true)}
+            className="rounded-2xl bg-gradient-to-b from-sky-50 to-emerald-100 border-2 border-emerald-200 shadow-lg px-4 py-2.5 flex items-center gap-3 cursor-pointer hover:shadow-xl transition-shadow animate-fadeIn"
+          >
+            <span className="text-xl shrink-0">🏡</span>
+            <div className="min-w-0 flex-1">
+              <div className="text-xs font-bold text-emerald-900 truncate">สนามวิ่งเล่นและกิจกรรมของทีม ({roster.length} ตัว)</div>
+              <div className="flex items-center gap-1 mt-0.5">
+                {roster.slice(0, 8).map((m) => (
+                  <span key={m.id} className="text-sm">{(PETS_CONFIG[m.pet] || PETS_CONFIG.dog).emoji}</span>
+                ))}
+                {message && <span className="text-[10px] text-emerald-700 truncate ml-1">💬 {message}</span>}
+              </div>
+            </div>
+            <span className="shrink-0 text-[10px] font-medium text-emerald-700 bg-white/70 rounded-full px-2.5 py-1">▾ กางออก</span>
+          </section>
+        );
+      }
 
       return (
         <section className="rounded-2xl bg-gradient-to-b from-sky-50 to-emerald-100 border-2 border-emerald-200 shadow-lg p-4 relative overflow-hidden">
@@ -1422,6 +1652,13 @@
                 className="rounded-xl bg-rose-400 hover:bg-rose-500 text-white px-3.5 py-2 text-xs font-semibold shadow-md transition-colors"
               >
                 🤏 หยิกแก้ม
+              </button>
+              <button
+                onClick={() => setOpen(false)}
+                title="ย่อเก็บ"
+                className="rounded-xl bg-white/80 hover:bg-white text-emerald-700 px-2.5 py-2 text-xs font-semibold shadow-md transition-colors"
+              >
+                ▴ ย่อ
               </button>
             </div>
           </div>
@@ -1472,7 +1709,7 @@
        ขวา: งานประจำวันที่เลือก
        ============================================================ */
 
-    function TaskDetailPanel({ theme, task, onToggle }) {
+    function TaskDetailPanel({ theme, task, categories, onToggle }) {
       if (!task) {
         return (
           <Panel title="งานประจำวัน" emoji="📋" badge="อัปเดตสด" badgeClass="bg-emerald-100 text-emerald-700">
@@ -1485,7 +1722,7 @@
         );
       }
 
-      const cat = CATEGORIES.find((c) => c.id === task.category) || CATEGORIES[0];
+      const cat = categories.find((c) => c.id === task.category) || categories[0];
       return (
         <Panel title="งานประจำวัน" emoji="📋" badge="อัปเดตสด" badgeClass="bg-emerald-100 text-emerald-700">
           <div className="rounded-xl border border-slate-200 bg-slate-50 p-3.5 animate-scaleUp">
@@ -1531,7 +1768,7 @@
        ขวา: คลังไฟล์และลิงก์ของวันนี้
        ============================================================ */
 
-    function LinkVaultPanel({ date, messages }) {
+    function LinkVaultPanel({ date, messages, onViewImage }) {
       const { images, links } = useMemo(() => {
         const imgs = [];
         const lks = [];
@@ -1566,16 +1803,15 @@
                   <div className="text-[10px] text-slate-400 mb-1.5">🖼 รูปภาพ ({images.length})</div>
                   <div className="grid grid-cols-3 gap-1.5">
                     {images.map((im) => (
-                      <a
+                      <button
                         key={im.id}
-                        href={im.src}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        type="button"
+                        onClick={() => onViewImage(im)}
                         title={(im.caption ? im.caption + ' — ' : '') + 'โดย ' + im.name + ' ' + timeLabel(im.ts)}
                         className="block aspect-square rounded-lg overflow-hidden border border-slate-200 hover:opacity-80 transition-opacity animate-scaleUp"
                       >
                         <img src={im.src} alt={im.caption || 'รูปโดย ' + im.name} loading="lazy" className="w-full h-full object-cover" />
-                      </a>
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -1615,7 +1851,7 @@
        ขวา: แชทอัปเดตกลุ่ม
        ============================================================ */
 
-    function ChatPanel({ theme, me, messages, pinDate, onSend, onToggleImportant, onDelete, onError }) {
+    function ChatPanel({ theme, me, messages, pinDate, onSend, onToggleImportant, onDelete, onError, onViewImage }) {
       const [text, setText] = useState('');
       const [pendingImage, setPendingImage] = useState(null);
       const [busy, setBusy] = useState(false);
@@ -1728,14 +1964,18 @@
                   )}
 
                   {m.image && (
-                    <a href={m.image} target="_blank" rel="noopener noreferrer" className="block mt-1">
+                    <button
+                      type="button"
+                      onClick={() => onViewImage({ src: m.image, caption: m.text, name: m.name })}
+                      className="block mt-1"
+                    >
                       <img
                         src={m.image}
                         alt={'รูปที่ ' + m.name + ' แชร์'}
                         loading="lazy"
                         className="rounded-xl border border-slate-200 max-h-52 w-auto hover:opacity-90 transition-opacity"
                       />
-                    </a>
+                    </button>
                   )}
 
                   {!m.image && m.imageRemoved && (
@@ -1871,9 +2111,10 @@
 
       const [selectedDate, setSelectedDate] = useState(() => toISO(new Date()));
       const [weekAnchor, setWeekAnchor] = useState(() => toISO(new Date()));
-      const [category, setCategory] = useState('marketing');
+      const [category, setCategory] = useState('urgent');
       const [selectedTaskId, setSelectedTaskId] = useState(null);
       const [showMonth, setShowMonth] = useState(false);
+      const [viewerImage, setViewerImage] = useState(null);
 
       const [fullness, setFullness] = useState(() => readStore('pawmate.fullness', 70));
       const [petMsg, setPetMsg] = useState('');
@@ -1935,7 +2176,7 @@
         [me, fullness, sleeping]
       );
 
-      const { status, allMembers, tasks, messages, roomTheme, emit, api } = useRoom({
+      const { status, allMembers, tasks, messages, roomTheme, roomCategories, emit, api } = useRoom({
         room: session ? session.room : null,
         me: meWithPet,
         ready: !!authUid,
@@ -1946,6 +2187,13 @@
       useEffect(() => {
         if (roomTheme && THEMES_CONFIG[roomTheme]) setThemeId(roomTheme);
       }, [roomTheme]);
+
+      // ประเภทงาน (นอกจาก "งานด่วน" ที่ตายตัว) แก้ไขได้เอง — ยังไม่มีใน Firestore ก็ใช้ค่าเริ่มต้นไปก่อน
+      const editableCategories = roomCategories && roomCategories.length ? roomCategories : DEFAULT_CATEGORIES;
+      const categories = useMemo(
+        () => [URGENT_CATEGORY, ...editableCategories],
+        [editableCategories]
+      );
 
       /* ---------- สมาชิกคนอื่นที่ยังไม่หายไป ----------
          Firestore ไม่มี onDisconnect เหมือน RTDB ถ้าใครปิดแท็บดื้อ ๆ doc จะค้าง
@@ -2026,6 +2274,14 @@
 
       const setMood = (mood) => setMe((prev) => ({ ...prev, mood }));
 
+      const changePet = (pet) => {
+        setMe((prev) => ({ ...prev, pet }));   // presence effect เขียนลง Firestore ให้เอง
+        const s = { ...session, pet };
+        writeStore('pawmate.session', s);
+        setSession(s);
+        playSynthesizedSound(PETS_CONFIG[pet].sound);
+      };
+
       const addTask = ({ text, category, date, points, ownerId, ownerName }) => {
         const task = {
           id: uid(), text, category, date, points, done: false,
@@ -2063,6 +2319,23 @@
         if (selectedTaskId === task.id) setSelectedTaskId(null);
       };
 
+      const addCategory = (name, emoji) => {
+        guard(api.setCategories([...editableCategories, { id: uid(), name, emoji }]), 'เพิ่มหมวดงาน');
+      };
+
+      const renameCategory = (id, name) => {
+        guard(api.setCategories(editableCategories.map((c) => (c.id === id ? { ...c, name } : c))), 'แก้ชื่อหมวดงาน');
+      };
+
+      const deleteCategory = (id) => {
+        if (tasks.some((t) => t.category === id)) {
+          toast('ลบไม่ได้ ยังมีงานค้างอยู่ในหมวดนี้ — ย้ายหรือปิดงานก่อนนะ');
+          return;
+        }
+        guard(api.setCategories(editableCategories.filter((c) => c.id !== id)), 'ลบหมวดงาน');
+        if (category === id) setCategory('urgent');
+      };
+
       const sendChat = (text, image) => {
         const msg = {
           id: uid(), text: text || '', pinDate: selectedDate,
@@ -2084,6 +2357,10 @@
         setThemeId(id);
         guard(api.setTheme(id), 'เปลี่ยนธีม');
         emit('theme', { id });
+      };
+
+      const lockedThemeAttempt = (t) => {
+        toast('🔒 ' + t.name + ' ปลดล็อกที่บ้าน Lv.' + t.unlockLevel + ' — ตอนนี้อยู่ Lv.' + houseLevel);
       };
 
       const wakePet = () => {
@@ -2186,6 +2463,8 @@
             onName={renameMe}
             onMood={setMood}
             onTheme={changeTheme}
+            onLockedTheme={lockedThemeAttempt}
+            onPet={changePet}
             onLeave={leave}
           />
 
@@ -2194,13 +2473,23 @@
             {/* ---------- ซ้าย ---------- */}
             <div className="space-y-4 animate-fadeIn">
               <WorkloadPanel me={me} members={members} tasks={tasks} />
-              <CategoryPanel theme={theme} tasks={tasks} selected={category} onSelect={setCategory} />
+              <CategoryPanel
+                theme={theme}
+                tasks={tasks}
+                selected={category}
+                onSelect={setCategory}
+                categories={categories}
+                onAdd={addCategory}
+                onRename={renameCategory}
+                onDelete={deleteCategory}
+              />
               <CreateTaskPanel
                 theme={theme}
                 category={category}
                 date={selectedDate}
                 me={me}
                 members={members}
+                categories={categories}
                 onAdd={addTask}
               />
             </div>
@@ -2240,6 +2529,7 @@
                 date={selectedDate}
                 tasks={tasks}
                 me={me}
+                categories={categories}
                 selectedTaskId={selectedTaskId}
                 onPick={setSelectedTaskId}
                 onToggle={toggleTask}
@@ -2261,8 +2551,8 @@
 
             {/* ---------- ขวา ---------- */}
             <div className="space-y-4 animate-fadeIn">
-              <TaskDetailPanel theme={theme} task={selectedTask} onToggle={toggleTask} />
-              <LinkVaultPanel date={selectedDate} messages={messages} />
+              <TaskDetailPanel theme={theme} task={selectedTask} categories={categories} onToggle={toggleTask} />
+              <LinkVaultPanel date={selectedDate} messages={messages} onViewImage={setViewerImage} />
               <ChatPanel
                 theme={theme}
                 me={me}
@@ -2272,6 +2562,7 @@
                 onToggleImportant={toggleImportant}
                 onDelete={deleteMessage}
                 onError={toast}
+                onViewImage={setViewerImage}
               />
             </div>
           </div>
@@ -2287,6 +2578,8 @@
               onClose={() => setShowMonth(false)}
             />
           )}
+
+          <ImageLightbox image={viewerImage} onClose={() => setViewerImage(null)} />
 
           <FocusButton theme={theme} focusUntil={me.focusUntil} onStart={startFocus} onStop={stopFocus} />
           <Toasts toasts={toasts} />
