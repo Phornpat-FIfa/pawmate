@@ -29,7 +29,9 @@ service cloud.firestore {
              && d.category is string && d.category.size() <= 20
              && d.date is string && d.date.size() == 10
              && d.points is number && d.points >= 0 && d.points <= 100
-             && d.done is bool;
+             && d.done is bool
+             && (!d.keys().hasAny(['time']) || (d.time is string && d.time.size() <= 5))
+             && (!d.keys().hasAny(['description']) || (d.description is string && d.description.size() <= 2000));
     }
 
     // ข้อความจะมีแค่ตัวหนังสือ หรือแค่รูป หรือทั้งคู่ก็ได้ แต่ต้องมีอย่างน้อยหนึ่งอย่าง

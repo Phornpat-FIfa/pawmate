@@ -939,7 +939,9 @@
                 {petPickerOpen && (
                   <div className="absolute z-40 top-full left-0 mt-2 w-60 rounded-xl bg-white shadow-2xl border border-slate-200 p-2 grid grid-cols-4 gap-1.5">
                     {Object.entries(PETS_CONFIG).map(([key, p]) => {
-                      const locked = p.unlockLevel && houseLevel < p.unlockLevel;
+                      const isCurrent = key === me.pet;
+                      // ตัวที่ใส่อยู่แล้วต้องไม่โดนล็อก แม้เลเวลห้องจะร่วงลงมาทีหลัง (เช่นเพื่อนแต้มเยอะออกจากห้องไป)
+                      const locked = !isCurrent && p.unlockLevel && houseLevel < p.unlockLevel;
                       return (
                         <button
                           key={key}
@@ -948,7 +950,7 @@
                           onClick={() => { onPet(key); setPetPickerOpen(false); }}
                           title={locked ? p.name + ' — ปลดล็อกที่ Lv.' + p.unlockLevel : p.name}
                           className={'rounded-lg py-2 flex flex-col items-center gap-0.5 transition-colors ' +
-                            (key === me.pet ? 'bg-fuchsia-100' : locked ? 'opacity-30 cursor-not-allowed' : 'hover:bg-slate-100')}
+                            (isCurrent ? 'bg-fuchsia-100' : locked ? 'opacity-30 cursor-not-allowed' : 'hover:bg-slate-100')}
                         >
                           <span className="text-xl">{locked ? '🔒' : p.emoji}</span>
                           <span className="text-[9px] text-slate-500 truncate w-full text-center">{p.name}</span>
@@ -1017,13 +1019,15 @@
 
               <div className="rounded-xl bg-white/95 p-1.5 grid grid-cols-4 gap-1">
                 {Object.values(THEMES_CONFIG).map((t) => {
-                  const locked = t.unlockLevel && houseLevel < t.unlockLevel;
+                  const isCurrent = t.id === theme.id;
+                  // ธีมที่ใช้อยู่แล้วต้องไม่โดนล็อก แม้เลเวลห้องจะร่วงลงมาทีหลัง (เช่นเพื่อนแต้มเยอะออกจากห้องไป)
+                  const locked = !isCurrent && t.unlockLevel && houseLevel < t.unlockLevel;
                   return (
                     <button
                       key={t.id}
                       onClick={() => (locked ? onLockedTheme(t) : onTheme(t.id))}
                       title={locked ? t.name + ' — ปลดล็อกที่ Lv.' + t.unlockLevel : t.name}
-                      className={'rounded-lg px-2 py-1 text-[10px] transition-all ' + (t.id === theme.id
+                      className={'rounded-lg px-2 py-1 text-[10px] transition-all ' + (isCurrent
                         ? t.swatch + ' text-white font-medium'
                         : locked ? 'text-slate-300' : 'text-slate-600 hover:bg-slate-100')}
                     >
@@ -1237,6 +1241,8 @@
     function CreateTaskPanel({ theme, category, date, me, members, categories, onAdd }) {
       const [text, setText] = useState('');
       const [taskDate, setTaskDate] = useState(date);
+      const [taskTime, setTaskTime] = useState('');
+      const [description, setDescription] = useState('');
       const [points, setPoints] = useState(10);
       const [ownerId, setOwnerId] = useState(me.id);
 
@@ -1250,8 +1256,13 @@
         const t = text.trim();
         if (!t) return;
         const owner = roster.find((m) => m.id === ownerId) || me;
-        onAdd({ text: t, category, date: taskDate, points, ownerId: owner.id, ownerName: owner.name });
+        onAdd({
+          text: t, category, date: taskDate, points, ownerId: owner.id, ownerName: owner.name,
+          time: taskTime || null, description: description.trim() || null
+        });
         setText('');
+        setTaskTime('');
+        setDescription('');
       };
 
       return (
@@ -1271,13 +1282,36 @@
               />
             </div>
 
+            <div className="flex gap-2">
+              <div className="flex-1">
+                <label className="block text-[11px] text-slate-500 mb-1">เลือกวันที่ทำงาน</label>
+                <input
+                  type="date"
+                  value={taskDate}
+                  onChange={(e) => setTaskDate(e.target.value)}
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+                />
+              </div>
+              <div className="w-28 shrink-0">
+                <label className="block text-[11px] text-slate-500 mb-1">เวลา (ถ้ามี)</label>
+                <input
+                  type="time"
+                  value={taskTime}
+                  onChange={(e) => setTaskTime(e.target.value)}
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+                />
+              </div>
+            </div>
+
             <div>
-              <label className="block text-[11px] text-slate-500 mb-1">เลือกวันที่ทำงาน</label>
-              <input
-                type="date"
-                value={taskDate}
-                onChange={(e) => setTaskDate(e.target.value)}
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+              <label className="block text-[11px] text-slate-500 mb-1">รายละเอียดเพิ่มเติม (ถ้ามี)</label>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                maxLength={2000}
+                rows={3}
+                placeholder="อธิบายงานนี้ให้ละเอียดขึ้น เช่น สเปค ลิงก์อ้างอิง ขั้นตอนที่ต้องทำ..."
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-300 placeholder:text-slate-400 resize-none"
               />
             </div>
 
@@ -1477,8 +1511,34 @@
        กลาง: รายการงานประจำวัน
        ============================================================ */
 
-    function DayTaskList({ theme, date, tasks, me, categories, selectedTaskId, onPick, onToggle, onDelete }) {
-      const list = tasks.filter((t) => t.date === date);
+    function DayTaskList({ theme, date, tasks, me, categories, selectedTaskId, onPick, onToggle, onDelete, onEdit }) {
+      const [editingId, setEditingId] = useState(null);
+      const [editText, setEditText] = useState('');
+      const [editCategory, setEditCategory] = useState('');
+      const [editTime, setEditTime] = useState('');
+      const [editDescription, setEditDescription] = useState('');
+
+      // งานที่มีเวลาให้เรียงตามเวลาก่อนหลัง ส่วนที่ไม่ระบุเวลาให้ต่อท้ายไว้
+      const list = tasks
+        .filter((t) => t.date === date)
+        .slice()
+        .sort((a, b) => (a.time || '99:99').localeCompare(b.time || '99:99'));
+
+      const startEdit = (t) => {
+        setEditingId(t.id);
+        setEditText(t.text);
+        setEditCategory(t.category);
+        setEditTime(t.time || '');
+        setEditDescription(t.description || '');
+      };
+
+      const submitEdit = (e) => {
+        e.preventDefault();
+        const text = editText.trim();
+        if (!text) return;
+        onEdit(editingId, { text, category: editCategory, time: editTime || null, description: editDescription.trim() || null });
+        setEditingId(null);
+      };
 
       return (
         <Panel
@@ -1499,6 +1559,58 @@
               {list.map((t) => {
                 const cat = categories.find((c) => c.id === t.category) || categories[0];
                 const owner = t.ownerName || t.byName;
+
+                if (editingId === t.id) {
+                  return (
+                    <form
+                      key={t.id}
+                      onSubmit={submitEdit}
+                      className="rounded-xl border-2 border-slate-300 bg-slate-50 px-3 py-2.5 space-y-1.5 animate-scaleUp"
+                    >
+                      <input
+                        value={editText}
+                        onChange={(e) => setEditText(e.target.value)}
+                        maxLength={80}
+                        autoFocus
+                        className="w-full rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-sm outline-none focus:ring-2 focus:ring-slate-300"
+                      />
+                      <div className="flex gap-1.5">
+                        <select
+                          value={editCategory}
+                          onChange={(e) => setEditCategory(e.target.value)}
+                          className="flex-1 min-w-0 rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-xs outline-none focus:ring-2 focus:ring-slate-300"
+                        >
+                          {categories.map((c) => (
+                            <option key={c.id} value={c.id}>{c.emoji} {c.name}</option>
+                          ))}
+                        </select>
+                        <input
+                          type="time"
+                          value={editTime}
+                          onChange={(e) => setEditTime(e.target.value)}
+                          className="w-28 shrink-0 rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-xs outline-none focus:ring-2 focus:ring-slate-300"
+                        />
+                      </div>
+                      <textarea
+                        value={editDescription}
+                        onChange={(e) => setEditDescription(e.target.value)}
+                        maxLength={2000}
+                        rows={2}
+                        placeholder="รายละเอียดเพิ่มเติม (ถ้ามี)"
+                        className="w-full rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs outline-none focus:ring-2 focus:ring-slate-300 placeholder:text-slate-400 resize-none"
+                      />
+                      <div className="flex gap-1.5 pt-0.5">
+                        <button type="submit" className="flex-1 rounded-lg py-1.5 text-xs font-semibold text-white bg-emerald-500 hover:bg-emerald-600">
+                          ✓ บันทึก
+                        </button>
+                        <button type="button" onClick={() => setEditingId(null)} className="flex-1 rounded-lg py-1.5 text-xs font-semibold bg-slate-200 text-slate-600 hover:bg-slate-300">
+                          ยกเลิก
+                        </button>
+                      </div>
+                    </form>
+                  );
+                }
+
                 return (
                   <div
                     key={t.id}
@@ -1516,7 +1628,7 @@
 
                     <div className="min-w-0 flex-1">
                       <div className={'text-sm font-medium truncate ' + (t.done ? 'line-through text-slate-400' : 'text-slate-700')}>
-                        {t.text}
+                        {t.time && <span className="text-slate-400 font-normal">{t.time} · </span>}{t.text}
                       </div>
                       <div className="text-[11px] text-slate-400 truncate">
                         {cat.emoji} {cat.name} · +{t.points} แต้ม · ของ {owner}
@@ -1527,6 +1639,14 @@
                     {t.category === 'urgent' && !t.done && (
                       <span className="shrink-0 text-[9px] rounded-full bg-rose-100 text-rose-600 px-2 py-0.5 font-medium">ด่วน</span>
                     )}
+
+                    <button
+                      onClick={(e) => { e.stopPropagation(); startEdit(t); }}
+                      className="shrink-0 text-xs text-slate-300 hover:text-slate-600 px-1 transition-colors"
+                      title="แก้ไขงานนี้"
+                    >
+                      ✏️
+                    </button>
 
                     <button
                       onClick={(e) => { e.stopPropagation(); onDelete(t); }}
@@ -1629,11 +1749,14 @@
             <span className="text-xl shrink-0">🏡</span>
             <div className="min-w-0 flex-1">
               <div className="text-xs font-bold text-emerald-900 truncate">สนามวิ่งเล่นและกิจกรรมของทีม ({roster.length} ตัว)</div>
-              <div className="flex items-center gap-1 mt-0.5">
-                {roster.slice(0, 8).map((m) => (
-                  <span key={m.id} className="text-sm">{(PETS_CONFIG[m.pet] || PETS_CONFIG.dog).emoji}</span>
-                ))}
-                {message && <span className="text-[10px] text-emerald-700 truncate ml-1">💬 {message}</span>}
+              <div className="flex items-center gap-1 mt-0.5 min-w-0">
+                <div className="flex items-center gap-1 shrink-0">
+                  {roster.slice(0, 8).map((m) => (
+                    <span key={m.id} className="text-sm">{(PETS_CONFIG[m.pet] || PETS_CONFIG.dog).emoji}</span>
+                  ))}
+                </div>
+                {/* min-w-0 จำเป็นสำหรับ truncate ในลูกของ flex — ไม่งั้นข้อความยาวจะดันการ์ดล้นจอมือถือ */}
+                {message && <span className="text-[10px] text-emerald-700 truncate min-w-0 ml-1">💬 {message}</span>}
               </div>
             </div>
             <span className="shrink-0 text-[10px] font-medium text-emerald-700 bg-white/70 rounded-full px-2.5 py-1">▾ กางออก</span>
@@ -1752,7 +1875,7 @@
                 {cat.emoji} {cat.name}
               </span>
               <span className="text-[10px] rounded-full bg-white border border-slate-200 px-2 py-0.5 text-slate-500">
-                📅 {task.date}
+                📅 {task.date}{task.time ? ' · 🕐 ' + task.time : ''}
               </span>
               <span className={'text-[10px] rounded-full px-2 py-0.5 font-medium ' +
                 (task.done ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700')}>
@@ -1763,6 +1886,12 @@
             <p className={'text-sm font-semibold ' + (task.done ? 'line-through text-slate-400' : 'text-slate-800')}>
               {task.text}
             </p>
+
+            {task.description && (
+              <p className="mt-1.5 text-xs text-slate-600 whitespace-pre-wrap break-words">
+                {task.description}
+              </p>
+            )}
 
             <dl className="mt-3 space-y-1 text-[11px] text-slate-500">
               <div className="flex gap-2"><dt className="w-16 shrink-0">เจ้าของ</dt><dd className="font-medium text-slate-700">{task.ownerName || task.byName}</dd></div>
@@ -2303,16 +2432,26 @@
         playSynthesizedSound(PETS_CONFIG[pet].sound);
       };
 
-      const addTask = ({ text, category, date, points, ownerId, ownerName }) => {
+      const addTask = ({ text, category, date, points, ownerId, ownerName, time, description }) => {
         const task = {
           id: uid(), text, category, date, points, done: false,
           byId: me.id, byName: me.name, ownerId, ownerName,
           doneById: null, doneByName: null, ts: Date.now()
         };
+        if (time) task.time = time;               // ไม่มีเวลาก็อย่าใส่ field เปล่า rules จะได้ตรวจง่าย
+        if (description) task.description = description;
         guard(api.addTask(task), 'เพิ่มงาน');
         setSelectedTaskId(task.id);
         setSelectedDate(date);
         playSynthesizedSound(PETS_CONFIG[me.pet].sound);
+      };
+
+      const editTask = (id, { text, category, time, description }) => {
+        guard(api.updateTask(id, {
+          text, category,
+          time: time || firebase.firestore.FieldValue.delete(),
+          description: description || firebase.firestore.FieldValue.delete()
+        }), 'แก้ไขงาน');
       };
 
       const toggleTask = (task) => {
@@ -2555,6 +2694,7 @@
                 onPick={setSelectedTaskId}
                 onToggle={toggleTask}
                 onDelete={deleteTask}
+                onEdit={editTask}
               />
 
               <PetYard
