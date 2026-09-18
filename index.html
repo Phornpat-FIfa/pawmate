@@ -302,13 +302,20 @@
       { emoji: '🔥', text: 'ปั่นงานเร่งด่วนสุดๆ' }
     ];
 
-    // "งานด่วน" เป็นหมวดตายตัว แก้ชื่อ/ลบไม่ได้ — หมวดอื่นแก้ไขได้เอง เก็บไว้ที่ rooms/{room}/meta/categories
-    const URGENT_CATEGORY = { id: 'urgent', name: 'งานด่วน!', emoji: '🔥', urgent: true };
-    const DEFAULT_CATEGORIES = [
-      { id: 'marketing', name: 'Marketing', emoji: '✨' },
-      { id: 'design', name: 'Design', emoji: '🎨' },
-      { id: 'production', name: 'Production', emoji: '🎬' }
+    // ปุ่มสแปมทัก/บ่นให้เพื่อนในห้องเห็น (คนละอย่างกับ mood ที่ติดค้างอยู่ที่ตัวเอง) — กดรัวได้ ไม่มีลิมิต
+    const CRAVINGS_CONFIG = [
+      { emoji: '🍜', text: 'อยากกินก๋วยเตี๋ยว' },
+      { emoji: '🌶️', text: 'อยากกินหม่าล่า' },
+      { emoji: '🧋', text: 'อยากกินชานมไข่มุก' },
+      { emoji: '🍕', text: 'อยากกินพิซซ่า' },
+      { emoji: '🍺', text: 'อยากไปปาร์ตี้' },
+      { emoji: '😩', text: 'เหนื่อยจังเลย ปลอบหน่อย' }
     ];
+
+    // หมวดงาน — เริ่มจากว่างเปล่า ให้แต่ละห้องพิมพ์/สร้างหมวดของตัวเองเอาเอง (เก็บไว้ที่ rooms/{room}/meta/categories)
+    // "งานด่วน" เป็นหมวดตายตัว แก้ชื่อ/ลบไม่ได้ — หมวดอื่นแก้ไขได้เอง
+    const URGENT_CATEGORY = { id: 'urgent', name: 'งานด่วน!', emoji: '🔥', urgent: true };
+    const DEFAULT_CATEGORIES = [];
 
     const THAI_DAYS = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัส', 'ศุกร์', 'เสาร์'];
     const THAI_DAYS_SHORT = ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'];
@@ -918,9 +925,11 @@
        HEADER
        ============================================================ */
 
-    function Header({ theme, me, houseLevel, houseExp, status, room, memberCount, onName, onMood, onTheme, onLockedTheme, onPet, onLeave }) {
+    function Header({ theme, me, houseLevel, houseExp, status, room, memberCount, onName, onMood, onTheme, onLockedTheme, onPet, onCraving, onLeave }) {
       const pet = PETS_CONFIG[me.pet] || PETS_CONFIG.dog;
       const [petPickerOpen, setPetPickerOpen] = useState(false);
+      const [cravingOpen, setCravingOpen] = useState(false);
+      const [cravingText, setCravingText] = useState('');
       return (
         <header className={'sticky top-0 z-30 border-b backdrop-blur-md shadow-lg ' + theme.headerClass}>
           <div className="max-w-[1800px] mx-auto px-4 py-2.5 flex flex-wrap items-center gap-x-4 gap-y-2">
@@ -999,8 +1008,56 @@
               </div>
             </div>
 
-            {/* ขวา: mood + ธีม + ออก */}
+            {/* ขวา: สแปมทัก + mood + ธีม + ออก */}
             <div className="flex items-start gap-2 ml-auto">
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setCravingOpen((v) => !v)}
+                  title="ส่งเสียงทักแบบกวนๆ ให้ทุกคนในห้องเห็น"
+                  className="rounded-xl bg-white/95 hover:bg-white px-2.5 py-2 text-sm shadow-sm transition-colors"
+                >
+                  📣
+                </button>
+                {cravingOpen && (
+                  <div className="absolute z-40 top-full right-0 mt-2 w-64 rounded-xl bg-white shadow-2xl border border-slate-200 p-2.5">
+                    <div className="text-[11px] font-bold text-slate-500 mb-1.5">ทักทุกคนในห้อง — กดรัวได้เลย 📣</div>
+                    <div className="grid grid-cols-2 gap-1 mb-2">
+                      {CRAVINGS_CONFIG.map((c) => (
+                        <button
+                          key={c.text}
+                          type="button"
+                          onClick={() => onCraving(c.text, c.emoji)}
+                          title={c.text}
+                          className="rounded-lg px-2 py-1.5 text-[11px] text-left truncate bg-slate-50 hover:bg-slate-100 text-slate-700 transition-colors"
+                        >
+                          {c.emoji} {c.text}
+                        </button>
+                      ))}
+                    </div>
+                    <form
+                      onSubmit={(e) => { e.preventDefault(); onCraving(cravingText, '💬'); setCravingText(''); }}
+                      className="flex gap-1"
+                    >
+                      <input
+                        value={cravingText}
+                        onChange={(e) => setCravingText(e.target.value)}
+                        maxLength={60}
+                        placeholder="พิมพ์เอง..."
+                        className="flex-1 min-w-0 rounded-lg border border-slate-200 bg-slate-50 px-2 py-1.5 text-[11px] outline-none focus:ring-2 focus:ring-slate-300 placeholder:text-slate-400"
+                      />
+                      <button
+                        type="submit"
+                        disabled={!cravingText.trim()}
+                        className="shrink-0 rounded-lg bg-fuchsia-600 hover:bg-fuchsia-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-[11px] font-semibold px-2.5"
+                      >
+                        ส่ง
+                      </button>
+                    </form>
+                  </div>
+                )}
+              </div>
+
               <div className="rounded-xl bg-white/95 p-1.5 grid grid-cols-3 gap-1">
                 {MOODS_CONFIG.map((m) => (
                   <button
@@ -2314,6 +2371,10 @@
               ? from.name + ' เข้าโหมด Focus Time — อย่าเพิ่งกวนนะ 🕐'
               : from.name + ' ออกจากโหมดโฟกัสแล้ว ✨');
             break;
+          case 'craving':
+            playSynthesizedSound((PETS_CONFIG[from.pet] || PETS_CONFIG.dog).sound);
+            toast(from.name + ': ' + payload.emoji + ' ' + payload.text);
+            break;
           default:
             break;
         }
@@ -2536,8 +2597,9 @@
         const food = DEFAULT_FOODS[Math.floor(Math.random() * DEFAULT_FOODS.length)];
         playSynthesizedSound(PETS_CONFIG[me.pet].sound);
         setFullness((f) => clamp(f + 20, 0, 100));
+        setMe((prev) => ({ ...prev, points: (prev.points || 0) + 1 })); // ให้อาหารก็ได้ EXP ทีละ 1 ด้วย
         setLastPoke(Date.now());
-        setPetMsg('อร่อยจัง! ' + food.emoji + ' ' + food.name + ' อิ่มขึ้นอีก 20% แล้ว');
+        setPetMsg('อร่อยจัง! ' + food.emoji + ' ' + food.name + ' อิ่มขึ้นอีก 20% แล้ว (+1 EXP)');
         emit('poke', { action: 'ป้อน ' + food.name + ' ให้', pet: me.pet });
       };
 
@@ -2554,6 +2616,13 @@
         setLastPoke(Date.now());
         setPetMsg('ไปทัก ' + m.name + ' มาแล้ว ' + pet.emoji);
         emit('poke', { action: 'ทัก ' + m.name + ' ที่สนาม', pet: m.pet });
+      };
+
+      const sendCraving = (text, emoji) => {
+        const t = text.trim();
+        if (!t) return;
+        emit('craving', { text: t, emoji: emoji || '📣' });
+        toast('ส่งไปแล้ว! ' + (emoji || '📣') + ' ' + t);
       };
 
       const startFocus = () => {
@@ -2625,6 +2694,7 @@
             onTheme={changeTheme}
             onLockedTheme={lockedThemeAttempt}
             onPet={changePet}
+            onCraving={sendCraving}
             onLeave={leave}
           />
 
