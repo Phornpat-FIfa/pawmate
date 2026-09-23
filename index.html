@@ -440,6 +440,22 @@
             osc.start(now + i * 0.16);
             osc.stop(now + i * 0.16 + 0.52);
           });
+
+        } else if (type === 'alert') {
+          // เสียงเตือนงานใกล้ถึงเวลา/ถึงเวลาแล้ว — เสียงบี๊บคู่ ชัดกว่า chime
+          const playBeep = (offset) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain); gain.connect(ctx.destination);
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(1046, now + offset);
+            gain.gain.setValueAtTime(0.001, now + offset);
+            gain.gain.exponentialRampToValueAtTime(0.22, now + offset + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.22);
+            osc.start(now + offset);
+            osc.stop(now + offset + 0.24);
+          };
+          playBeep(0); playBeep(0.3);
         }
       } catch (err) {
         // เสียงเล่นไม่ได้ ไม่ควรทำให้ทั้งแอปพัง
@@ -595,6 +611,9 @@
       const [messages, setMessages] = useState([]);
       const [roomTheme, setRoomTheme] = useState(null);
       const [roomCategories, setRoomCategories] = useState(null); // null = ยังไม่มีใน Firestore, ให้ใช้ DEFAULT_CATEGORIES
+      // EXP ของบ้าน — เก็บเป็นยอดสะสมถาวรของห้อง ไม่ผูกกับผลรวมแต้มของสมาชิกที่ออนไลน์อยู่ตอนนี้
+      // (ถ้าผูกกับ presence สด ๆ พอมีคนออกจากห้อง/ปิดแท็บ แต้มของคนนั้นจะหายไปจากยอดรวมทันที)
+      const [houseTotal, setHouseTotal] = useState(0);
 
       const meRef = useRef(me);
       const onEventRef = useRef(onEvent);
@@ -638,6 +657,11 @@
         unsubs.push(roomRef.collection('meta').doc('categories').onSnapshot((d) => {
           const data = d.data();
           setRoomCategories(data && Array.isArray(data.list) ? data.list : null);
+        }, fail('meta')));
+
+        unsubs.push(roomRef.collection('meta').doc('house').onSnapshot((d) => {
+          const data = d.data();
+          setHouseTotal(data && typeof data.total === 'number' ? data.total : 0);
         }, fail('meta')));
 
         // รับเฉพาะ event ที่เกิดหลังเราเข้าห้อง ไม่งั้นจะได้ยินเสียงทักย้อนหลังทั้งกอง
@@ -736,10 +760,13 @@
         deleteMessage: (id) => roomRef && roomRef.collection('messages').doc(id).delete(),
         setTheme: (themeId) => roomRef && roomRef.collection('meta').doc('state').set({ themeId, ts: Date.now() }),
         setCategories: (list) => roomRef && roomRef.collection('meta').doc('categories').set({ list, ts: Date.now() }),
+        addHouseExp: (n) => roomRef && roomRef.collection('meta').doc('house').set({
+          total: firebase.firestore.FieldValue.increment(n), ts: Date.now()
+        }, { merge: true }),
         removeMe: (id) => roomRef && roomRef.collection('members').doc(id).delete()
       }), [roomRef]);
 
-      return { status, allMembers, tasks, messages, roomTheme, roomCategories, emit, api };
+      return { status, allMembers, tasks, messages, roomTheme, roomCategories, houseTotal, emit, api };
     }
 
     /* ============================================================
@@ -2375,6 +2402,10 @@
             playSynthesizedSound((PETS_CONFIG[from.pet] || PETS_CONFIG.dog).sound);
             toast(from.name + ': ' + payload.emoji + ' ' + payload.text);
             break;
+          case 'mood':
+            playSynthesizedSound((PETS_CONFIG[from.pet] || PETS_CONFIG.dog).sound);
+            toast(from.name + ' ' + payload.emoji + ' ' + payload.text);
+            break;
           default:
             break;
         }
@@ -2387,7 +2418,7 @@
         [me, fullness, sleeping]
       );
 
-      const { status, allMembers, tasks, messages, roomTheme, roomCategories, emit, api } = useRoom({
+      const { status, allMembers, tasks, messages, roomTheme, roomCategories, houseTotal, emit, api } = useRoom({
         room: session ? session.room : null,
         me: meWithPet,
         ready: !!authUid,
@@ -2448,10 +2479,54 @@
         return () => clearTimeout(t);
       }, [me.focusUntil, toast, emit]);
 
+      /* ---------- เสียงเตือนงานที่มีเวลา — เตือนล่วงหน้า 10 นาที + ตอนถึงเวลาจริง ----------
+         ทำงานได้เฉพาะตอนเปิดแท็บนี้ค้างไว้เท่านั้น (ไม่มี push notification ตอนปิดแท็บ)
+         เก็บ id งานที่เตือนไปแล้วไว้กันเตือนซ้ำทุกครั้งที่เช็ค
+         อ่านจาก tasksRef เสมอ ไม่ใส่ tasks ใน deps ตรงๆ กันไม่ให้ interval รีสตาร์ททุกครั้งที่งานเปลี่ยน
+         (ไม่งั้นตัวจับเวลา 30 นาทีของตัวเตือนงานค้างด้านล่างจะถูกรีเซ็ตอยู่ตลอด แทบไม่มีโอกาสได้ครบรอบ) */
+      const tasksRef = useRef(tasks);
+      tasksRef.current = tasks;
+      const notifiedRef = useRef(new Set());
+      useEffect(() => {
+        const check = () => {
+          const now = Date.now();
+          const today = toISO(new Date());
+          tasksRef.current.forEach((t) => {
+            if (t.done || t.date !== today || !t.time) return;
+            const due = new Date(t.date + 'T' + t.time).getTime();
+            const soonKey = t.id + ':soon';
+            const dueKey = t.id + ':due';
+            if (now >= due - 10 * 60000 && now < due && !notifiedRef.current.has(soonKey)) {
+              notifiedRef.current.add(soonKey);
+              playSynthesizedSound('alert');
+              toast('⏰ อีก 10 นาทีถึงเวลา "' + t.text + '" แล้วนะ');
+            }
+            if (now >= due && !notifiedRef.current.has(dueKey)) {
+              notifiedRef.current.add(dueKey);
+              playSynthesizedSound('alert');
+              toast('⏰ ถึงเวลาทำ "' + t.text + '" แล้ว!');
+            }
+          });
+        };
+        const t = setInterval(check, 20000);
+        check();
+        return () => clearInterval(t);
+      }, []);
+
+      /* ---------- เตือนซ้ำเป็นระยะว่ายังมีงานค้างของวันนี้ — ทุก 30 นาทีตลอดที่เปิดแท็บไว้ ---------- */
+      useEffect(() => {
+        const t = setInterval(() => {
+          const today = toISO(new Date());
+          const pending = tasksRef.current.filter((task) => task.date === today && !task.done).length;
+          if (pending > 0) {
+            playSynthesizedSound('chime');
+            toast('📋 วันนี้ยังมีงานค้างอยู่ ' + pending + ' ชิ้นนะ อย่าลืมทำ!');
+          }
+        }, 30 * 60000);
+        return () => clearInterval(t);
+      }, []);
+
       /* ---------- ข้อมูลที่คำนวณ ---------- */
-      const houseTotal = useMemo(() => {
-        return [me, ...Object.values(members)].reduce((sum, m) => sum + (m.points || 0), 0);
-      }, [me, members]);
       const houseLevel = Math.floor(houseTotal / HOUSE_EXP_PER_LEVEL) + 1;
       const houseExp = houseTotal % HOUSE_EXP_PER_LEVEL;
 
@@ -2483,7 +2558,13 @@
         setSession(s);
       };
 
-      const setMood = (mood) => setMe((prev) => ({ ...prev, mood }));
+      // ติ๊กอารมณ์ = ทั้งติดป้ายอารมณ์ค้างไว้ที่ตัวเอง และกระจายเสียง+toast ให้ทุกคนในห้องเห็นทันที
+      // กดซ้ำอารมณ์เดิมก็ยังส่งกระจายใหม่ได้เรื่อยๆ (สแปมได้)
+      const setMood = (mood) => {
+        setMe((prev) => ({ ...prev, mood }));
+        playSynthesizedSound(PETS_CONFIG[me.pet].sound);
+        emit('mood', { emoji: mood.emoji, text: mood.text });
+      };
 
       const changePet = (pet) => {
         setMe((prev) => ({ ...prev, pet }));   // presence effect เขียนลง Firestore ให้เอง
@@ -2524,14 +2605,17 @@
         }), 'ปิดงาน');
 
         // แต้มเป็นของคนที่กดปิดงาน — คืนแต้มถ้าคนเดิมกดเปิดใหม่
+        // EXP ของบ้านเป็นยอดสะสมถาวรแยกต่างหาก ไม่ขึ้นกับว่าใครยังออนไลน์อยู่ในห้องหรือเปล่า
         if (done) {
           setMe((prev) => ({ ...prev, points: (prev.points || 0) + task.points }));
+          guard(api.addHouseExp(task.points), 'เพิ่ม EXP บ้าน');
           playSynthesizedSound(PETS_CONFIG[me.pet].sound);
           toast('เก่งมาก! +' + task.points + ' แต้ม 🎉');
           setPetMsg('เย้! ปิดงานได้อีกชิ้น เก่งที่สุดเลย! 🎉');
           setLastPoke(Date.now());
         } else if (task.doneById === me.id) {
           setMe((prev) => ({ ...prev, points: Math.max(0, (prev.points || 0) - task.points) }));
+          guard(api.addHouseExp(-task.points), 'ลด EXP บ้าน');
         }
       };
 
@@ -2598,6 +2682,7 @@
         playSynthesizedSound(PETS_CONFIG[me.pet].sound);
         setFullness((f) => clamp(f + 20, 0, 100));
         setMe((prev) => ({ ...prev, points: (prev.points || 0) + 1 })); // ให้อาหารก็ได้ EXP ทีละ 1 ด้วย
+        guard(api.addHouseExp(1), 'เพิ่ม EXP บ้าน');
         setLastPoke(Date.now());
         setPetMsg('อร่อยจัง! ' + food.emoji + ' ' + food.name + ' อิ่มขึ้นอีก 20% แล้ว (+1 EXP)');
         emit('poke', { action: 'ป้อน ' + food.name + ' ให้', pet: me.pet });
@@ -2621,6 +2706,7 @@
       const sendCraving = (text, emoji) => {
         const t = text.trim();
         if (!t) return;
+        playSynthesizedSound(PETS_CONFIG[me.pet].sound);
         emit('craving', { text: t, emoji: emoji || '📣' });
         toast('ส่งไปแล้ว! ' + (emoji || '📣') + ' ' + t);
       };

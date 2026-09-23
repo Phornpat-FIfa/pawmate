@@ -119,6 +119,16 @@ service cloud.firestore {
                      && request.resource.data.list.size() <= 20
                      && request.resource.data.ts is number;
       }
+
+      // EXP สะสมของบ้าน — ยอดถาวรของห้อง ไม่ลบ/รีเซ็ตเวลามีใครออกจากห้องหรือปิดแท็บ
+      match /meta/house {
+        allow read: if isSignedIn();
+        allow write: if isSignedIn()
+                     && request.resource.data.keys().hasOnly(['total', 'ts'])
+                     && request.resource.data.total is number
+                     && request.resource.data.total <= 10000000
+                     && request.resource.data.ts is number;
+      }
     }
   }
 }
