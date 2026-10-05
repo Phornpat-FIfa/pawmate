@@ -268,6 +268,20 @@
         bannerEmoji: '🌌',
         illustrationText: '🐼🌌 ล่องลอยท่องกาแล็กซี่กับเพื่อนซี้สุดเจ๋ง!',
         unlockLevel: 10
+      },
+      aot: {
+        id: 'aot',
+        name: 'ธีม Attack on Titan ปลดล็อกพิเศษ ⚔️',
+        shortName: 'AoT',
+        swatch: 'bg-gradient-to-br from-stone-700 to-emerald-800',
+        bgClass: 'bg-gradient-to-br from-stone-900 via-zinc-800 to-emerald-950 text-white',
+        headerClass: 'bg-zinc-950/90 border-emerald-900 shadow-emerald-950/60 text-white',
+        primaryButton: 'bg-emerald-800 hover:bg-emerald-900 focus:ring-emerald-600',
+        activeTabClass: 'bg-emerald-950/70 text-white border-l-4 border-red-700 shadow-sm',
+        accentText: 'text-emerald-200',
+        bannerEmoji: '⚔️',
+        illustrationText: '⚔️🐶 เพื่อสร้างกำแพงให้ทีม — ปกป้องกันและกันพังทุกงาน!',
+        unlockLevel: 12
       }
     };
 
@@ -2478,6 +2492,20 @@
         }, left);
         return () => clearTimeout(t);
       }, [me.focusUntil, toast, emit]);
+
+      /* ---------- เสียงเมื่อมีข้อความแชทใหม่จากเพื่อน — เฉพาะข้อความที่มาหลังเปิดแอป ไม่เล่นย้อนหลังตอนโหลดครั้งแรก ---------- */
+      const chatSeenRef = useRef(new Set());
+      const chatMountedAt = useRef(Date.now());
+      useEffect(() => {
+        messages.forEach((m) => {
+          if (chatSeenRef.current.has(m.id)) return;
+          chatSeenRef.current.add(m.id);
+          if (m.ts > chatMountedAt.current && m.fromId !== me.id) {
+            playSynthesizedSound('chime');
+            toast(m.name + ': ' + (m.text || '📷 ส่งรูปมาให้'));
+          }
+        });
+      }, [messages]);
 
       /* ---------- เสียงเตือนงานที่มีเวลา — เตือนล่วงหน้า 10 นาที + ตอนถึงเวลาจริง ----------
          ทำงานได้เฉพาะตอนเปิดแท็บนี้ค้างไว้เท่านั้น (ไม่มี push notification ตอนปิดแท็บ)
