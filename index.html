@@ -82,6 +82,18 @@
       100% { transform: translateX(-40vw); }
     }
     .animate-dragon-fly { animation: dragonFly 26s linear infinite; }
+    @keyframes dragonHover {
+      0%, 100% { transform: translateY(0) rotate(-1deg); }
+      50% { transform: translateY(-14px) rotate(1deg); }
+    }
+    .animate-dragon-hover { animation: dragonHover 4s ease-in-out infinite; }
+    @keyframes shootingStar {
+      0% { transform: translate(0, 0); opacity: 0; }
+      8% { opacity: 1; }
+      35% { opacity: 0; }
+      100% { transform: translate(-70vw, 45vh); opacity: 0; }
+    }
+    .animate-shooting { animation: shootingStar 4.5s linear infinite; }
     @keyframes wingFlap {
       0%, 100% { transform: scaleY(1); }
       50% { transform: scaleY(0.35); }
@@ -301,7 +313,7 @@
         accentText: 'text-amber-300',
         bannerEmoji: '🐉',
         illustrationText: '🏰🐉 มังกรเฝ้าปราสาท อัศวินผู้กล้ารับภารกิจ — ปิดงานให้ได้ทุกชิ้น!',
-        unlockLevel: 12
+        unlockLevel: 20
       }
     };
 
@@ -991,10 +1003,6 @@
       return (
         <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 select-none" aria-hidden="true">
           <video src="assets/dragon-fire-pixabay-61790-small.mp4" autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover opacity-40" />
-          <div className="absolute top-40 left-0 right-0 animate-dragon-fly">
-            <img src="assets/dragon-karmabub-cc0.svg" alt="" className="w-40 sm:w-56 h-auto drop-shadow-xl" />
-          </div>
-
           <div className="absolute bottom-0 left-0 right-0 h-24">
             <svg viewBox="0 0 400 120" preserveAspectRatio="none" className="w-full h-full">
               <path d="M0 120 L0 70 L30 70 L30 40 L40 40 L40 30 L50 30 L50 40 L60 40 L60 70 L110 70 L110 50 L120 50 L120 22 L130 10 L140 22 L140 50 L150 50 L150 70 L260 70 L260 46 L270 46 L270 34 L280 34 L280 46 L300 46 L300 60 L340 60 L340 40 L350 40 L350 26 L360 16 L370 26 L370 40 L380 40 L380 70 L400 70 L400 120 Z" fill="#1c1917" opacity="0.92" />
@@ -1019,6 +1027,34 @@
               <rect x="42" y="66" width="11" height="3" fill="#facc15" />
             </svg>
           </div>
+        </div>
+      );
+    }
+
+    function DragonHero() {
+      return (
+        <div className="relative z-10 flex flex-col items-center justify-center pt-6 pb-2 pointer-events-none select-none">
+          <div className="absolute w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-orange-500/20 blur-3xl animate-flame" aria-hidden="true" />
+          <img src="assets/dragon-karmabub-cc0.svg" alt="" className="relative w-44 sm:w-60 h-auto drop-shadow-2xl animate-dragon-hover" style={{ filter: 'hue-rotate(190deg) saturate(1.4)' }} />
+          <div className="relative text-xs text-amber-200/90 mt-1">🏰 มังกรเฝ้าปราสาท — ปิดงานให้ได้ทุกชิ้น!</div>
+        </div>
+      );
+    }
+
+    function GalaxyScene() {
+      const stars = [
+        { top: '6%', right: '8%', delay: '0s' },
+        { top: '18%', right: '30%', delay: '1.6s' },
+        { top: '4%', right: '55%', delay: '3.1s' },
+        { top: '28%', right: '12%', delay: '4.4s' },
+        { top: '12%', right: '75%', delay: '6.2s' },
+        { top: '36%', right: '45%', delay: '7.5s' }
+      ];
+      return (
+        <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 select-none" aria-hidden="true">
+          {stars.map((st, i) => (
+            <span key={i} className="absolute w-44 h-[2px] rounded-full bg-gradient-to-l from-white via-indigo-200 to-transparent shadow-[0_0_10px_rgba(255,255,255,0.9)] animate-shooting" style={{ top: st.top, right: st.right, animationDelay: st.delay }} />
+          ))}
         </div>
       );
     }
@@ -2853,6 +2889,7 @@
       return (
         <div className={'relative min-h-screen pb-24 ' + theme.bgClass}>
           {theme.id === 'dragon' && <DragonScene />}
+          {theme.id === 'galaxy' && <GalaxyScene />}
           <Header
             theme={theme}
             me={me}
@@ -2870,6 +2907,7 @@
             onLeave={leave}
           />
 
+          {theme.id === 'dragon' && <DragonHero />}
           <div className="relative z-10 max-w-[1800px] mx-auto px-3 py-4 grid gap-4 grid-cols-1 lg:grid-cols-[280px_minmax(0,1fr)] xl:grid-cols-[280px_minmax(0,1fr)_340px]">
 
             {/* ---------- ซ้าย ---------- */}
