@@ -120,6 +120,77 @@
       100% { opacity: 0; transform: translate(18px, -34px) scale(1.25); }
     }
 
+    /* ธีมสายไหม — เด้งหยุ่นสนุกสนานแบบลูกโป่ง/ลูกอม */
+    @keyframes candyBounce {
+      0%, 100% { transform: translateY(0) rotate(-6deg) scale(1, 1); }
+      8% { transform: translateY(0) rotate(-6deg) scale(1.07, 0.93); }
+      25% { transform: translateY(-6px) rotate(-3deg) scale(0.94, 1.07); }
+      45% { transform: translateY(-22px) rotate(3deg) scale(1, 1); }
+      70% { transform: translateY(-6px) rotate(-3deg) scale(0.97, 1.03); }
+      82% { transform: translateY(0) rotate(-6deg) scale(1.07, 0.93); }
+      92% { transform: translateY(0) rotate(-6deg) scale(0.98, 1.02); }
+    }
+    .animate-candy-bounce { animation: candyBounce 1.6s ease-in-out infinite; transform-origin: 50% 100%; }
+    @keyframes candyShadow {
+      0%, 100% { transform: scaleX(1); opacity: 0.35; }
+      8%, 82% { transform: scaleX(1.1); opacity: 0.4; }
+      45% { transform: scaleX(0.6); opacity: 0.15; }
+    }
+    .animate-candy-shadow { animation: candyShadow 1.6s ease-in-out infinite; }
+    @keyframes sprinkleFall {
+      0% { transform: translateY(-8vh) rotate(var(--r)); }
+      100% { transform: translateY(108vh) rotate(calc(var(--r) + 360deg)); }
+    }
+    .animate-sprinkle-fall { animation: sprinkleFall 12s linear infinite; }
+    @keyframes balloonSway {
+      0%, 100% { transform: rotate(-5deg) translateY(0); }
+      50% { transform: rotate(5deg) translateY(-6px); }
+    }
+    .animate-balloon-sway { animation: balloonSway 3.2s ease-in-out infinite; transform-origin: 50% 100%; }
+    @keyframes bubblePop {
+      0%, 100% { transform: scale(1); }
+      6% { transform: scale(1.07); }
+      12% { transform: scale(0.97); }
+      18% { transform: scale(1); }
+    }
+    .animate-bubble-pop { animation: bubblePop 3s ease-in-out infinite; transform-origin: 0% 100%; }
+
+    /* ธีมยูนิคอร์น — ล่องลอยนุ่มนวล สง่างามแบบมนตร์เสน่ห์ */
+    @keyframes unicornFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .animate-unicorn-float { animation: unicornFloat 6s ease-in-out infinite; }
+    @keyframes shimmer {
+      0%, 100% { opacity: 0; transform: scale(0.3) rotate(0deg); }
+      50% { opacity: 1; transform: scale(1) rotate(90deg); }
+    }
+    .animate-shimmer { animation: shimmer 4.5s ease-in-out infinite; }
+    @keyframes hornGlint {
+      0%, 60%, 100% { opacity: 0; transform: scale(0.4) rotate(0deg); }
+      75% { opacity: 1; transform: scale(1.15) rotate(45deg); }
+    }
+    .animate-horn-glint { animation: hornGlint 2.8s ease-in-out infinite; }
+    @keyframes cloudDrift {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .animate-cloud-drift { animation: cloudDrift 60s linear infinite; }
+    @keyframes rainbowBreathe {
+      0%, 100% { opacity: 0.55; }
+      50% { opacity: 0.8; }
+    }
+    .animate-rainbow-breathe { animation: rainbowBreathe 8s ease-in-out infinite; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .animate-candy-bounce, .animate-candy-shadow, .animate-sprinkle-fall, .animate-balloon-sway,
+      .animate-bubble-pop, .animate-unicorn-float, .animate-shimmer, .animate-horn-glint,
+      .animate-cloud-drift, .animate-rainbow-breathe {
+        animation: none;
+      }
+      .animate-sprinkle-fall { display: none; }
+    }
+
     /* Scrollbar customization */
     ::-webkit-scrollbar {
       width: 6px;
@@ -319,6 +390,34 @@
         bannerEmoji: '🐉',
         illustrationText: '🏰🐉 มังกรเฝ้าปราสาท อัศวินผู้กล้ารับภารกิจ — ปิดงานให้ได้ทุกชิ้น!',
         unlockLevel: 20
+      },
+      cottoncandy: {
+        id: 'cottoncandy',
+        name: 'ธีมสายไหม ปลดล็อกพิเศษ 🍭',
+        shortName: 'สายไหม',
+        swatch: 'bg-gradient-to-br from-pink-400 via-pink-300 to-rose-200',
+        bgClass: 'bg-gradient-to-b from-pink-300 via-pink-200 to-rose-100 text-rose-950',
+        headerClass: 'bg-white/85 border-pink-300 shadow-pink-400/30 text-rose-950',
+        primaryButton: 'bg-pink-500 hover:bg-pink-600 focus:ring-pink-300',
+        activeTabClass: 'bg-pink-50 text-rose-900 border-l-4 border-pink-500 shadow-sm',
+        accentText: 'text-pink-600',
+        bannerEmoji: '🍭',
+        illustrationText: '🐰🍭 กินสายไหมหวานฟูนุ่มจนยิ้มไม่หุบ — ทีมนี้น่ารักที่สุด!',
+        unlockLevel: 25
+      },
+      unicorn: {
+        id: 'unicorn',
+        name: 'ธีมยูนิคอร์น ปลดล็อกพิเศษ 🦄',
+        shortName: 'ยูนิคอร์น',
+        swatch: 'bg-gradient-to-b from-indigo-400 via-violet-300 to-pink-200',
+        bgClass: 'bg-gradient-to-b from-indigo-300 via-violet-200 to-pink-100 text-indigo-950',
+        headerClass: 'bg-white/60 border-white/70 shadow-indigo-400/30 text-indigo-950',
+        primaryButton: 'bg-gradient-to-r from-indigo-500 via-violet-500 to-fuchsia-500 hover:brightness-110 focus:ring-violet-300',
+        activeTabClass: 'bg-gradient-to-r from-indigo-50 to-violet-100 text-indigo-900 border-l-4 border-violet-400 shadow-sm',
+        accentText: 'text-violet-600',
+        bannerEmoji: '🦄',
+        illustrationText: '🦄🌈 ยูนิคอร์นวิเศษมาอวยพรให้ทีมเก่งที่สุดในจักรวาล!',
+        unlockLevel: 30
       }
     };
 
@@ -1074,6 +1173,190 @@
           {stars.map((st, i) => (
             <span key={i} className="absolute w-16 h-[2px] rounded-full bg-gradient-to-l from-white via-white/50 to-transparent shadow-[0_0_6px_rgba(255,255,255,0.9)] animate-meteor" style={{ top: st.top, right: st.right, animationDelay: st.delay }} />
           ))}
+        </div>
+      );
+    }
+
+    // ฉากธีมสายไหม — ภาพสายไหมน่ารัก CC0-friendly จาก Pixabay (Pixabay Content License ฟรีใช้เชิงพาณิชย์)
+    const SPRINKLE_COLORS = ['#f472b6', '#38bdf8', '#facc15', '#fb923c', '#5eead4'];
+
+    // ฉากธีมสายไหม — งานออกแบบ: ร้านขายสายไหมกลางงานวัดตอนกลางวัน โทนชมพูอุ่น
+    function CottonCandyScene() {
+      return (
+        <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 select-none" aria-hidden="true">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: 'radial-gradient(rgba(255,255,255,0.55) 3px, transparent 3.5px), radial-gradient(rgba(255,255,255,0.3) 2px, transparent 2.5px)',
+              backgroundSize: '36px 36px, 36px 36px',
+              backgroundPosition: '0 0, 18px 18px'
+            }}
+          />
+          <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-pink-400/25 blur-3xl" />
+          <div className="absolute -bottom-32 -right-24 w-[28rem] h-[28rem] rounded-full bg-sky-300/25 blur-3xl" />
+          {Array.from({ length: 22 }, (_, i) => (
+            <span
+              key={'sprinkle' + i}
+              className="absolute top-0 w-[4px] h-[12px] rounded-full opacity-80 animate-sprinkle-fall"
+              style={{
+                left: ((i * 29 + 5) % 100) + '%',
+                background: SPRINKLE_COLORS[i % SPRINKLE_COLORS.length],
+                '--r': ((i * 47) % 180) + 'deg',
+                animationDuration: (10 + (i % 5) * 2) + 's',
+                animationDelay: -(i * 1.3) + 's'
+              }}
+            />
+          ))}
+        </div>
+      );
+    }
+
+    // งานออกแบบ: ป้ายผ้าใบลายทางเหนือหัว + แผงขายของ (ลูกโป่ง / สายไหม / บับเบิลคำพูด)
+    function CottonCandyHero() {
+      return (
+        <div className="relative z-10 pointer-events-none select-none" aria-hidden="true" style={{ filter: 'drop-shadow(0 4px 4px rgba(190,24,93,0.18))' }}>
+          <div className="h-7 sm:h-9 w-full" style={{ backgroundImage: 'repeating-linear-gradient(90deg, #f472b6 0 32px, #fff1f7 32px 64px)' }} />
+          <div
+            className="h-4 w-full"
+            style={{
+              backgroundImage: 'radial-gradient(circle at 16px 0, #f472b6 15px, transparent 16px), radial-gradient(circle at 48px 0, #fff1f7 15px, transparent 16px)',
+              backgroundSize: '64px 16px',
+              backgroundRepeat: 'repeat-x'
+            }}
+          />
+          <div className="max-w-[1800px] mx-auto px-4 sm:px-10 pt-4 pb-1 flex items-end justify-center gap-3 sm:gap-6">
+            <div className="relative w-16 h-28 sm:w-20 sm:h-32 self-center">
+              <div className="absolute flex flex-col items-center animate-balloon-sway origin-bottom left-0 top-0">
+                <div className="relative w-9 h-11 sm:w-11 sm:h-14 rounded-[50%_50%_48%_48%/55%_55%_45%_45%] bg-gradient-to-br from-pink-300 to-pink-500">
+                  <span className="absolute top-2 left-2 w-2 h-3 rounded-full bg-white/70 -rotate-[20deg]" />
+                </div>
+                <div className="w-px h-12 bg-rose-900/30" />
+              </div>
+              <div className="absolute flex flex-col items-center animate-balloon-sway origin-bottom left-7 top-3" style={{ animationDelay: '-1.6s' }}>
+                <div className="relative w-9 h-11 sm:w-11 sm:h-14 rounded-[50%_50%_48%_48%/55%_55%_45%_45%] bg-gradient-to-br from-sky-200 to-sky-400">
+                  <span className="absolute top-2 left-2 w-2 h-3 rounded-full bg-white/70 -rotate-[20deg]" />
+                </div>
+                <div className="w-px h-12 bg-rose-900/30" />
+              </div>
+            </div>
+            <div className="relative flex flex-col items-center">
+              <img
+                src="assets/cottoncandy-pixabay-6792926.png"
+                alt=""
+                className="w-28 sm:w-36 h-auto origin-bottom animate-candy-bounce"
+                style={{ filter: 'drop-shadow(3px 5px 0 rgba(190,24,93,0.22))' }}
+              />
+              <div className="w-16 sm:w-20 h-2.5 -mt-1 rounded-full bg-rose-900/20 blur-[2px] animate-candy-shadow" />
+            </div>
+            <div className="relative self-center max-w-[130px] sm:max-w-xs bg-white border-2 border-pink-400 rounded-2xl px-3 py-2 shadow-[3px_3px_0_0_#f472b6] origin-bottom-left animate-bubble-pop">
+              <span className="absolute -left-[7px] bottom-4 w-3 h-3 bg-white border-l-2 border-b-2 border-pink-400 rotate-45" />
+              <div className="text-xs sm:text-sm font-bold text-pink-600">🍭 สายไหมหวานฟู ๆ</div>
+              <div className="text-[11px] sm:text-xs font-medium text-rose-700/80">ทีมเก่งจนปลดล็อกธีมนี้มาได้!</div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function CloudBank({ layer, duration, circles, height, circleClass, fillerClass }) {
+      const half = (
+        <div className={'relative w-1/2 ' + height}>
+          {circles.map(([left, size], i) => (
+            <span
+              key={layer + i}
+              className={'absolute rounded-full ' + circleClass}
+              style={{ left: left + '%', bottom: -(size / 2) + 'px', width: size + 'px', height: size + 'px' }}
+            />
+          ))}
+          <div className={'absolute inset-x-0 bottom-0 ' + fillerClass} />
+        </div>
+      );
+      return (
+        <div className="absolute bottom-0 left-0 w-[200%] flex animate-cloud-drift" style={{ animationDuration: duration }}>
+          {half}
+          {half}
+        </div>
+      );
+    }
+
+    // ฉากธีมยูนิคอร์น — งานออกแบบ: อาณาจักรเมฆยามพลบค่ำ โทนน้ำเงินม่วงเย็นสงบ
+    function UnicornScene() {
+      return (
+        <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 select-none" aria-hidden="true">
+          {Array.from({ length: 12 }, (_, i) => (
+            <span
+              key={'shimmer' + i}
+              className="absolute text-white animate-shimmer"
+              style={{
+                left: ((i * 37 + 7) % 100) + '%',
+                top: (((i * 23) % 55) + 3) + '%',
+                fontSize: [10, 14, 18][i % 3] + 'px',
+                textShadow: '0 0 8px rgba(255,255,255,0.9), 0 0 16px rgba(196,181,253,0.8)',
+                animationDelay: (i * 0.6) + 's'
+              }}
+            >✦</span>
+          ))}
+          <CloudBank
+            layer="back"
+            duration="70s"
+            height="h-40"
+            circleClass="bg-white/35 blur-[2px]"
+            fillerClass="h-10 bg-white/35"
+            circles={[[0, 180], [10, 140], [18, 200], [30, 160], [41, 190], [52, 150], [62, 210], [74, 170], [85, 190], [94, 160]]}
+          />
+          <CloudBank
+            layer="front"
+            duration="45s"
+            height="h-28"
+            circleClass="bg-white/60"
+            fillerClass="h-6 bg-white/60"
+            circles={[[5, 110], [15, 90], [26, 130], [37, 100], [48, 120], [59, 95], [70, 135], [81, 105], [92, 120]]}
+          />
+        </div>
+      );
+    }
+
+    // งานออกแบบ: ยูนิคอร์นนั่งบนเมฆฝั่งขวา สายรุ้งโค้งไปทางซ้าย ข้อความอยู่ฝั่งตรงข้าม
+    function UnicornHero() {
+      return (
+        <div className="relative z-10 max-w-[1800px] mx-auto h-64 sm:h-80 px-4 sm:px-10 pointer-events-none select-none overflow-hidden" aria-hidden="true">
+          <div
+            className="absolute bottom-10 right-[110px] sm:right-[190px] w-[320px] h-[160px] sm:w-[440px] sm:h-[220px] blur-[1px] animate-rainbow-breathe"
+            style={{
+              backgroundImage: 'radial-gradient(circle farthest-side at 50% 100%, transparent 0 58%, rgba(253,164,175,.85) 58% 64%, rgba(253,186,116,.85) 64% 70%, rgba(253,230,138,.85) 70% 76%, rgba(134,239,172,.85) 76% 82%, rgba(125,211,252,.85) 82% 88%, rgba(196,181,253,.85) 88% 94%, transparent 94%)'
+            }}
+          />
+          <div className="hidden sm:block absolute bottom-6 right-[520px] w-28 h-10">
+            <span className="absolute left-2 bottom-0 w-12 h-12 rounded-full bg-white/70" />
+            <span className="absolute left-8 bottom-0 w-16 h-16 rounded-full bg-white/70" />
+            <span className="absolute left-16 bottom-0 w-10 h-10 rounded-full bg-white/70" />
+          </div>
+          <div className="absolute bottom-4 right-4 sm:right-12 flex flex-col items-center animate-unicorn-float">
+            <div className="relative">
+              <img
+                src="assets/unicorn-pixabay-4127196.png"
+                alt=""
+                className="w-36 sm:w-48 h-auto"
+                style={{ filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.85))' }}
+              />
+              <span
+                className="absolute top-0 left-0 -translate-x-1/3 -translate-y-1/3 text-white text-lg sm:text-xl animate-horn-glint"
+                style={{ textShadow: '0 0 8px rgba(255,255,255,0.9), 0 0 16px rgba(196,181,253,0.8)' }}
+              >✦</span>
+            </div>
+            <div className="relative -mt-8 w-44 h-12 sm:w-56 sm:h-14">
+              <div className="absolute inset-x-0 bottom-0 h-8 rounded-full bg-white shadow-[0_10px_30px_-6px_rgba(99,102,241,0.45)]" />
+              <div className="absolute left-2 bottom-0 w-16 h-16 rounded-full bg-gradient-to-b from-white to-indigo-50" />
+              <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-b from-white to-indigo-50" />
+              <div className="absolute right-2 bottom-0 w-16 h-16 rounded-full bg-gradient-to-b from-white to-indigo-50" />
+            </div>
+          </div>
+          <div className="absolute left-4 sm:left-12 top-1/2 -translate-y-1/2 max-w-[42%] sm:max-w-sm">
+            <div className="text-base sm:text-2xl font-bold tracking-wide bg-gradient-to-r from-indigo-700 via-violet-600 to-fuchsia-600 bg-clip-text text-transparent">
+              ยูนิคอร์นวิเศษมาอวยพร
+            </div>
+            <div className="mt-1 text-xs sm:text-sm text-indigo-900/70">ทีมสุดเทพของจักรวาล ✨</div>
+          </div>
         </div>
       );
     }
@@ -2413,8 +2696,11 @@
        ปุ่มลอย: Focus Time
        ============================================================ */
 
-    function FocusButton({ theme, focusUntil, onStart, onStop }) {
+    const FOCUS_DURATION_OPTIONS = [15, 25, 45, 60];
+
+    function FocusButton({ theme, focusUntil, minutes, onStart, onStop }) {
       const [now, setNow] = useState(Date.now());
+      const [pickerOpen, setPickerOpen] = useState(false);
 
       useEffect(() => {
         if (!focusUntil) return;
@@ -2427,17 +2713,45 @@
       const mm = String(Math.floor(left / 60000)).padStart(2, '0');
       const ss = String(Math.floor((left % 60000) / 1000)).padStart(2, '0');
 
+      if (running) {
+        return (
+          <button
+            onClick={onStop}
+            className="fixed bottom-5 right-5 z-40 rounded-full px-6 py-3.5 font-bold text-white shadow-2xl transition-all hover:scale-105 active:scale-95 flex items-center gap-2 bg-gradient-to-r from-rose-500 to-red-600"
+          >
+            <span className="animate-pulse">🕐</span>
+            <span>โฟกัสอยู่ {mm}:{ss} — กดเพื่อหยุด</span>
+          </button>
+        );
+      }
+
       return (
-        <button
-          onClick={running ? onStop : onStart}
-          className={'fixed bottom-5 right-5 z-40 rounded-full px-6 py-3.5 font-bold text-white shadow-2xl transition-all hover:scale-105 active:scale-95 flex items-center gap-2 ' +
-            (running ? 'bg-gradient-to-r from-rose-500 to-red-600' : theme.primaryButton)}
-        >
-          <span className={running ? 'animate-pulse' : ''}>🕐</span>
-          {running
-            ? <span>โฟกัสอยู่ {mm}:{ss} — กดเพื่อหยุด</span>
-            : <span>Focus Time ({FOCUS_MINUTES} นาที)</span>}
-        </button>
+        <div className="fixed bottom-5 right-5 z-40">
+          {pickerOpen && (
+            <div className="absolute bottom-full right-0 mb-2 w-44 rounded-xl bg-white shadow-2xl border border-slate-200 p-2">
+              <div className="text-[11px] font-bold text-slate-500 mb-1.5 px-1">เลือกเวลาโฟกัส</div>
+              <div className="grid grid-cols-2 gap-1">
+                {FOCUS_DURATION_OPTIONS.map((m) => (
+                  <button
+                    key={m}
+                    type="button"
+                    onClick={() => { setPickerOpen(false); onStart(m); }}
+                    className="rounded-lg px-2 py-1.5 text-xs font-semibold bg-slate-50 hover:bg-slate-100 text-slate-700 transition-colors"
+                  >
+                    {m} นาที
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+          <button
+            onClick={() => setPickerOpen((v) => !v)}
+            className={'rounded-full px-6 py-3.5 font-bold text-white shadow-2xl transition-all hover:scale-105 active:scale-95 flex items-center gap-2 ' + theme.primaryButton}
+          >
+            <span>🕐</span>
+            <span>Focus Time ({minutes} นาที) ▾</span>
+          </button>
+        </div>
       );
     }
 
@@ -2466,6 +2780,20 @@
         if (authUid) setMe((prev) => (prev.id === authUid ? prev : { ...prev, id: authUid }));
       }, [authUid]);
 
+      // ปลดล็อก AudioContext ด้วย user gesture แรกที่เจอ — สำคัญสำหรับคนที่ session
+      // ถูกจำไว้แล้ว (ข้าม JoinScreen) เพราะ browser จะไม่ยอมเล่นเสียงที่เริ่มจาก
+      // event แบบ async (เช่นเสียงแจ้งเตือนจากคนอื่นที่มาผ่าน Firestore listener)
+      // จนกว่าจะมี gesture จริงของผู้ใช้เกิดขึ้นในหน้านี้ก่อน
+      useEffect(() => {
+        const unlock = () => { getAudioContext(); };
+        document.addEventListener('pointerdown', unlock, { once: true });
+        document.addEventListener('keydown', unlock, { once: true });
+        return () => {
+          document.removeEventListener('pointerdown', unlock);
+          document.removeEventListener('keydown', unlock);
+        };
+      }, []);
+
       const [themeId, setThemeId] = useState('purple');
       const [toasts, setToasts] = useState([]);
 
@@ -2477,6 +2805,7 @@
       const [viewerImage, setViewerImage] = useState(null);
 
       const [fullness, setFullness] = useState(() => readStore('pawmate.fullness', 70));
+      const [focusMinutes, setFocusMinutes] = useState(() => readStore('pawmate.focusMinutes', FOCUS_MINUTES));
       const [petMsg, setPetMsg] = useState('');
       const [lastPoke, setLastPoke] = useState(() => Date.now());
       const [tick, setTick] = useState(0);   // เดินเวลาให้สัตว์เลี้ยงหลับ + ตัดคนที่หายไปเอง
@@ -2552,9 +2881,16 @@
       });
 
       // ธีมของห้องมาจาก Firestore — ใครเปลี่ยนก็เปลี่ยนพร้อมกันทุกเครื่อง
+      // ต้องเช็ค unlockLevel ตอนโหลดด้วย ไม่งั้นถ้าห้องเคยถูกตั้งธีมพิเศษไว้ตอนที่ยังไม่ล็อก (หรือแก้ข้อมูลตรงๆ)
+      // แล้วค่อยมาล็อกทีหลัง ธีมนั้นจะยังโผล่มาทุกครั้งที่รีเฟรชโดยไม่เช็คเลเวลเลย
       useEffect(() => {
-        if (roomTheme && THEMES_CONFIG[roomTheme]) setThemeId(roomTheme);
-      }, [roomTheme]);
+        if (!roomTheme) return;
+        const t = THEMES_CONFIG[roomTheme];
+        if (!t) return;
+        const level = Math.floor(houseTotal / HOUSE_EXP_PER_LEVEL) + 1;
+        if (t.unlockLevel && level < t.unlockLevel) return;
+        setThemeId(roomTheme);
+      }, [roomTheme, houseTotal]);
 
       // ประเภทงาน (นอกจาก "งานด่วน" ที่ตายตัว) แก้ไขได้เอง — ยังไม่มีใน Firestore ก็ใช้ค่าเริ่มต้นไปก่อน
       const editableCategories = roomCategories && roomCategories.length ? roomCategories : DEFAULT_CATEGORIES;
@@ -2851,8 +3187,11 @@
         toast('ส่งไปแล้ว! ' + (emoji || '📣') + ' ' + t);
       };
 
-      const startFocus = () => {
-        const until = Date.now() + FOCUS_MINUTES * 60000;
+      const startFocus = (minutes) => {
+        const mins = minutes || focusMinutes;
+        setFocusMinutes(mins);
+        writeStore('pawmate.focusMinutes', mins);
+        const until = Date.now() + mins * 60000;
         setMe((prev) => ({ ...prev, focusUntil: until }));
         setLastPoke(Date.now());
         setPetMsg('โหมดโฟกัส! เดี๋ยวเฝ้าให้ ห้ามใครกวน 🔕');
@@ -2909,6 +3248,8 @@
         <div className={'relative min-h-screen pb-24 ' + theme.bgClass}>
           {theme.id === 'dragon' && <DragonScene />}
           {theme.id === 'galaxy' && <GalaxyScene />}
+          {theme.id === 'cottoncandy' && <CottonCandyScene />}
+          {theme.id === 'unicorn' && <UnicornScene />}
           <Header
             theme={theme}
             me={me}
@@ -2927,6 +3268,8 @@
           />
 
           {theme.id === 'dragon' && <DragonHero />}
+          {theme.id === 'cottoncandy' && <CottonCandyHero />}
+          {theme.id === 'unicorn' && <UnicornHero />}
           <div className="relative z-10 max-w-[1800px] mx-auto px-3 py-4 grid gap-4 grid-cols-1 lg:grid-cols-[280px_minmax(0,1fr)] xl:grid-cols-[280px_minmax(0,1fr)_340px]">
 
             {/* ---------- ซ้าย ---------- */}
@@ -3042,7 +3385,7 @@
 
           <ImageLightbox image={viewerImage} onClose={() => setViewerImage(null)} />
 
-          <FocusButton theme={theme} focusUntil={me.focusUntil} onStart={startFocus} onStop={stopFocus} />
+          <FocusButton theme={theme} focusUntil={me.focusUntil} minutes={focusMinutes} onStart={startFocus} onStop={stopFocus} />
           <Toasts toasts={toasts} />
 
           <footer className="max-w-[1800px] mx-auto px-4 pb-4 text-center">
