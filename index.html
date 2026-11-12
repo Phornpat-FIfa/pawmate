@@ -182,13 +182,176 @@
     }
     .animate-rainbow-breathe { animation: rainbowBreathe 8s ease-in-out infinite; }
 
+    /* ธีมเทพเจ้ากรีก — สง่างาม ช้า มั่นคง เปล่งประกายทอง */
+    @keyframes sunburstSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .animate-sunburst-spin { animation: sunburstSpin 120s linear infinite; }
+    @keyframes haloPulse {
+      0%, 100% { opacity: 0.8; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.06); }
+    }
+    .animate-halo-pulse { animation: haloPulse 6s ease-in-out infinite; }
+    @keyframes goldGleam {
+      0% { background-position: 100% 0; }
+      45%, 100% { background-position: 0% 0; }
+    }
+    .animate-gold-gleam { animation: goldGleam 7s ease-in-out infinite; }
+    @keyframes boltFlash {
+      0%, 84%, 100% { opacity: 0; }
+      86% { opacity: 1; }
+      88% { opacity: 0.25; }
+      90% { opacity: 1; }
+      95% { opacity: 0; }
+    }
+    .animate-bolt-flash { animation: boltFlash 6s linear infinite; }
+    @keyframes moteDrift {
+      0%, 100% { transform: translate(0, 0); opacity: 0.2; }
+      50% { transform: translate(var(--dx), -26px); opacity: 1; }
+    }
+    .animate-mote-drift { animation: moteDrift 7s ease-in-out infinite; }
+    @keyframes leafFall {
+      0% { transform: translate(0, -10vh) rotate(0deg); }
+      25% { transform: translate(34px, 18vh) rotate(70deg); }
+      50% { transform: translate(-12px, 48vh) rotate(-20deg); }
+      75% { transform: translate(28px, 78vh) rotate(80deg); }
+      100% { transform: translate(0, 110vh) rotate(20deg); }
+    }
+    .animate-leaf-fall { animation: leafFall 20s linear infinite; }
+
+    /* ธีมเทพเจ้ากรีก (รอบแก้) — พายุทองเหนือโอลิมปัส ทุกอย่างซิงก์รอบ 6 วินาที ฟ้าผ่าที่ 35% และ 85% */
+    @keyframes cloudRoll {
+      from { background-position: 0 0; }
+      to { background-position: -640px 0; }
+    }
+    .animate-cloud-roll { animation: cloudRoll 80s linear infinite; }
+    @keyframes boltStrike {
+      0%, 84%, 100% { opacity: 0; }
+      85% { opacity: 1; }
+      87.5% { opacity: 0.3; }
+      89% { opacity: 1; }
+      94% { opacity: 0; }
+    }
+    @keyframes boltDraw {
+      0%, 84% { stroke-dashoffset: 1; }
+      86.5%, 100% { stroke-dashoffset: 0; }
+    }
+    .animate-bolt-strike { opacity: 0; animation: boltStrike 6s linear infinite; }
+    .animate-bolt-strike path { stroke-dasharray: 1; stroke-dashoffset: 1; animation: boltDraw 6s linear infinite; animation-delay: var(--d, 0s); }
+    @keyframes stormFlash {
+      0%, 35%, 44%, 85%, 94%, 100% { opacity: 0; }
+      35.8% { opacity: 1; }
+      37.5% { opacity: 0.2; }
+      39% { opacity: 0.85; }
+      85.8% { opacity: 1; }
+      87.5% { opacity: 0.2; }
+      89% { opacity: 0.85; }
+    }
+    .animate-storm-flash { opacity: 0; animation: stormFlash 6s linear infinite; }
+    @keyframes sparkFlicker {
+      0%, 22%, 100% { opacity: 0; }
+      4% { opacity: 1; }
+      8% { opacity: 0.15; }
+      12% { opacity: 1; }
+    }
+    .animate-spark-flicker { opacity: 0; animation: sparkFlicker 2.6s steps(1, end) infinite; }
+    @keyframes zeusShadow {
+      0%, 100% { transform: scaleX(1); opacity: 0.55; }
+      50% { transform: scaleX(0.78); opacity: 0.28; }
+    }
+    .animate-zeus-shadow { animation: zeusShadow 5s ease-in-out infinite; }
+
+    /* ธีมมหาสมุทรลึก (รอบแก้) — มืด ช้า ลึกลับ มีแสงเรืองจากสิ่งมีชีวิต */
+    @keyframes squidDrift {
+      0% { transform: translate(110vw, 0) rotate(-2deg); }
+      50% { transform: translate(40vw, -30px) rotate(2deg); }
+      100% { transform: translate(calc(-100% - 10vw), 0) rotate(-2deg); }
+    }
+    .animate-squid-drift { animation: squidDrift 80s linear infinite; }
+    @keyframes snowSink {
+      0% { transform: translate(0, -5vh); opacity: 0; }
+      10% { opacity: 0.8; }
+      50% { transform: translate(var(--dx), 50vh); }
+      90% { opacity: 0.6; }
+      100% { transform: translate(0, 105vh); opacity: 0; }
+    }
+    .animate-snow-sink { animation: snowSink 28s linear infinite; }
+    @keyframes eyeBlink {
+      0%, 30%, 70%, 100% { opacity: 0; transform: scaleY(1); }
+      36%, 50%, 54%, 64% { opacity: 1; transform: scaleY(1); }
+      52% { opacity: 1; transform: scaleY(0.1); }
+    }
+    .animate-eye-blink { animation: eyeBlink 16s ease-in-out infinite; }
+    @keyframes lurePulse {
+      0%, 100% { opacity: 0.45; transform: scale(0.85); }
+      45% { opacity: 1; transform: scale(1.1); }
+      55% { opacity: 0.8; transform: scale(1); }
+    }
+    .animate-lure-pulse { animation: lurePulse 3.2s ease-in-out infinite; }
+    @keyframes abyssLurk {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      35% { transform: translate(16px, -6px) rotate(-1.5deg); }
+      70% { transform: translate(4px, 8px) rotate(1deg); }
+    }
+    .animate-abyss-lurk { animation: abyssLurk 11s ease-in-out infinite; }
+    @keyframes jellyPulse {
+      0%, 100% { transform: scale(1, 1); }
+      35% { transform: scale(1.14, 0.84); }
+      60% { transform: scale(0.95, 1.06); }
+    }
+    .animate-jelly-pulse { animation: jellyPulse 2s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+    @keyframes abyssGlow {
+      0%, 100% { opacity: 0.45; }
+      50% { opacity: 1; }
+    }
+    .animate-abyss-glow { animation: abyssGlow 4.5s ease-in-out infinite; }
+
+    /* ธีมมหาสมุทร — ลื่นไหล ลอยตัว ขึ้นลงตามคลื่น */
+    @keyframes raySway {
+      0%, 100% { transform: rotate(calc(var(--a) - 3deg)); opacity: 0.5; }
+      50% { transform: rotate(calc(var(--a) + 3deg)); opacity: 1; }
+    }
+    .animate-ray-sway { animation: raySway 9s ease-in-out infinite; transform-origin: 50% 0%; }
+    @keyframes bubbleRise {
+      0% { transform: translate(0, 0) scale(0.6); opacity: 0; }
+      8% { opacity: 0.95; }
+      30% { transform: translate(var(--dx), -32vh) scale(0.85); }
+      55% { transform: translate(calc(var(--dx) * -1), -62vh) scale(1); }
+      80% { transform: translate(var(--dx), -90vh) scale(1.05); opacity: 0.9; }
+      100% { transform: translate(0, -118vh) scale(1.1); opacity: 0; }
+    }
+    .animate-bubble-rise { animation: bubbleRise 12s ease-in-out infinite; }
+    @keyframes fishSwim {
+      0% { transform: translate(-30vw, 0); }
+      25% { transform: translate(10vw, -14px); }
+      50% { transform: translate(50vw, 0); }
+      75% { transform: translate(90vw, 12px); }
+      100% { transform: translate(130vw, 0); }
+    }
+    .animate-fish-swim { animation: fishSwim 40s linear infinite; }
+    @keyframes kelpSway {
+      0%, 100% { transform: rotate(-5deg); }
+      50% { transform: rotate(5deg); }
+    }
+    .animate-kelp-sway { animation: kelpSway 5s ease-in-out infinite; transform-origin: 50% 100%; }
+
     @media (prefers-reduced-motion: reduce) {
       .animate-candy-bounce, .animate-candy-shadow, .animate-sprinkle-fall, .animate-balloon-sway,
       .animate-bubble-pop, .animate-unicorn-float, .animate-shimmer, .animate-horn-glint,
-      .animate-cloud-drift, .animate-rainbow-breathe {
+      .animate-cloud-drift, .animate-rainbow-breathe,
+      .animate-sunburst-spin, .animate-halo-pulse, .animate-gold-gleam, .animate-bolt-flash,
+      .animate-mote-drift, .animate-leaf-fall, .animate-ray-sway,
+      .animate-bubble-rise, .animate-fish-swim, .animate-kelp-sway,
+      .animate-cloud-roll, .animate-zeus-shadow, .animate-lure-pulse, .animate-abyss-lurk,
+      .animate-jelly-pulse, .animate-abyss-glow {
         animation: none;
       }
-      .animate-sprinkle-fall { display: none; }
+      .animate-sprinkle-fall, .animate-leaf-fall, .animate-bubble-rise, .animate-fish-swim,
+      .animate-bolt-strike, .animate-storm-flash, .animate-spark-flicker,
+      .animate-squid-drift, .animate-snow-sink, .animate-eye-blink {
+        display: none;
+      }
     }
 
     /* Scrollbar customization */
@@ -418,6 +581,34 @@
         bannerEmoji: '🦄',
         illustrationText: '🦄🌈 ยูนิคอร์นวิเศษมาอวยพรให้ทีมเก่งที่สุดในจักรวาล!',
         unlockLevel: 30
+      },
+      greekgod: {
+        id: 'greekgod',
+        name: 'ธีมเทพเจ้ากรีก ปลดล็อกพิเศษ ⚡',
+        shortName: 'กรีก',
+        swatch: 'bg-gradient-to-b from-stone-900 via-amber-600 to-yellow-200',
+        bgClass: 'bg-gradient-to-b from-amber-200 via-amber-50 to-stone-100 text-stone-900',
+        headerClass: 'bg-stone-950/85 border-amber-500/80 shadow-amber-900/40 text-amber-50',
+        primaryButton: 'bg-gradient-to-b from-amber-600 to-amber-800 hover:brightness-110 focus:ring-amber-300',
+        activeTabClass: 'bg-gradient-to-r from-amber-50 to-yellow-100 text-amber-950 border-l-4 border-amber-500 shadow-sm',
+        accentText: 'text-amber-700',
+        bannerEmoji: '⚡',
+        illustrationText: '⚡🏛️ ซุสกวัดสายฟ้าประทานพร — ทีมนี้ยิ่งใหญ่ระดับตำนาน!',
+        unlockLevel: 40
+      },
+      ocean: {
+        id: 'ocean',
+        name: 'ธีมมหาสมุทรลึก ปลดล็อกพิเศษ 🦑',
+        shortName: 'มหาสมุทร',
+        swatch: 'bg-gradient-to-b from-cyan-800 via-slate-950 to-black',
+        bgClass: 'bg-gradient-to-b from-sky-950 via-slate-950 to-black text-cyan-50',
+        headerClass: 'bg-slate-950/85 border-cyan-400/40 shadow-cyan-950/60 text-cyan-50',
+        primaryButton: 'bg-gradient-to-r from-teal-600 via-cyan-700 to-indigo-800 hover:brightness-125 focus:ring-cyan-400',
+        activeTabClass: 'bg-slate-900/85 text-cyan-50 border-l-4 border-cyan-400 shadow-sm shadow-cyan-500/20',
+        accentText: 'text-cyan-300',
+        bannerEmoji: '🦑',
+        illustrationText: '🦑🌑 ดำดิ่งสู่ทะเลลึก — ระวังเจ้าปลาเขี้ยวยาวที่ซ่อนอยู่ในความมืด!',
+        unlockLevel: 45
       }
     };
 
@@ -1361,6 +1552,561 @@
       );
     }
 
+    // ฉากธีมเทพเจ้ากรีก — ภาพรูปปั้นเทพซุส Pixabay Content License (ฟรีใช้เชิงพาณิชย์) ย้อมสีทองด้วย CSS filter
+    const GREEK_MEANDER = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='24' viewBox='0 0 22 24'%3E%3Cpath d='M0 1H22M0 23H22M2 23V7H18V17H8V12H13' fill='none' stroke='%23b45309' stroke-width='2'/%3E%3C/svg%3E")`;
+    const GREEK_FLUTES = 'linear-gradient(90deg, rgba(146,64,14,0.20), rgba(146,64,14,0) 28%, rgba(146,64,14,0) 68%, rgba(146,64,14,0.26)), repeating-linear-gradient(90deg, #fffdf7 0 5px, #e7dcc4 5px 7px, #fffaf0 7px 10px)';
+    const ZEUS_GOLD_FILTER = 'brightness(0) saturate(100%) invert(46%) sepia(100%) saturate(407%) hue-rotate(5deg) brightness(96%) contrast(95%) drop-shadow(0 0 6px rgba(255,255,255,0.95)) drop-shadow(0 4px 10px rgba(146,64,14,0.35))';
+
+    // งานออกแบบ: ยอดเขาโอลิมปัสยามเที่ยงวันอันเรืองรอง — แสงทองส่องลงจากฟ้า ฝุ่นทองลอยในลำแสง
+    // ใบลอเรลทองร่วงช้า ๆ เสาหินอ่อนกรอบสองข้างจอ และขั้นบันไดวิหารด้านล่าง (สมมาตร มั่นคง สง่างาม)
+    function GreekGodScene() {
+      return (
+        <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 select-none" aria-hidden="true">
+          <div className="absolute -top-64 left-1/2 -translate-x-1/2 w-[1200px] h-[640px] rounded-full bg-amber-300/40 blur-3xl" />
+          <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[560px] h-[320px] rounded-full bg-yellow-50/90 blur-3xl" />
+          <div
+            className="absolute inset-0 animate-rainbow-breathe"
+            style={{
+              backgroundImage: 'repeating-conic-gradient(from 0deg at 50% -6%, rgba(255,251,235,0.9) 0deg 2.5deg, rgba(255,251,235,0) 2.5deg 8deg)',
+              WebkitMaskImage: 'linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.45) 40%, transparent 78%)',
+              maskImage: 'linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.45) 40%, transparent 78%)'
+            }}
+          />
+          {Array.from({ length: 24 }, (_, i) => (
+            <span
+              key={'mote' + i}
+              className="absolute rounded-full bg-amber-300 animate-mote-drift"
+              style={{
+                left: (((i * 41) + 11) % 96 + 2) + '%',
+                top: (((i * 29) + 7) % 72 + 4) + '%',
+                width: (2 + (i % 4)) + 'px',
+                height: (2 + (i % 4)) + 'px',
+                boxShadow: '0 0 6px 2px rgba(251,191,36,0.55)',
+                '--dx': ((i % 2 ? 1 : -1) * (6 + (i % 5) * 3)) + 'px',
+                animationDuration: (6 + (i % 4) * 1.5) + 's',
+                animationDelay: -(i * 0.7) + 's'
+              }}
+            />
+          ))}
+          {Array.from({ length: 8 }, (_, i) => (
+            <span
+              key={'laurel' + i}
+              className="absolute top-0 w-2.5 h-5 sm:w-3 sm:h-6 rounded-[100%_0] bg-gradient-to-br from-yellow-200 via-amber-400 to-amber-600 opacity-80 shadow-sm animate-leaf-fall"
+              style={{
+                left: ((i * 13 + 4) % 100) + '%',
+                animationDuration: (17 + (i % 4) * 3) + 's',
+                animationDelay: -(i * 2.6) + 's'
+              }}
+            />
+          ))}
+          <div className="hidden md:block absolute -left-3 top-0 bottom-12 w-10 xl:w-14 opacity-90 shadow-[6px_0_18px_-6px_rgba(146,64,14,0.35)]" style={{ backgroundImage: GREEK_FLUTES }} />
+          <div className="hidden md:block absolute -right-3 top-0 bottom-12 w-10 xl:w-14 opacity-90 shadow-[-6px_0_18px_-6px_rgba(146,64,14,0.35)]" style={{ backgroundImage: GREEK_FLUTES }} />
+          <div className="absolute inset-x-0 bottom-0">
+            <div className="h-3 bg-gradient-to-b from-white to-stone-100 border-t-2 border-amber-400/80" />
+            <div className="h-4 bg-stone-50 border-t border-amber-300/60 opacity-90" style={{ backgroundImage: GREEK_MEANDER, backgroundSize: '15px 16px', backgroundRepeat: 'repeat-x', backgroundPosition: 'center' }} />
+            <div className="h-5 bg-gradient-to-b from-stone-100 to-stone-300 border-t border-amber-300/60" />
+          </div>
+        </div>
+      );
+    }
+
+    // เสาไอโอนิกหินอ่อน ขอบทอง — ใช้ซ้ายขวาของรูปปั้นใน GreekGodHero
+    function GreekColumn({ className }) {
+      return (
+        <div className={'absolute bottom-0 flex flex-col items-center ' + className}>
+          <div className="w-12 sm:w-16 h-2.5 sm:h-3 rounded-sm bg-gradient-to-b from-white to-stone-200 border-b-2 border-amber-500 shadow-sm" />
+          <div className="relative w-14 sm:w-[76px] h-5 sm:h-6 flex items-center justify-between">
+            <span className="absolute inset-x-3 top-1 bottom-1.5 bg-gradient-to-b from-stone-50 to-stone-300 rounded-b-md" />
+            <span className="relative w-5 h-5 sm:w-6 sm:h-6 rounded-full border-[3px] border-amber-500 bg-amber-50 flex items-center justify-center shadow-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+            </span>
+            <span className="relative w-5 h-5 sm:w-6 sm:h-6 rounded-full border-[3px] border-amber-500 bg-amber-50 flex items-center justify-center shadow-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+            </span>
+          </div>
+          <div className="w-8 sm:w-11 h-36 sm:h-52" style={{ backgroundImage: GREEK_FLUTES }} />
+          <div className="w-10 sm:w-14 h-2 rounded-t-sm bg-gradient-to-b from-white to-stone-200 border-t border-amber-400" />
+          <div className="w-12 sm:w-16 h-2.5 bg-gradient-to-b from-stone-100 to-stone-300" />
+        </div>
+      );
+    }
+
+    // พวงมาลัยใบลอเรลทอง (มงกุฎผู้ชนะ) วางที่ฐานรูปปั้น — คำนวณตำแหน่งใบตามเส้นโค้ง
+    function LaurelWreath({ className }) {
+      const leaves = [];
+      for (let i = 1; i <= 10; i++) {
+        const t = i / 10;
+        const x = (1 - t) * (1 - t) * 96 + 2 * (1 - t) * t * 26 + t * t * 14;
+        const y = (1 - t) * (1 - t) * 74 + 2 * (1 - t) * t * 72 + t * t * 10;
+        const dx = 2 * (1 - t) * (26 - 96) + 2 * t * (14 - 26);
+        const dy = 2 * (1 - t) * (72 - 74) + 2 * t * (10 - 72);
+        leaves.push({ x, y, ang: Math.atan2(dy, dx) * 180 / Math.PI, s: 1.1 - t * 0.4, tip: i === 10 });
+      }
+      const branch = (
+        <g>
+          <path d="M96 74 Q26 72 14 10" fill="none" stroke="#b45309" strokeWidth="2.2" strokeLinecap="round" />
+          {leaves.map((l, i) => (
+            <g key={i} transform={'translate(' + l.x + ' ' + l.y + ') rotate(' + l.ang + ') scale(' + l.s + ')'}>
+              {l.tip ? (
+                <ellipse cx="7" cy="0" rx="7.5" ry="3.2" fill="url(#greekLaurelGold)" />
+              ) : (
+                <g>
+                  <ellipse cx="7" cy="0" rx="7.5" ry="3.2" transform="rotate(-38)" fill="url(#greekLaurelGold)" />
+                  <ellipse cx="7" cy="0" rx="7.5" ry="3.2" transform="rotate(38)" fill="url(#greekLaurelGold)" />
+                </g>
+              )}
+            </g>
+          ))}
+        </g>
+      );
+      return (
+        <svg viewBox="0 0 200 84" className={className} style={{ filter: 'drop-shadow(0 2px 3px rgba(146,64,14,0.35))' }}>
+          <defs>
+            <linearGradient id="greekLaurelGold" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stopColor="#fef3c7" />
+              <stop offset="0.45" stopColor="#fbbf24" />
+              <stop offset="1" stopColor="#b45309" />
+            </linearGradient>
+          </defs>
+          {branch}
+          <g transform="translate(200 0) scale(-1 1)">{branch}</g>
+          <path d="M100 76 Q92 82 86 84 M100 76 Q108 82 114 84" fill="none" stroke="#b45309" strokeWidth="2.5" strokeLinecap="round" />
+          <circle cx="100" cy="75" r="4.5" fill="url(#greekLaurelGold)" stroke="#b45309" strokeWidth="1.2" />
+        </svg>
+      );
+    }
+
+    function GreekBolt({ className, delay }) {
+      return (
+        <svg viewBox="0 0 24 48" className={'absolute opacity-0 animate-bolt-flash ' + className} style={{ animationDelay: delay, filter: 'drop-shadow(0 0 6px rgba(253,224,71,0.95)) drop-shadow(0 0 14px rgba(251,191,36,0.7))' }}>
+          <polygon points="16,0 2,28 11,28 5,48 23,17 13,17 20,0" fill="#fde047" stroke="#f59e0b" strokeWidth="1.2" strokeLinejoin="round" />
+        </svg>
+      );
+    }
+
+    const GREEK_SKY = 'linear-gradient(to bottom, #0c0a09 0%, #1c1917 16%, #3f2511 36%, #b45309 58%, #f59e0b 72%, #fcd34d 86%, #fef3c7 100%)';
+    // วงแหวนพลังงาน: วงแหวนในวิดีโออยู่ที่รัศมี ~84% ของ closest-side — มาสก์เป็นวงโดนัทให้เหลือแค่ตัววงแหวน ซ่อนพื้นหลังน้ำเงินเข้มของวิดีโอ
+    const GREEK_RING_MASK = 'radial-gradient(closest-side, transparent 64%, #000 74%, #000 93%, transparent 100%)';
+    const GREEK_SPARKS = [-172, -148, -120, -92, -64, -34, -8];
+    const ZEUS_MASK = {
+      WebkitMaskImage: 'url(assets/greekgod-pixabay-9515478.png)',
+      maskImage: 'url(assets/greekgod-pixabay-9515478.png)',
+      WebkitMaskSize: '100% 100%',
+      maskSize: '100% 100%',
+      WebkitMaskRepeat: 'no-repeat',
+      maskRepeat: 'no-repeat'
+    };
+
+    // แถบเมฆพายุ (SVG data URI ปูซ้ำแนวนอน กว้าง 640px ขอบซ้ายขวาต่อกันสนิท) — ด้านบนมืด ใต้ท้องเมฆสะท้อนแสงทอง
+    function greekCloudTile(dark, lit) {
+      const svg = "<svg xmlns='http://www.w3.org/2000/svg' width='640' height='120' viewBox='0 0 640 120' preserveAspectRatio='none'><defs><linearGradient id='c' x1='0' y1='0' x2='0' y2='1'><stop offset='0.3' stop-color='" + dark + "'/><stop offset='1' stop-color='" + lit + "'/></linearGradient></defs><path d='M0 0H640V70Q610 98 570 84Q540 110 498 90Q466 112 430 92Q396 104 372 82Q340 108 300 88Q262 112 228 90Q196 104 170 84Q136 110 96 90Q62 106 36 84Q16 96 0 70Z' fill='url(#c)'/></svg>";
+      return 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '")';
+    }
+
+    // สายฟ้าแตกกิ่ง วาดเส้นลงมาจากเมฆ (pathLength=1 + dashoffset) — อัตราส่วนกล่อง 3:8 เสมอ
+    function GreekForkBolt({ className, delay }) {
+      return (
+        <svg viewBox="0 0 60 160" className={'absolute animate-bolt-strike ' + className} style={{ animationDelay: delay, '--d': delay, filter: 'drop-shadow(0 0 4px rgba(254,240,138,0.95)) drop-shadow(0 0 16px rgba(251,191,36,0.75))' }}>
+          <path d="M30 0 L22 40 L34 46 L20 92 L30 98 L16 160" pathLength="1" fill="none" stroke="#fde68a" strokeOpacity="0.55" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M30 0 L22 40 L34 46 L20 92 L30 98 L16 160" pathLength="1" fill="none" stroke="#fffbeb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M28 43 L44 66 L38 70 L50 98" pathLength="1" fill="none" stroke="#fef3c7" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M25 95 L10 116 L16 120 L6 140" pathLength="1" fill="none" stroke="#fef3c7" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+    }
+
+    // งานออกแบบ (รอบแก้): พายุทองเหนือยอดโอลิมปัส — ท้องฟ้าเมฆพายุมืดไล่สู่ขอบฟ้าทองยามอัสดง วงแหวนพลังงานสายฟ้า (วิดีโอจริง)
+    // ลุกโชนหลังรูปปั้นซุสที่ลอยตัวอยู่ สายฟ้าแตกกิ่งผ่าลงจากเมฆ ทุกครั้งที่ฟ้าผ่า ท้องฟ้าสว่างวาบ ตัวรูปปั้นเรืองขาวและดวงตาลุกเป็นประกาย
+    function GreekGodHero() {
+      return (
+        <div className="relative z-10 isolate pointer-events-none select-none overflow-hidden" aria-hidden="true">
+          <div className="relative h-72 sm:h-[24rem]" style={{ backgroundImage: GREEK_SKY }}>
+            {/* รัศมีทองหมุนช้า */}
+            <div className="absolute left-1/2 top-[54%] -translate-x-1/2 -translate-y-1/2 w-[620px] h-[620px] sm:w-[980px] sm:h-[980px]">
+              <div
+                className="w-full h-full rounded-full animate-sunburst-spin"
+                style={{
+                  backgroundImage: 'repeating-conic-gradient(from 0deg, rgba(253,224,71,0.22) 0deg 5deg, rgba(253,224,71,0) 5deg 15deg)',
+                  WebkitMaskImage: 'radial-gradient(circle, #000 0 14%, rgba(0,0,0,0.6) 34%, transparent 66%)',
+                  maskImage: 'radial-gradient(circle, #000 0 14%, rgba(0,0,0,0.6) 34%, transparent 66%)'
+                }}
+              />
+            </div>
+            {/* เมฆชั้นหลัง ขอบล่างสะท้อนทอง */}
+            <div className="absolute inset-x-0 top-2 h-24 sm:h-36 opacity-70 animate-cloud-roll" style={{ backgroundImage: greekCloudTile('#292524', '#b45309'), backgroundSize: '640px 100%', backgroundRepeat: 'repeat-x', animationDuration: '140s' }} />
+            {/* ทิวเขาโอลิมปัสที่ขอบฟ้า */}
+            <svg viewBox="0 0 400 80" preserveAspectRatio="none" className="absolute inset-x-0 bottom-0 w-full h-16 sm:h-24">
+              <path d="M0 80 V58 L40 46 L70 52 L110 30 L140 40 L170 22 L200 12 L230 24 L262 18 L300 38 L330 32 L370 48 L400 44 V80 Z" fill="#b45309" fillOpacity="0.35" />
+              <path d="M0 80 V66 L50 58 L90 64 L130 52 L180 60 L220 54 L270 62 L320 50 L360 58 L400 54 V80 Z" fill="#92400e" fillOpacity="0.3" />
+            </svg>
+            {/* สายฟ้าแตกกิ่ง (อยู่หลังเมฆชั้นหน้า ให้ดูเหมือนผ่าออกมาจากเมฆ) */}
+            <div className="absolute inset-0 max-w-[1800px] mx-auto">
+              <GreekForkBolt className="w-9 h-24 sm:w-[72px] sm:h-48 left-[5%] sm:left-[13%] top-1 sm:top-6" delay="0s" />
+              <GreekForkBolt className="w-9 h-24 sm:w-[72px] sm:h-48 right-[5%] sm:right-[13%] top-1 sm:top-8 -scale-x-100" delay="-3s" />
+            </div>
+            {/* เมฆชั้นหน้า มืดทึบ */}
+            <div className="absolute inset-x-0 top-0 h-20 sm:h-28 animate-cloud-roll" style={{ backgroundImage: greekCloudTile('#0c0a09', '#57351a'), backgroundSize: '640px 100%', backgroundRepeat: 'repeat-x', animationDuration: '80s' }} />
+            {/* ฟ้าแลบสว่างวาบทั้งฉาก (ซิงก์กับสายฟ้า) */}
+            <div className="absolute inset-0 animate-storm-flash" style={{ backgroundImage: 'radial-gradient(ellipse 80% 70% at 50% 0%, rgba(255,251,235,0.6), rgba(255,251,235,0.18) 55%, rgba(255,251,235,0) 100%)' }} />
+
+            <div className="absolute inset-0 max-w-[1800px] mx-auto">
+              {/* แสงศักดิ์สิทธิ์ขาวทองหลังรูปปั้น (ให้ลายเส้นทองอ่านออก) */}
+              <div className="absolute left-1/2 top-[54%] -translate-x-1/2 -translate-y-1/2 w-60 h-60 sm:w-[26rem] sm:h-[26rem]">
+                <div className="w-full h-full rounded-full animate-halo-pulse" style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.95) 0 20%, rgba(254,243,199,0.8) 38%, rgba(253,230,138,0.4) 54%, rgba(251,191,36,0) 68%)' }} />
+              </div>
+              {/* วงแหวนพลังงานสายฟ้า — วิดีโอจริง ย้อมทอง + screen blend + มาสก์โดนัท; mixBlendMode ต้องอยู่ที่ div นอกสุดนี้ (ตัวที่มี transform) */}
+              <div className="absolute left-1/2 top-[54%] -translate-x-1/2 -translate-y-1/2 w-60 h-60 sm:w-[22.5rem] sm:h-[22.5rem] motion-reduce:hidden" style={{ mixBlendMode: 'screen' }}>
+                <div className="relative w-full h-full animate-halo-pulse">
+                  <video
+                    src="assets/greek-energy-pixabay-149447-tiny.mp4"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="auto"
+                    className="block w-full h-full object-cover"
+                    style={{ filter: 'hue-rotate(180deg) saturate(1.8) brightness(1.2)', WebkitMaskImage: GREEK_RING_MASK, maskImage: GREEK_RING_MASK }}
+                  />
+                  {GREEK_SPARKS.map((a, i) => (
+                    <svg
+                      key={'spark' + i}
+                      viewBox="0 0 16 16"
+                      className="absolute w-3.5 h-3.5 sm:w-5 sm:h-5 animate-spark-flicker"
+                      style={{
+                        left: (50 + 46 * Math.cos(a * Math.PI / 180)) + '%',
+                        top: (50 + 46 * Math.sin(a * Math.PI / 180)) + '%',
+                        transform: 'translate(-50%, -50%) rotate(' + (a - 90) + 'deg)',
+                        filter: 'drop-shadow(0 0 3px rgba(253,224,71,0.9))',
+                        animationDuration: (2.2 + (i % 3) * 0.5) + 's',
+                        animationDelay: -(i * 0.37) + 's'
+                      }}
+                    >
+                      <path d="M8 0 L6 6 L10 7 L5 16" fill="none" stroke="#fef9c3" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  ))}
+                </div>
+              </div>
+              {/* ฝุ่นทองลอยขึ้น */}
+              {Array.from({ length: 14 }, (_, i) => (
+                <span
+                  key={'hmote' + i}
+                  className="absolute rounded-full bg-yellow-200 animate-mote-drift"
+                  style={{
+                    left: (((i * 37) + 9) % 92 + 4) + '%',
+                    top: (((i * 23) + 30) % 60 + 25) + '%',
+                    width: (2 + (i % 3)) + 'px',
+                    height: (2 + (i % 3)) + 'px',
+                    boxShadow: '0 0 8px 2px rgba(253,224,71,0.7)',
+                    '--dx': ((i % 2 ? 1 : -1) * (6 + (i % 5) * 3)) + 'px',
+                    animationDuration: (5 + (i % 4)) + 's',
+                    animationDelay: -(i * 0.9) + 's'
+                  }}
+                />
+              ))}
+              {/* สายฟ้าเล็กเหนือหัวเสา (เดสก์ท็อป) — ดีเลย์เดิม 0s / -3s ซิงก์กับฟ้าผ่า */}
+              <GreekBolt className="hidden sm:block w-9 h-[72px] top-5 right-1/2 mr-[190px] -rotate-12" delay="0s" />
+              <GreekBolt className="hidden sm:block w-9 h-[72px] top-7 left-1/2 ml-[190px] rotate-12 -scale-x-100" delay="-3s" />
+              <GreekColumn className="right-1/2 mr-[112px] sm:mr-[184px]" />
+              <GreekColumn className="left-1/2 ml-[112px] sm:ml-[184px]" />
+              {/* เงาบนพื้น หดเมื่อรูปปั้นลอยขึ้น */}
+              <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-32 sm:w-44 h-3 sm:h-4">
+                <div className="w-full h-full rounded-full bg-amber-950/50 blur-[3px] animate-zeus-shadow" />
+              </div>
+              {/* รูปปั้นซุส — ลอยตัว + ประกายทองกวาด + เรืองขาวเมื่อฟ้าผ่า + ดวงตาลุกโชน */}
+              <div className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 w-44 sm:w-64">
+                <div className="relative animate-unicorn-float" style={{ animationDuration: '5s' }}>
+                  <img src="assets/greekgod-pixabay-9515478.png" alt="" className="relative block w-full h-auto" style={{ filter: ZEUS_GOLD_FILTER }} />
+                  <div
+                    className="absolute inset-0 animate-gold-gleam"
+                    style={{ backgroundImage: 'linear-gradient(105deg, rgba(255,247,205,0) 45%, rgba(255,247,205,0.8) 50%, rgba(255,247,205,0) 55%)', backgroundSize: '300% 100%', ...ZEUS_MASK }}
+                  />
+                  <div className="absolute inset-0 animate-storm-flash" style={{ backgroundImage: 'linear-gradient(to bottom, #ffffff, #fef08a 60%, #fbbf24)', ...ZEUS_MASK }} />
+                  <span
+                    className="absolute w-3 h-1.5 sm:w-4 sm:h-2 rounded-full animate-storm-flash"
+                    style={{
+                      left: '62.6%',
+                      top: '17.7%',
+                      transform: 'translate(-50%, -50%) rotate(14deg)',
+                      background: 'radial-gradient(ellipse, #ffffff 0 30%, #fde047 60%, rgba(253,224,71,0) 100%)',
+                      boxShadow: '0 0 8px 3px rgba(253,224,71,0.85), 0 0 18px 6px rgba(251,191,36,0.5)'
+                    }}
+                  />
+                </div>
+              </div>
+              <LaurelWreath className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-52 sm:w-72 h-auto" />
+            </div>
+          </div>
+          {/* ป้ายจารึก + ลายกรีกคีย์ — เหมือนเดิมทุกตัวอักษร */}
+          <div style={{ filter: 'drop-shadow(0 6px 8px rgba(146,64,14,0.18))' }}>
+            <div className="relative bg-gradient-to-b from-white to-stone-100 border-y-2 border-amber-400 py-1.5 sm:py-2 text-center">
+              <span className="text-sm sm:text-lg font-black tracking-wide bg-gradient-to-r from-amber-700 via-yellow-500 to-amber-700 bg-clip-text text-transparent">
+                ⚡ ทวยเทพแห่งโอลิมปัสประทานพร ⚡
+              </span>
+              <span className="hidden sm:inline ml-3 text-sm font-semibold text-amber-800/70">ทีมนี้ยิ่งใหญ่ระดับตำนาน</span>
+            </div>
+            <div className="h-6 bg-amber-50 border-b-2 border-amber-500" style={{ backgroundImage: GREEK_MEANDER, backgroundSize: '22px 24px', backgroundRepeat: 'repeat-x', backgroundPosition: 'center' }} />
+          </div>
+        </div>
+      );
+    }
+
+    // ฉากธีมมหาสมุทรลึก — งานออกแบบ (รอบแก้): ดำดิ่งสู่โซนเที่ยงคืนใต้ทะเล แสงผิวน้ำเหลือเพียงร่องรอยจาง ๆ ด้านบน
+    // แพลงก์ตอนเรืองแสงกะพริบ หิมะทะเลร่วงช้า ๆ ฝูงปลาตะเกียง หมึกยักษ์เงาดำว่ายผ่านไกล ๆ ดวงตาลึกลับกะพริบในความมืด
+    // พื้นหินมืด สาหร่ายเงาดำ ปะการังเรืองแสง (สยองแบบน่ารัก ไม่น่ากลัวจริงจัง)
+    const OCEAN_RAYS = [[4, 70, -16, 0], [17, 44, -9, -2.5], [33, 110, -4, -5.2], [52, 60, 3, -1.4], [68, 120, 9, -6.6], [85, 54, 15, -3.8]];
+    const OCEAN_FISH_SCHOOLS = [
+      { top: '22%', scale: 0.9, duration: 46, delay: -6, reverse: false, opacity: 0.55 },
+      { top: '48%', scale: 0.65, duration: 64, delay: -31, reverse: true, opacity: 0.4 },
+      { top: '70%', scale: 1.1, duration: 38, delay: -15, reverse: false, opacity: 0.5 }
+    ];
+    const OCEAN_FISH_OFFSETS = [[0, 14], [24, 2], [30, 26], [52, 12], [60, 32]];
+    const OCEAN_KELP = [[1, 'h-40 sm:h-56', '#134e4a', 0], [4, 'h-28 sm:h-40', '#115e59', -1.6], [7, 'h-36 sm:h-48', '#0f3b3a', -3.1], [89, 'h-32 sm:h-44', '#115e59', -0.8], [92, 'h-44 sm:h-60', '#134e4a', -2.4], [96, 'h-28 sm:h-36', '#0f3b3a', -4]];
+    const OCEAN_PLANKTON = ['#67e8f9', '#5eead4', '#a5f3fc', '#c4b5fd', '#f0abfc'];
+    const OCEAN_EYES = [
+      { pos: { left: '2.5%', top: '34%' }, size: 5, gap: 9, color: '#fde047', delay: 0, duration: 15 },
+      { pos: { right: '3%', top: '22%' }, size: 4, gap: 7, color: '#f87171', delay: -6, duration: 18 },
+      { pos: { left: '5%', top: '68%' }, size: 3, gap: 6, color: '#67e8f9', delay: -11, duration: 13 },
+      { pos: { right: '5.5%', top: '58%' }, size: 6, gap: 11, color: '#fde047', delay: -3, duration: 17 },
+      { pos: { left: '46%', top: '84%' }, size: 3, gap: 6, color: '#c4b5fd', delay: -9, duration: 16 }
+    ];
+    const OCEAN_CORAL_PATH = 'M30 80 V50 Q30 38 18 32 V14 M30 50 Q30 40 42 34 V18 M42 34 Q50 30 52 22 M18 32 Q11 28 9 20';
+    const OCEAN_CORALS = [
+      { cls: 'bottom-3 left-[10%] w-14 sm:w-20', base: '#a21caf', vein: '#f0abfc', tip: '#f5d0fe', glow: 'rgba(232,121,249,0.9)', glow2: 'rgba(217,70,239,0.55)', delay: '0s' },
+      { cls: 'bottom-2 right-[12%] w-12 sm:w-16 -scale-x-100', base: '#0e7490', vein: '#a5f3fc', tip: '#ecfeff', glow: 'rgba(103,232,249,0.9)', glow2: 'rgba(34,211,238,0.5)', delay: '-2s' },
+      { cls: 'bottom-2 right-[4%] w-8 sm:w-10', base: '#6d28d9', vein: '#ddd6fe', tip: '#f5f3ff', glow: 'rgba(196,181,253,0.9)', glow2: 'rgba(139,92,246,0.5)', delay: '-3.2s' }
+    ];
+
+    function OceanScene() {
+      return (
+        <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 select-none" aria-hidden="true">
+          {/* ร่องรอยแสงผิวน้ำไกลลิบด้านบน */}
+          <div className="absolute inset-x-0 top-0 h-56 bg-gradient-to-b from-cyan-700/25 via-sky-900/10 to-transparent" />
+          {OCEAN_RAYS.map(([left, width, angle, delay], i) => (
+            <span
+              key={'ray' + i}
+              className="absolute -top-16 h-[60vh] bg-gradient-to-b from-cyan-200/10 via-cyan-300/5 to-transparent blur-md animate-ray-sway"
+              style={{ left: left + '%', width: width + 'px', '--a': angle + 'deg', animationDuration: '14s', animationDelay: delay + 's' }}
+            />
+          ))}
+          {/* หมึกยักษ์เงามืดว่ายผ่านไกล ๆ ตาวาวสีอำพัน */}
+          <div className="absolute left-0 top-[30%] animate-squid-drift">
+            <img src="assets/ocean-squid-pixabay-9245445.png" alt="" className="block w-64 sm:w-[30rem] h-auto opacity-60" style={{ filter: 'brightness(0.3) saturate(0.7) blur(1.5px) drop-shadow(0 0 18px rgba(127,29,29,0.35))' }} />
+            <span className="absolute w-2 h-2 sm:w-3 sm:h-3 rounded-full" style={{ left: '49.4%', top: '46.9%', transform: 'translate(-50%, -50%)', background: '#fbbf24', opacity: 0.8, boxShadow: '0 0 10px 3px rgba(251,191,36,0.6)' }} />
+          </div>
+          {/* ฝูงปลาตะเกียง จุดเรืองแสงใต้ท้อง */}
+          {OCEAN_FISH_SCHOOLS.map((s, i) => (
+            <div
+              key={'school' + i}
+              className="absolute left-0 animate-fish-swim"
+              style={{ top: s.top, opacity: s.opacity, animationDuration: s.duration + 's', animationDelay: s.delay + 's', animationDirection: s.reverse ? 'reverse' : 'normal', filter: 'drop-shadow(0 0 4px rgba(34,211,238,0.5))' }}
+            >
+              <div className="relative w-24 h-12" style={{ transform: 'scale(' + (s.reverse ? -s.scale : s.scale) + ', ' + s.scale + ')' }}>
+                {OCEAN_FISH_OFFSETS.map(([x, y], j) => (
+                  <svg key={j} viewBox="0 0 32 16" className="absolute w-8 h-4" style={{ left: x + 'px', top: y + 'px' }}>
+                    <path d="M31 8 Q23 0 11 6 L2 1 L5 8 L2 15 L11 10 Q23 16 31 8 Z" fill="#164e63" />
+                    <circle cx="25" cy="7" r="1.3" fill="#ecfeff" />
+                    <circle cx="14" cy="10" r="0.9" fill="#67e8f9" />
+                    <circle cx="18" cy="10.5" r="0.9" fill="#67e8f9" />
+                    <circle cx="22" cy="10.5" r="0.9" fill="#67e8f9" />
+                  </svg>
+                ))}
+              </div>
+            </div>
+          ))}
+          {/* ความมืดบีบเข้ามาจากขอบจอ หายใจช้า ๆ */}
+          <div className="absolute inset-0 animate-rainbow-breathe" style={{ backgroundImage: 'radial-gradient(ellipse 75% 65% at 50% 42%, rgba(0,0,0,0) 45%, rgba(0,0,0,0.75) 100%)' }} />
+          {/* แพลงก์ตอนเรืองแสง */}
+          {Array.from({ length: 28 }, (_, i) => {
+            const c = OCEAN_PLANKTON[i % OCEAN_PLANKTON.length];
+            const s = 2 + (i % 3);
+            return (
+              <span
+                key={'plankton' + i}
+                className="absolute rounded-full animate-mote-drift"
+                style={{
+                  left: (((i * 41) + 13) % 96 + 2) + '%',
+                  top: (((i * 29) + 11) % 84 + 8) + '%',
+                  width: s + 'px',
+                  height: s + 'px',
+                  background: c,
+                  boxShadow: '0 0 ' + (s * 3) + 'px ' + s + 'px ' + c,
+                  '--dx': ((i % 2 ? 1 : -1) * (5 + (i % 4) * 4)) + 'px',
+                  animationDuration: (7 + (i % 5) * 1.6) + 's',
+                  animationDelay: -(i * 0.8) + 's'
+                }}
+              />
+            );
+          })}
+          {/* หิมะทะเล (marine snow) ร่วงช้า ๆ */}
+          {Array.from({ length: 24 }, (_, i) => (
+            <span
+              key={'snow' + i}
+              className="absolute top-0 rounded-full bg-slate-200/60 animate-snow-sink"
+              style={{
+                left: ((i * 43 + 5) % 98) + '%',
+                width: (1 + (i % 3)) + 'px',
+                height: (1 + (i % 3)) + 'px',
+                '--dx': ((i % 2 ? 1 : -1) * (10 + (i % 5) * 6)) + 'px',
+                animationDuration: (22 + (i % 6) * 3) + 's',
+                animationDelay: -(i * 1.7) + 's'
+              }}
+            />
+          ))}
+          {Array.from({ length: 12 }, (_, i) => {
+            const size = [8, 12, 6, 16, 10, 22][i % 6];
+            return (
+              <span
+                key={'bubble' + i}
+                className="absolute rounded-full border border-cyan-100/30 animate-bubble-rise"
+                style={{
+                  left: ((i * 37 + 3) % 98) + '%',
+                  bottom: '-24px',
+                  width: size + 'px',
+                  height: size + 'px',
+                  background: 'radial-gradient(circle at 32% 30%, rgba(207,250,254,0.55) 0 14%, rgba(207,250,254,0.08) 34%, rgba(207,250,254,0.02) 70%)',
+                  '--dx': ((i % 2 ? 1 : -1) * (8 + (i % 4) * 5)) + 'px',
+                  animationDuration: (11 + (i % 5) * 2) + 's',
+                  animationDelay: -(i * 1.4) + 's'
+                }}
+              />
+            );
+          })}
+          {/* ดวงตาลึกลับในความมืด โผล่ กะพริบ แล้วหายไป */}
+          {OCEAN_EYES.map((e, i) => (
+            <div key={'eyes' + i} className="absolute flex" style={{ ...e.pos, gap: e.gap + 'px' }}>
+              {[0, 1].map((k) => (
+                <span
+                  key={k}
+                  className="block rounded-full animate-eye-blink"
+                  style={{
+                    width: e.size + 'px',
+                    height: Math.round(e.size * 0.65) + 'px',
+                    background: e.color,
+                    boxShadow: '0 0 ' + (e.size + 2) + 'px ' + Math.ceil(e.size / 2) + 'px ' + e.color,
+                    animationDuration: e.duration + 's',
+                    animationDelay: e.delay + 's'
+                  }}
+                />
+              ))}
+            </div>
+          ))}
+          {/* พื้นหินก้นทะเลมืด */}
+          <svg viewBox="0 0 400 60" preserveAspectRatio="none" className="absolute inset-x-0 bottom-0 w-full h-20 sm:h-28">
+            <path d="M0 30 Q30 16 64 26 Q96 8 140 24 Q180 14 214 28 Q250 10 296 24 Q336 16 364 26 Q384 20 400 24 V60 H0 Z" fill="#0b1626" />
+            <path d="M0 44 Q46 32 96 42 Q146 30 204 42 Q256 34 300 44 Q350 30 400 40 V60 H0 Z" fill="#020617" />
+          </svg>
+          {OCEAN_KELP.map(([left, h, color, delay], i) => (
+            <svg key={'kelp' + i} viewBox="0 0 24 120" preserveAspectRatio="none" className={'absolute bottom-0 w-6 sm:w-7 opacity-80 animate-kelp-sway ' + h} style={{ left: left + '%', animationDelay: delay + 's', animationDuration: (6.5 + (i % 3)) + 's' }}>
+              <path d="M12 120 C3 100 21 84 12 64 C3 46 21 30 12 4" fill="none" stroke={color} strokeWidth="6" strokeLinecap="round" />
+              <path d="M12 92 Q22 86 20 76 M12 64 Q2 58 4 48 M12 36 Q22 30 20 20" fill="none" stroke={color} strokeWidth="4" strokeLinecap="round" />
+            </svg>
+          ))}
+          {/* ปะการังเรืองแสง */}
+          {OCEAN_CORALS.map((c, i) => (
+            <svg key={'coral' + i} viewBox="0 0 60 80" className={'absolute animate-abyss-glow ' + c.cls} style={{ animationDelay: c.delay, filter: 'drop-shadow(0 0 4px ' + c.glow + ') drop-shadow(0 0 12px ' + c.glow2 + ')' }}>
+              <path d={OCEAN_CORAL_PATH} fill="none" stroke={c.base} strokeWidth="6" strokeLinecap="round" />
+              <path d={OCEAN_CORAL_PATH} fill="none" stroke={c.vein} strokeOpacity="0.9" strokeWidth="1.6" strokeLinecap="round" />
+              <circle cx="18" cy="14" r="2.5" fill={c.tip} />
+              <circle cx="42" cy="18" r="2.5" fill={c.tip} />
+              <circle cx="52" cy="22" r="2" fill={c.tip} />
+              <circle cx="9" cy="20" r="2" fill={c.tip} />
+            </svg>
+          ))}
+        </div>
+      );
+    }
+
+    const DRAGONFISH_GLOW = 'brightness(1.25) drop-shadow(0 0 1.5px rgba(165,243,252,0.9)) drop-shadow(0 0 16px rgba(34,211,238,0.3))';
+    // ตำแหน่งบนภาพปลามังกร 1280×747: ตาสองข้าง และปลายเหยื่อล่อเรืองแสงที่หนวดใต้คาง
+    const DRAGONFISH_EYES = [['87.3%', '53.1%'], ['97%', '51.5%']];
+    const DRAGONFISH_LURE = { left: '67.6%', top: '96%' };
+
+    // แมงกะพรุนเรืองแสง — ร่มหดพองเป็นจังหวะ หนวดพลิ้ว ลอยขึ้นลงช้า ๆ
+    function AbyssJelly({ className, color, glow, delay }) {
+      return (
+        <div className={'absolute animate-unicorn-float ' + className} style={{ animationDuration: '7s', animationDelay: delay }}>
+          <svg viewBox="0 0 40 64" className="block w-full h-auto overflow-visible" style={{ filter: 'drop-shadow(0 0 5px ' + glow + ') drop-shadow(0 0 14px ' + glow + ')' }}>
+            <g className="animate-kelp-sway" style={{ transformBox: 'fill-box', transformOrigin: '50% 0%', animationDuration: '3.4s', animationDelay: delay }}>
+              <path d="M10 22 Q6 34 11 44 Q15 54 9 63" fill="none" stroke={color} strokeOpacity="0.75" strokeWidth="1.4" strokeLinecap="round" />
+              <path d="M20 22 Q24 36 19 46 Q15 56 21 63" fill="none" stroke={color} strokeOpacity="0.75" strokeWidth="1.4" strokeLinecap="round" />
+              <path d="M30 22 Q34 32 29 42 Q25 52 31 60" fill="none" stroke={color} strokeOpacity="0.75" strokeWidth="1.4" strokeLinecap="round" />
+              <path d="M15 22 Q13 30 16 36" fill="none" stroke={color} strokeOpacity="0.5" strokeWidth="2.4" strokeLinecap="round" />
+              <path d="M25 22 Q27 30 24 36" fill="none" stroke={color} strokeOpacity="0.5" strokeWidth="2.4" strokeLinecap="round" />
+            </g>
+            <g className="animate-jelly-pulse" style={{ animationDelay: delay }}>
+              <path d="M4 22 Q4 2 20 2 Q36 2 36 22 Q32 19 28 22 Q24 19 20 22 Q16 19 12 22 Q8 19 4 22 Z" fill={color} fillOpacity="0.45" stroke={color} strokeWidth="1.2" />
+              <ellipse cx="15" cy="9" rx="6" ry="3.5" fill="#ffffff" fillOpacity="0.35" />
+              <circle cx="20" cy="13" r="2.4" fill="#ffffff" fillOpacity="0.8" />
+            </g>
+          </svg>
+        </div>
+      );
+    }
+
+    // งานออกแบบ (รอบแก้): ก้นทะเลมืดสนิท — ปลามังกรเขี้ยวยาวโผล่จากความมืดฝั่งซ้าย ขอบตัวเรืองฟ้าจาง ๆ ตาวาว
+    // เหยื่อล่อใต้คางเรืองแสงเต้นเป็นจังหวะส่องน้ำรอบตัว แมงกะพรุนเรืองแสงลอยผ่าน ป้ายกระจกมืดมีโซนาร์ฝั่งขวา (ไม่มีขอบคลื่น — ฉากโปร่งต่อกับพื้นหลัง)
+    function OceanHero() {
+      return (
+        <div className="relative z-10 pointer-events-none select-none overflow-hidden" aria-hidden="true">
+          <div className="relative max-w-[1800px] mx-auto h-60 sm:h-[21rem]">
+            {/* ดวงตาในมุมมืด (เดสก์ท็อป) */}
+            <div className="hidden sm:flex absolute right-[3%] top-[18%] gap-2">
+              {[0, 1].map((k) => (
+                <span key={k} className="block w-1.5 h-1 rounded-full bg-yellow-300 shadow-[0_0_8px_3px_rgba(253,224,71,0.7)] animate-eye-blink" style={{ animationDuration: '12s', animationDelay: '-4s' }} />
+              ))}
+            </div>
+            <div className="hidden sm:flex absolute left-[38%] bottom-[14%] gap-1.5">
+              {[0, 1].map((k) => (
+                <span key={k} className="block w-1 h-[3px] rounded-full bg-red-400 shadow-[0_0_6px_2px_rgba(248,113,113,0.7)] animate-eye-blink" style={{ animationDuration: '15s', animationDelay: '-9s' }} />
+              ))}
+            </div>
+            <AbyssJelly className="w-8 sm:w-12 left-[74%] sm:left-[50%] top-2 sm:top-10" color="#c4b5fd" glow="rgba(167,139,250,0.8)" delay="0s" />
+            <AbyssJelly className="hidden sm:block w-9 left-[62%] top-[48%]" color="#67e8f9" glow="rgba(34,211,238,0.75)" delay="-2.3s" />
+            {/* ปลามังกรเขี้ยวยาว */}
+            <div className="absolute -left-14 top-3 w-[19rem] sm:left-[4%] sm:top-4 sm:w-[32rem]">
+              <div className="relative animate-abyss-lurk">
+                {/* แอ่งแสงจากเหยื่อล่อ (อยู่หลังตัวปลา) */}
+                <div className="absolute" style={DRAGONFISH_LURE}>
+                  <div className="-translate-x-1/2 -translate-y-1/2 w-48 h-48 sm:w-96 sm:h-96">
+                    <div className="w-full h-full rounded-full animate-lure-pulse" style={{ backgroundImage: 'radial-gradient(circle, rgba(165,243,252,0.32) 0%, rgba(34,211,238,0.12) 35%, rgba(34,211,238,0) 68%)' }} />
+                  </div>
+                </div>
+                <img src="assets/ocean-dragonfish-pixabay-9245448.png" alt="" className="relative block w-full h-auto" style={{ filter: DRAGONFISH_GLOW }} />
+                {DRAGONFISH_EYES.map(([l, t], i) => (
+                  <div key={'fisheye' + i} className="absolute" style={{ left: l, top: t }}>
+                    <div className="-translate-x-1/2 -translate-y-1/2">
+                      <span className="block w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 rounded-full animate-lure-pulse" style={{ background: 'radial-gradient(circle, #f0f9ff 0 25%, #38bdf8 55%, rgba(56,189,248,0) 72%)', boxShadow: '0 0 10px 3px rgba(56,189,248,0.65)', animationDelay: '-1.6s' }} />
+                    </div>
+                  </div>
+                ))}
+                <div className="absolute" style={DRAGONFISH_LURE}>
+                  <div className="-translate-x-1/2 -translate-y-1/2">
+                    <span className="block w-3 h-3 sm:w-4 sm:h-4 rounded-full animate-lure-pulse" style={{ background: 'radial-gradient(circle, #ffffff 0 30%, #a5f3fc 55%, rgba(103,232,249,0) 75%)', boxShadow: '0 0 14px 5px rgba(103,232,249,0.8), 0 0 36px 12px rgba(34,211,238,0.35)' }} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* ป้ายกระจกมืด + โซนาร์ */}
+            <div className="absolute right-3 bottom-3 sm:bottom-auto sm:right-[8%] sm:top-14 max-w-[58%] sm:max-w-sm">
+              <div className="rounded-2xl bg-slate-950/70 backdrop-blur-sm border border-cyan-400/25 shadow-[0_0_32px_rgba(34,211,238,0.15)] px-3 py-2 sm:px-5 sm:py-4">
+                <div className="flex items-center gap-2 text-[10px] sm:text-xs font-mono tracking-wider text-cyan-300/80">
+                  <span className="relative flex w-2 h-2 shrink-0">
+                    <span className="absolute inset-0 rounded-full bg-cyan-300 opacity-70 animate-ping motion-reduce:hidden" style={{ animationDuration: '2.4s' }} />
+                    <span className="relative w-2 h-2 rounded-full bg-cyan-300 shadow-[0_0_6px_rgba(103,232,249,0.9)]" />
+                  </span>
+                  โซนเที่ยงคืน · ลึก 3,800 ม.
+                </div>
+                <div className="mt-1 text-sm sm:text-2xl font-black text-cyan-50 leading-snug" style={{ textShadow: '0 0 14px rgba(34,211,238,0.55)' }}>
+                  🦑 ดำดิ่งสู่ก้นทะเลลึก
+                </div>
+                <div className="mt-0.5 text-[11px] sm:text-sm font-medium text-cyan-200/75">อย่าเผลอว่ายตามแสงไฟดวงนั้นนะ... 👀</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     function Header({ theme, me, houseLevel, houseExp, status, room, memberCount, onName, onMood, onTheme, onLockedTheme, onPet, onCraving, onLeave }) {
       const pet = PETS_CONFIG[me.pet] || PETS_CONFIG.dog;
       const [petPickerOpen, setPetPickerOpen] = useState(false);
@@ -2008,6 +2754,7 @@
       const [editingId, setEditingId] = useState(null);
       const [editText, setEditText] = useState('');
       const [editCategory, setEditCategory] = useState('');
+      const [editDate, setEditDate] = useState('');
       const [editTime, setEditTime] = useState('');
       const [editDescription, setEditDescription] = useState('');
 
@@ -2021,6 +2768,7 @@
         setEditingId(t.id);
         setEditText(t.text);
         setEditCategory(t.category);
+        setEditDate(t.date);
         setEditTime(t.time || '');
         setEditDescription(t.description || '');
       };
@@ -2028,8 +2776,8 @@
       const submitEdit = (e) => {
         e.preventDefault();
         const text = editText.trim();
-        if (!text) return;
-        onEdit(editingId, { text, category: editCategory, time: editTime || null, description: editDescription.trim() || null });
+        if (!text || !editDate) return;
+        onEdit(editingId, { text, category: editCategory, date: editDate, time: editTime || null, description: editDescription.trim() || null });
         setEditingId(null);
       };
 
@@ -2067,21 +2815,28 @@
                         autoFocus
                         className="w-full rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-sm outline-none focus:ring-2 focus:ring-slate-300"
                       />
+                      <select
+                        value={editCategory}
+                        onChange={(e) => setEditCategory(e.target.value)}
+                        className="w-full rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-xs outline-none focus:ring-2 focus:ring-slate-300"
+                      >
+                        {categories.map((c) => (
+                          <option key={c.id} value={c.id}>{c.emoji} {c.name}</option>
+                        ))}
+                      </select>
                       <div className="flex gap-1.5">
-                        <select
-                          value={editCategory}
-                          onChange={(e) => setEditCategory(e.target.value)}
+                        <input
+                          type="date"
+                          value={editDate}
+                          onChange={(e) => setEditDate(e.target.value)}
+                          title="ย้ายงานนี้ไปวันอื่น"
                           className="flex-1 min-w-0 rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-xs outline-none focus:ring-2 focus:ring-slate-300"
-                        >
-                          {categories.map((c) => (
-                            <option key={c.id} value={c.id}>{c.emoji} {c.name}</option>
-                          ))}
-                        </select>
+                        />
                         <input
                           type="time"
                           value={editTime}
                           onChange={(e) => setEditTime(e.target.value)}
-                          className="w-28 shrink-0 rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-xs outline-none focus:ring-2 focus:ring-slate-300"
+                          className="w-24 shrink-0 rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-xs outline-none focus:ring-2 focus:ring-slate-300"
                         />
                       </div>
                       <textarea
@@ -2275,9 +3030,13 @@
             <div className="flex gap-2 shrink-0">
               <button
                 onClick={onFeed}
-                className="rounded-xl bg-amber-400 hover:bg-amber-500 text-amber-950 px-3.5 py-2 text-xs font-semibold shadow-md transition-colors"
+                disabled={fullness >= 100}
+                className={'rounded-xl px-3.5 py-2 text-xs font-semibold shadow-md transition-colors '
+                  + (fullness >= 100
+                    ? 'bg-amber-200 text-amber-500 cursor-not-allowed'
+                    : 'bg-amber-400 hover:bg-amber-500 text-amber-950')}
               >
-                🍖 ให้อาหาร
+                🍖 ให้อาหาร{fullness >= 100 ? ' (อิ่มแล้ว)' : ''}
               </button>
               <button
                 onClick={onPinch}
@@ -3064,12 +3823,17 @@
         playSynthesizedSound(PETS_CONFIG[me.pet].sound);
       };
 
-      const editTask = (id, { text, category, time, description }) => {
+      const editTask = (id, { text, category, date, time, description }) => {
         guard(api.updateTask(id, {
-          text, category,
+          text, category, date,
           time: time || firebase.firestore.FieldValue.delete(),
           description: description || firebase.firestore.FieldValue.delete()
         }), 'แก้ไขงาน');
+        if (date && date !== selectedDate) {
+          setSelectedDate(date);
+          setWeekAnchor(date);
+          toast('ย้ายงานไปวันที่ ' + date + ' แล้ว');
+        }
       };
 
       const toggleTask = (task) => {
@@ -3154,6 +3918,10 @@
       };
 
       const feedPet = () => {
+        if (fullness >= 100) {
+          toast('อิ่มจนจะแตกแล้ว เดี๋ยวท้องย่อยก่อนนะ 🐽');
+          return;
+        }
         const food = DEFAULT_FOODS[Math.floor(Math.random() * DEFAULT_FOODS.length)];
         playSynthesizedSound(PETS_CONFIG[me.pet].sound);
         setFullness((f) => clamp(f + 20, 0, 100));
@@ -3250,6 +4018,8 @@
           {theme.id === 'galaxy' && <GalaxyScene />}
           {theme.id === 'cottoncandy' && <CottonCandyScene />}
           {theme.id === 'unicorn' && <UnicornScene />}
+          {theme.id === 'greekgod' && <GreekGodScene />}
+          {theme.id === 'ocean' && <OceanScene />}
           <Header
             theme={theme}
             me={me}
@@ -3270,6 +4040,8 @@
           {theme.id === 'dragon' && <DragonHero />}
           {theme.id === 'cottoncandy' && <CottonCandyHero />}
           {theme.id === 'unicorn' && <UnicornHero />}
+          {theme.id === 'greekgod' && <GreekGodHero />}
+          {theme.id === 'ocean' && <OceanHero />}
           <div className="relative z-10 max-w-[1800px] mx-auto px-3 py-4 grid gap-4 grid-cols-1 lg:grid-cols-[280px_minmax(0,1fr)] xl:grid-cols-[280px_minmax(0,1fr)_340px]">
 
             {/* ---------- ซ้าย ---------- */}
