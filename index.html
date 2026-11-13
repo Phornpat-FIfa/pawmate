@@ -594,7 +594,7 @@
         accentText: 'text-amber-700',
         bannerEmoji: '⚡',
         illustrationText: '⚡🏛️ ซุสกวัดสายฟ้าประทานพร — ทีมนี้ยิ่งใหญ่ระดับตำนาน!',
-        unlockLevel: 50
+        unlockLevel: 60
       },
       ocean: {
         id: 'ocean',
@@ -608,7 +608,7 @@
         accentText: 'text-cyan-300',
         bannerEmoji: '🦑',
         illustrationText: '🦑🌑 ดำดิ่งสู่ทะเลลึก — ระวังเจ้าปลาเขี้ยวยาวที่ซ่อนอยู่ในความมืด!',
-        unlockLevel: 70
+        unlockLevel: 80
       }
     };
 
@@ -693,6 +693,9 @@
     const WORKLOAD_CAPACITY = 5;   // งานค้างกี่ชิ้นถึงเรียกว่าเต็มมือ
     const HOUSE_EXP_PER_LEVEL = 100;
     const FOCUS_MINUTES = 25;
+
+    // เลขรุ่นของหน้าเว็บ — เปลี่ยนทุกครั้งที่ deploy เพื่อให้เครื่องที่เปิดค้างไว้รู้ตัวว่ามีเวอร์ชันใหม่แล้วรีเฟรชให้เอง
+    const APP_VERSION = '2026-11-13.1';
 
     /* ============================================================
        SOUND — สังเคราะห์เสียงสัตว์ด้วย Web Audio API
@@ -3699,6 +3702,36 @@
         }, left);
         return () => clearTimeout(t);
       }, [me.focusUntil, toast, emit]);
+
+      /* ---------- เช็กเวอร์ชันหน้าเว็บ — มี deploy ใหม่ขึ้นเมื่อไหร่ รีเฟรชให้อัตโนมัติ ----------
+         เช็กเป็นระยะ + ทุกครั้งที่กลับมาเปิดแท็บ ถ้าเจอเวอร์ชันใหม่และผู้ใช้ไม่ได้พิมพ์อะไรอยู่ (กันข้อมูลหาย)
+         ก็เตือนสั้น ๆ แล้วรีเฟรชหน้าให้เอง ถ้าเผลอพิมพ์อยู่ก็รอเช็กรอบถัดไปแทน */
+      useEffect(() => {
+        const pendingRef = { current: false };
+        const checkVersion = async () => {
+          if (pendingRef.current) return;
+          try {
+            const res = await fetch(location.pathname + '?v=' + Date.now(), { cache: 'no-store' });
+            const html = await res.text();
+            const m = html.match(/APP_VERSION\s*=\s*'([^']+)'/);
+            if (m && m[1] && m[1] !== APP_VERSION) {
+              const el = document.activeElement;
+              const busy = el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT');
+              if (busy) return; // รอเช็กรอบหน้า ไม่รบกวนระหว่างพิมพ์
+              pendingRef.current = true;
+              toast('มีอัปเดตใหม่ของแอป กำลังรีเฟรชให้อัตโนมัติ... 🔄');
+              setTimeout(() => location.reload(), 1500);
+            }
+          } catch (e) { /* เน็ตหลุดตอนเช็ก ไม่ต้องทำอะไร รอรอบหน้า */ }
+        };
+        const interval = setInterval(checkVersion, 120000);
+        const onVisible = () => { if (document.visibilityState === 'visible') checkVersion(); };
+        document.addEventListener('visibilitychange', onVisible);
+        return () => {
+          clearInterval(interval);
+          document.removeEventListener('visibilitychange', onVisible);
+        };
+      }, [toast]);
 
       /* ---------- เสียงเมื่อมีข้อความแชทใหม่จากเพื่อน — เฉพาะข้อความที่มาหลังเปิดแอป ไม่เล่นย้อนหลังตอนโหลดครั้งแรก ---------- */
       const chatSeenRef = useRef(new Set());
