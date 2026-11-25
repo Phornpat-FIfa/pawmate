@@ -336,6 +336,31 @@
     }
     .animate-kelp-sway { animation: kelpSway 5s ease-in-out infinite; transform-origin: 50% 100%; }
 
+    /* ธีมเทพเจ้าอียิปต์ — สุริยะเรืองแสง ทรายปลิว ดวงตาฮอรัสส่องประกาย ผิวน้ำไนล์ระยิบ */
+    @keyframes sunDiskGlow {
+      0%, 100% { opacity: 0.78; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.06); }
+    }
+    .animate-sun-disk-glow { animation: sunDiskGlow 5s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 50%; }
+    @keyframes sandDrift {
+      0% { transform: translate(0, 0); opacity: 0; }
+      10% { opacity: 0.7; }
+      50% { transform: translate(60vw, var(--dy)); }
+      90% { opacity: 0.6; }
+      100% { transform: translate(120vw, 0); opacity: 0; }
+    }
+    .animate-sand-drift { animation: sandDrift 18s linear infinite; }
+    @keyframes eyeGlow {
+      0%, 100% { filter: drop-shadow(0 0 3px rgba(45,212,191,0.45)); }
+      50% { filter: drop-shadow(0 0 12px rgba(94,234,212,0.95)); }
+    }
+    .animate-eye-glow { animation: eyeGlow 4s ease-in-out infinite; }
+    @keyframes nileShimmer {
+      0% { background-position: 0 0; }
+      100% { background-position: 120px 0; }
+    }
+    .animate-nile-shimmer { animation: nileShimmer 10s linear infinite; }
+
     @media (prefers-reduced-motion: reduce) {
       .animate-candy-bounce, .animate-candy-shadow, .animate-sprinkle-fall, .animate-balloon-sway,
       .animate-bubble-pop, .animate-unicorn-float, .animate-shimmer, .animate-horn-glint,
@@ -344,9 +369,11 @@
       .animate-mote-drift, .animate-leaf-fall, .animate-ray-sway,
       .animate-bubble-rise, .animate-fish-swim, .animate-kelp-sway,
       .animate-cloud-roll, .animate-zeus-shadow, .animate-lure-pulse, .animate-abyss-lurk,
-      .animate-jelly-pulse, .animate-abyss-glow {
+      .animate-jelly-pulse, .animate-abyss-glow,
+      .animate-sun-disk-glow, .animate-eye-glow, .animate-nile-shimmer {
         animation: none;
       }
+      .animate-sand-drift,
       .animate-sprinkle-fall, .animate-leaf-fall, .animate-bubble-rise, .animate-fish-swim,
       .animate-bolt-strike, .animate-storm-flash, .animate-spark-flicker,
       .animate-squid-drift, .animate-snow-sink, .animate-eye-blink {
@@ -609,6 +636,20 @@
         bannerEmoji: '🦑',
         illustrationText: '🦑🌑 ดำดิ่งสู่ทะเลลึก — ระวังเจ้าปลาเขี้ยวยาวที่ซ่อนอยู่ในความมืด!',
         unlockLevel: 80
+      },
+      egypt: {
+        id: 'egypt',
+        name: 'ธีมเทพเจ้าอียิปต์ ปลดล็อกพิเศษ 🏺',
+        shortName: 'อียิปต์',
+        swatch: 'bg-gradient-to-b from-blue-900 via-amber-500 to-teal-400',
+        bgClass: 'bg-gradient-to-b from-slate-950 via-blue-950 to-amber-950 text-amber-50',
+        headerClass: 'bg-slate-950/85 border-amber-400/80 shadow-amber-900/40 text-amber-50',
+        primaryButton: 'bg-gradient-to-b from-amber-500 to-amber-700 hover:brightness-110 focus:ring-teal-300',
+        activeTabClass: 'bg-gradient-to-r from-blue-950/90 to-slate-900/85 text-amber-100 border-l-4 border-amber-400 shadow-sm shadow-amber-500/20',
+        accentText: 'text-amber-300',
+        bannerEmoji: '🏺',
+        illustrationText: '👁️☀️ ดวงตาแห่งฮอรัสเฝ้าคุ้มครอง — ทีมนี้ได้รับพรจากทวยเทพแห่งไนล์!',
+        unlockLevel: 100
       }
     };
 
@@ -695,7 +736,7 @@
     const FOCUS_MINUTES = 25;
 
     // เลขรุ่นของหน้าเว็บ — เปลี่ยนทุกครั้งที่ deploy เพื่อให้เครื่องที่เปิดค้างไว้รู้ตัวว่ามีเวอร์ชันใหม่แล้วรีเฟรชให้เอง
-    const APP_VERSION = '2026-11-13.1';
+    const APP_VERSION = '2026-11-25.1';
 
     /* ============================================================
        SOUND — สังเคราะห์เสียงสัตว์ด้วย Web Audio API
@@ -2106,6 +2147,253 @@
               </div>
             </div>
           </div>
+        </div>
+      );
+    }
+
+    // ===== ธีมเทพเจ้าอียิปต์ — ค่ำคืนริมแม่น้ำไนล์ ใต้ดวงอาทิตย์มีปีกของเทพ Ra / ดวงตาแห่งฮอรัส =====
+    // พาเลต: ลาพิสลาซูลี (#1c3f95) · ทองคำ (#d4af37) · เทอร์ควอยซ์ (#2bb3a3) · หินทราย (#e8c98f) · คาร์เนเลียน (#b5371f) · ผงโคลหมึก (#111018)
+    const EGYPT_SKY = 'linear-gradient(to bottom, #0b1026 0%, #14215a 38%, #1c3f95 62%, #c8955a 90%, #e8c98f 100%)';
+    const EGYPT_COLUMN = 'linear-gradient(90deg, rgba(60,30,5,0.38), rgba(60,30,5,0) 30%, rgba(60,30,5,0) 62%, rgba(60,30,5,0.42)), repeating-linear-gradient(90deg, #edd5a3 0 6px, #c8955a 6px 8px, #e8c98f 8px 13px)';
+    // ลายกลีบบัวสลับดอกตูม ทองบนพื้นลาพิส (ใช้เป็นแถบขอบล่าง)
+    const EGYPT_LOTUS = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='16' viewBox='0 0 32 16'%3E%3Crect width='32' height='16' fill='%231c3f95'/%3E%3Cpath d='M8 15 Q4 9 8 2 Q12 9 8 15Z M8 15 Q1 12 2 6 Q7 9 8 15Z M8 15 Q15 12 14 6 Q9 9 8 15Z' fill='%23d4af37'/%3E%3Cpath d='M24 15 L24 7 M24 7 Q21 4 24 1 Q27 4 24 7Z' stroke='%232bb3a3' fill='%232bb3a3' stroke-width='1.2'/%3E%3Crect y='0' width='32' height='1.5' fill='%23d4af37'/%3E%3Crect y='14.5' width='32' height='1.5' fill='%23d4af37'/%3E%3C/svg%3E")`;
+
+    // ปีกขนนกด้านขวา 3 ชั้น (ทอง / ลาพิส / เทอร์ควอยซ์) — ปีกซ้ายได้จากการกลับด้านทั้งกลุ่ม
+    function EgyptWingSide() {
+      const rows = [
+        { ox: 138, oy: 38, n: 7, a0: -32, da: 4.2, l0: 66, dl: 4.5, w: 5, fill: 'url(#egyptGold)', stroke: '#92650f' },
+        { ox: 138, oy: 43, n: 6, a0: -4, da: 3.6, l0: 72, dl: 3.4, w: 4.6, fill: '#1f4287', stroke: '#d4af37' },
+        { ox: 137, oy: 47, n: 5, a0: 12, da: 5.5, l0: 40, dl: 4.5, w: 4, fill: '#2bb3a3', stroke: '#d4af37' }
+      ];
+      return (
+        <g>
+          {rows.map((r, ri) => Array.from({ length: r.n }, (_, i) => {
+            const L = r.l0 + i * r.dl;
+            return (
+              <path
+                key={'egw' + ri + '-' + i}
+                transform={'translate(' + r.ox + ' ' + r.oy + ') rotate(' + (r.a0 + i * r.da) + ')'}
+                d={'M0 0 Q' + (L * 0.5) + ' ' + (-r.w) + ' ' + L + ' 0 Q' + (L * 0.5) + ' ' + r.w + ' 0 0 Z'}
+                fill={r.fill}
+                stroke={r.stroke}
+                strokeWidth="0.7"
+              />
+            );
+          }))}
+        </g>
+      );
+    }
+
+    // ดวงอาทิตย์มีปีก (Behdet): จานสุริยะสีคาร์เนเลียน ขนาบด้วยงูเห่าและปีกขนนก
+    function EgyptWingedSun({ className }) {
+      return (
+        <svg viewBox="0 0 240 90" className={className} overflow="visible" style={{ filter: 'drop-shadow(0 0 14px rgba(252,199,46,0.45))' }}>
+          <defs>
+            <linearGradient id="egyptGold" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stopColor="#fef3c7" />
+              <stop offset="0.45" stopColor="#fcc72e" />
+              <stop offset="1" stopColor="#92650f" />
+            </linearGradient>
+            <radialGradient id="egyptSunDisk" cx="0.4" cy="0.35" r="0.75">
+              <stop offset="0" stopColor="#fde68a" />
+              <stop offset="0.45" stopColor="#f97316" />
+              <stop offset="1" stopColor="#b5371f" />
+            </radialGradient>
+          </defs>
+          <EgyptWingSide />
+          <g transform="translate(240 0) scale(-1 1)"><EgyptWingSide /></g>
+          {/* งูเห่าอูราอุสสองข้างจาน */}
+          <path d="M103 58 Q92 52 100 44 Q108 38 102 30" fill="none" stroke="url(#egyptGold)" strokeWidth="4" strokeLinecap="round" />
+          <circle cx="102" cy="29" r="3" fill="url(#egyptGold)" />
+          <path d="M137 58 Q148 52 140 44 Q132 38 138 30" fill="none" stroke="url(#egyptGold)" strokeWidth="4" strokeLinecap="round" />
+          <circle cx="138" cy="29" r="3" fill="url(#egyptGold)" />
+          {/* จานสุริยะ */}
+          <g className="animate-sun-disk-glow">
+            <circle cx="120" cy="40" r="25" fill="#fcc72e" fillOpacity="0.22" />
+            <circle cx="120" cy="40" r="18" fill="url(#egyptSunDisk)" stroke="url(#egyptGold)" strokeWidth="3" />
+            <ellipse cx="114" cy="33" rx="6" ry="4" fill="#fff" fillOpacity="0.4" />
+          </g>
+          {/* แถบทองใต้จาน */}
+          <path d="M104 64 Q120 72 136 64 L132 70 Q120 77 108 70 Z" fill="url(#egyptGold)" stroke="#92650f" strokeWidth="0.6" />
+        </svg>
+      );
+    }
+
+    // ดวงตาแห่งฮอรัส (Wedjat)
+    function EgyptEyeOfHorus({ className }) {
+      return (
+        <svg viewBox="0 0 100 62" className={className} fill="none" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M8 17 Q42 0 80 14" stroke="#111018" strokeWidth="6" />
+          <path d="M8 17 Q42 0 80 14" stroke="#d4af37" strokeWidth="2" />
+          <path d="M10 31 Q45 9 83 29 Q46 43 10 31 Z" fill="#f8f1dc" stroke="#111018" strokeWidth="4" />
+          <circle cx="47" cy="27" r="10" fill="#1c3f95" stroke="#d4af37" strokeWidth="1.5" />
+          <circle cx="47" cy="27" r="4.2" fill="#111018" />
+          <circle cx="43.5" cy="23.5" r="1.8" fill="#fff" />
+          <path d="M83 29 Q96 31 93 43 Q89 50 82 45" stroke="#111018" strokeWidth="4" />
+          <path d="M38 38 Q33 48 36 57" stroke="#111018" strokeWidth="4" />
+          <path d="M46 40 L50 52 Q52 58 59 54" stroke="#111018" strokeWidth="4" />
+        </svg>
+      );
+    }
+
+    // เสาหัวบัวปาปิรัส สองข้างกลางฉาก ประดับอักษรอียิปต์โบราณ
+    function EgyptColumn({ className }) {
+      return (
+        <div className={'absolute bottom-6 sm:bottom-9 flex flex-col items-center ' + className}>
+          <svg viewBox="0 0 60 30" className="w-14 sm:w-[76px] h-auto block">
+            <rect x="4" y="0" width="52" height="5" rx="1.5" fill="#d4af37" stroke="#92650f" strokeWidth="0.8" />
+            <path d="M9 30 Q3 14 12 6 L48 6 Q57 14 51 30 Z" fill="#1c3f95" stroke="#d4af37" strokeWidth="1" />
+            {[16, 23, 30, 37, 44].map((x) => (
+              <line key={'ecv' + x} x1={x} y1="7" x2={x} y2="29" stroke="#2bb3a3" strokeWidth="1.6" />
+            ))}
+            <rect x="8" y="26" width="44" height="4" fill="#d4af37" />
+          </svg>
+          <div className="relative w-9 sm:w-12 h-24 sm:h-36 border-x border-amber-700/50" style={{ backgroundImage: EGYPT_COLUMN }}>
+            <svg viewBox="0 0 24 90" className="absolute inset-0 w-full h-full p-1" fill="none" stroke="#111018" strokeWidth="2" strokeLinecap="round">
+              <ellipse cx="12" cy="11" rx="5" ry="6" />
+              <path d="M12 17 L12 38 M5 24 L19 24" />
+              <path d="M4 50 Q12 43 20 50 Q12 57 4 50 Z" />
+              <circle cx="12" cy="50" r="1.8" fill="#111018" />
+              <path d="M4 66 l4 -3 l4 3 l4 -3 l4 3 M4 73 l4 -3 l4 3 l4 -3 l4 3" />
+              <path d="M7 84 L17 84" />
+            </svg>
+          </div>
+          <div className="w-12 sm:w-16 h-2 sm:h-2.5 rounded-sm bg-gradient-to-b from-amber-300 to-amber-700 shadow-sm" />
+        </div>
+      );
+    }
+
+    // งานออกแบบ: ท้องฟ้ายามค่ำคืนเหนือแม่น้ำไนล์ ดาวระยิบ ทรายทองปลิวผ่านเป็นสาย เสาหินทรายสองข้างจอ และแถบดอกบัวทองด้านล่าง
+    function EgyptScene() {
+      return (
+        <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 select-none" aria-hidden="true">
+          <div className="absolute -top-56 left-1/2 -translate-x-1/2 w-[1100px] h-[560px] rounded-full bg-blue-700/30 blur-3xl" />
+          <div className="absolute -top-20 right-[8%] w-72 h-72 rounded-full bg-amber-300/15 blur-3xl" />
+          {Array.from({ length: 42 }, (_, i) => (
+            <span
+              key={'egstar' + i}
+              className={'absolute rounded-full animate-twinkle ' + (i % 5 === 0 ? 'bg-amber-200' : 'bg-white')}
+              style={{
+                left: (((i * 37) + 5) % 98 + 1) + '%',
+                top: (((i * 23) + 3) % 70 + 1) + '%',
+                width: (1 + (i % 3 === 0 ? 1 : 0)) + 'px',
+                height: (1 + (i % 3 === 0 ? 1 : 0)) + 'px',
+                animationDuration: (2.5 + (i % 4)) + 's',
+                animationDelay: -(i * 0.45) + 's'
+              }}
+            />
+          ))}
+          {Array.from({ length: 14 }, (_, i) => (
+            <span
+              key={'egsand' + i}
+              className="absolute left-[-3vw] rounded-full bg-amber-200 animate-sand-drift"
+              style={{
+                top: (((i * 31) + 9) % 80 + 8) + '%',
+                width: (2 + (i % 3)) + 'px',
+                height: (2 + (i % 3)) + 'px',
+                '--dy': ((i % 2 ? 1 : -1) * (14 + (i % 4) * 8)) + 'px',
+                animationDuration: (15 + (i % 5) * 2.5) + 's',
+                animationDelay: -(i * 1.7) + 's'
+              }}
+            />
+          ))}
+          <div className="hidden md:block absolute -left-3 top-0 bottom-8 w-10 xl:w-14 opacity-80 border-r-2 border-amber-500/70" style={{ backgroundImage: EGYPT_COLUMN, boxShadow: '6px 0 18px -6px rgba(0,0,0,0.5)' }}>
+            <div className="h-3 bg-gradient-to-r from-blue-800 via-amber-400 to-teal-500" />
+          </div>
+          <div className="hidden md:block absolute -right-3 top-0 bottom-8 w-10 xl:w-14 opacity-80 border-l-2 border-amber-500/70" style={{ backgroundImage: EGYPT_COLUMN, boxShadow: '-6px 0 18px -6px rgba(0,0,0,0.5)' }}>
+            <div className="h-3 bg-gradient-to-r from-teal-500 via-amber-400 to-blue-800" />
+          </div>
+          <div className="absolute inset-x-0 bottom-0">
+            <div className="h-1.5 bg-gradient-to-r from-amber-700 via-amber-300 to-amber-700" />
+            <div className="h-5" style={{ backgroundImage: EGYPT_LOTUS, backgroundSize: '32px 16px', backgroundRepeat: 'repeat-x', backgroundPosition: 'center' }} />
+            <div className="h-3 bg-gradient-to-b from-amber-200 to-amber-600" />
+          </div>
+        </div>
+      );
+    }
+
+    // ฮีโร่: ดวงอาทิตย์มีปีกแห่งเทพ Ra เหนือพีระมิดและแม่น้ำไนล์ มีดวงตาฮอรัสเรืองแสงและเสาหินทรายขนาบ
+    function EgyptHero() {
+      return (
+        <div className="relative z-10 pointer-events-none select-none isolate" aria-hidden="true">
+          <div className="relative overflow-hidden h-72 sm:h-[24rem]" style={{ backgroundImage: EGYPT_SKY }}>
+            {/* ลำแสงสุริยะ */}
+            <div
+              className="absolute inset-0 animate-rainbow-breathe"
+              style={{
+                backgroundImage: 'repeating-conic-gradient(from 0deg at 50% 26%, rgba(94,234,212,0.22) 0deg 3deg, rgba(94,234,212,0) 3deg 11deg)',
+                WebkitMaskImage: 'linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.5) 50%, transparent 85%)',
+                maskImage: 'linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.5) 50%, transparent 85%)'
+              }}
+            />
+            {/* ดาวบนฟ้า */}
+            {Array.from({ length: 22 }, (_, i) => (
+              <span
+                key={'ehstar' + i}
+                className="absolute rounded-full bg-white animate-twinkle"
+                style={{
+                  left: (((i * 43) + 7) % 96 + 2) + '%',
+                  top: (((i * 17) + 4) % 40 + 2) + '%',
+                  width: (1 + (i % 3 === 0 ? 1 : 0)) + 'px',
+                  height: (1 + (i % 3 === 0 ? 1 : 0)) + 'px',
+                  animationDelay: -(i * 0.5) + 's'
+                }}
+              />
+            ))}
+            {/* พีระมิด */}
+            <svg viewBox="0 0 400 100" preserveAspectRatio="none" className="absolute inset-x-0 bottom-7 sm:bottom-10 w-full h-24 sm:h-36">
+              <polygon points="20,100 95,38 170,100" fill="#a87440" />
+              <polygon points="95,38 170,100 108,100" fill="#8a5a2b" />
+              <polygon points="95,38 90,46 100,46" fill="#fcc72e" />
+              <polygon points="130,100 255,6 380,100" fill="#c8955a" />
+              <polygon points="255,6 380,100 280,100" fill="#8a5a2b" />
+              <polygon points="255,6 247,18 263,18" fill="#fcc72e" />
+              <polygon points="300,100 350,52 400,100" fill="#a87440" />
+              <polygon points="350,52 400,100 365,100" fill="#8a5a2b" />
+              <rect x="0" y="96" width="400" height="4" fill="#e8c98f" />
+            </svg>
+            {/* แม่น้ำไนล์ */}
+            <div
+              className="absolute inset-x-0 bottom-0 h-7 sm:h-10 animate-nile-shimmer"
+              style={{
+                backgroundImage: 'repeating-linear-gradient(100deg, rgba(255,255,255,0) 0 22px, rgba(165,243,252,0.35) 22px 24px, rgba(255,255,255,0) 24px 60px), linear-gradient(to bottom, #2bb3a3, #1c3f95)',
+                borderTop: '2px solid #d4af37'
+              }}
+            />
+            <EgyptColumn className="right-1/2 mr-[118px] sm:mr-[240px]" />
+            <EgyptColumn className="left-1/2 ml-[118px] sm:ml-[240px]" />
+            {/* ดวงอาทิตย์มีปีก */}
+            <div className="absolute left-1/2 -translate-x-1/2 top-[7%] w-[19rem] sm:w-[34rem]">
+              <EgyptWingedSun className="block w-full h-auto" />
+            </div>
+            {/* ดวงตาแห่งฮอรัส */}
+            <div className="absolute left-1/2 -translate-x-1/2 top-[45%] sm:top-[43%]">
+              <EgyptEyeOfHorus className="block w-20 sm:w-32 h-auto animate-eye-glow" />
+            </div>
+            {/* อังค์ทองลอยเรื่อย ๆ */}
+            {[12, 24, 36, 64, 76, 88].map((left, i) => (
+              <span
+                key={'ehankh' + i}
+                className="absolute text-amber-300 text-base sm:text-xl animate-mote-drift"
+                style={{
+                  left: left + '%',
+                  top: (14 + (i % 3) * 18) + '%',
+                  textShadow: '0 0 8px rgba(252,199,46,0.8)',
+                  '--dx': ((i % 2 ? 1 : -1) * 8) + 'px',
+                  animationDuration: (6 + i) + 's',
+                  animationDelay: -(i * 1.3) + 's'
+                }}
+              >☥</span>
+            ))}
+          </div>
+          {/* ป้ายชื่อ + แถบดอกบัว */}
+          <div className="bg-gradient-to-b from-blue-950 to-slate-950 border-y-2 border-amber-400 text-center py-1.5 sm:py-2 px-3">
+            <span className="text-sm sm:text-xl font-black bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-yellow-300 to-amber-400" style={{ WebkitBackgroundClip: 'text' }}>
+              ☥ ทวยเทพแห่งไอยคุปต์ประทานพร ☥
+            </span>
+            <span className="hidden sm:inline text-xs text-teal-200/80 ml-3">ดวงตาแห่งฮอรัสเฝ้าคุ้มครองทีมของคุณ</span>
+          </div>
+          <div className="h-5 sm:h-6" style={{ backgroundImage: EGYPT_LOTUS, backgroundSize: '32px 16px', backgroundRepeat: 'repeat-x', backgroundPosition: 'center' }} />
         </div>
       );
     }
@@ -4053,6 +4341,7 @@
           {theme.id === 'unicorn' && <UnicornScene />}
           {theme.id === 'greekgod' && <GreekGodScene />}
           {theme.id === 'ocean' && <OceanScene />}
+          {theme.id === 'egypt' && <EgyptScene />}
           <Header
             theme={theme}
             me={me}
@@ -4075,6 +4364,7 @@
           {theme.id === 'unicorn' && <UnicornHero />}
           {theme.id === 'greekgod' && <GreekGodHero />}
           {theme.id === 'ocean' && <OceanHero />}
+          {theme.id === 'egypt' && <EgyptHero />}
           <div className="relative z-10 max-w-[1800px] mx-auto px-3 py-4 grid gap-4 grid-cols-1 lg:grid-cols-[280px_minmax(0,1fr)] xl:grid-cols-[280px_minmax(0,1fr)_340px]">
 
             {/* ---------- ซ้าย ---------- */}
