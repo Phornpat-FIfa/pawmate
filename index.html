@@ -355,11 +355,93 @@
       50% { filter: drop-shadow(0 0 12px rgba(94,234,212,0.95)); }
     }
     .animate-eye-glow { animation: eyeGlow 4s ease-in-out infinite; }
+    @keyframes godBreathe {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-5px) scale(1.012); }
+    }
+    .animate-god-breathe { animation: godBreathe 5.5s ease-in-out infinite; transform-origin: 50% 100%; }
     @keyframes nileShimmer {
       0% { background-position: 0 0; }
       100% { background-position: 120px 0; }
     }
     .animate-nile-shimmer { animation: nileShimmer 10s linear infinite; }
+
+    /* ธีมเวทมนตร์ — วงเวทหมุนสวนทาง เปลวเทียนลอยตัว ประกายดาว ฝุ่นดาวลอยขึ้น นกฮูกกะพริบตา */
+    @keyframes runeSpin { to { transform: rotate(360deg); } }
+    .animate-rune-spin { animation: runeSpin 60s linear infinite; transform-box: fill-box; transform-origin: 50% 50%; }
+    .animate-rune-spin-rev { animation: runeSpin 40s linear infinite reverse; transform-box: fill-box; transform-origin: 50% 50%; }
+    @keyframes circlePulse {
+      0%, 100% { opacity: 0.65; filter: drop-shadow(0 0 3px rgba(192,132,252,0.5)); }
+      50% { opacity: 1; filter: drop-shadow(0 0 12px rgba(192,132,252,0.95)); }
+    }
+    .animate-circle-pulse { animation: circlePulse 4s ease-in-out infinite; }
+    @keyframes candleBob {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(-10px) rotate(2deg); }
+    }
+    .animate-candle-bob { animation: candleBob 6s ease-in-out infinite; }
+    @keyframes flameFlickerMagic {
+      0%, 100% { transform: scaleY(1); opacity: 0.95; }
+      30% { transform: scaleY(1.18) scaleX(0.92); opacity: 1; }
+      60% { transform: scaleY(0.9) scaleX(1.05); opacity: 0.85; }
+    }
+    .animate-flame-flicker-magic { animation: flameFlickerMagic 0.9s ease-in-out infinite; transform-origin: 50% 100%; transform-box: fill-box; }
+    @keyframes sparkleTwinkle {
+      0%, 100% { transform: scale(0.4) rotate(0deg); opacity: 0.2; }
+      50% { transform: scale(1) rotate(90deg); opacity: 1; }
+    }
+    .animate-sparkle-twinkle { animation: sparkleTwinkle 2.5s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 50%; }
+    @keyframes stardustRise {
+      0% { transform: translate(0, 0); opacity: 0; }
+      12% { opacity: 0.9; }
+      85% { opacity: 0.6; }
+      100% { transform: translate(var(--dx), -110vh); opacity: 0; }
+    }
+    .animate-stardust-rise { animation: stardustRise 16s linear infinite; }
+    @keyframes owlBlink {
+      0%, 44%, 52%, 100% { transform: scaleY(1); }
+      48% { transform: scaleY(0.08); }
+    }
+    .animate-owl-blink { animation: owlBlink 6s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 50%; }
+    @keyframes wandTrail {
+      0% { stroke-dashoffset: 300; }
+      100% { stroke-dashoffset: -300; }
+    }
+    .animate-wand-trail { animation: wandTrail 3.5s ease-in-out infinite; }
+    @keyframes auroraShift {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+    .animate-aurora-shift { animation: auroraShift 20s ease-in-out infinite alternate; }
+    /* เอฟเฟกต์ร่ายเวท: ลูกพลังเวทพุ่งเข้าลูกแก้ว (--dir ซ้าย/ขวา, --sx ระยะ, --y0 ความสูงต้นทาง) พร้อมคลื่นระเบิดแสง ดาวตก และรูนลอย */
+    @keyframes spellBolt {
+      0%, 6% { transform: translate(calc(var(--dir) * var(--sx)), var(--y0)) scale(0.4); opacity: 0; }
+      12% { opacity: 1; }
+      32% { transform: translate(calc(var(--dir) * var(--sx) * 0.5), calc(var(--y0) * 0.3 - 34px)) scale(0.9); opacity: 1; }
+      54% { transform: translate(calc(var(--dir) * 10px), 0) scale(1); opacity: 1; }
+      58% { transform: translate(0, 0) scale(1.7); opacity: 0.9; }
+      62%, 100% { transform: translate(0, 0) scale(0.2); opacity: 0; }
+    }
+    .animate-spell-bolt { animation: spellBolt 5s ease-in infinite; }
+    @keyframes spellRing {
+      0%, 56% { transform: translate(-50%, -50%) scale(0.2); opacity: 0; }
+      58% { transform: translate(-50%, -50%) scale(0.3); opacity: 0.95; }
+      100% { transform: translate(-50%, -50%) scale(2.6); opacity: 0; }
+    }
+    .animate-spell-ring { animation: spellRing 5s ease-out infinite; }
+    @keyframes shootingStar {
+      0% { transform: translate(0, 0) rotate(28deg); opacity: 0; }
+      1.5% { opacity: 1; }
+      7% { transform: translate(420px, 200px) rotate(28deg); opacity: 0; }
+      100% { transform: translate(420px, 200px) rotate(28deg); opacity: 0; }
+    }
+    .animate-shooting-star { animation: shootingStar 9s linear infinite; }
+    @keyframes runeFloat {
+      0% { transform: translateY(0) scale(0.6) rotate(0deg); opacity: 0; }
+      20% { opacity: 0.95; }
+      100% { transform: translateY(-110px) scale(1.15) rotate(25deg); opacity: 0; }
+    }
+    .animate-rune-float { animation: runeFloat 6s ease-out infinite; }
 
     @media (prefers-reduced-motion: reduce) {
       .animate-candy-bounce, .animate-candy-shadow, .animate-sprinkle-fall, .animate-balloon-sway,
@@ -370,10 +452,13 @@
       .animate-bubble-rise, .animate-fish-swim, .animate-kelp-sway,
       .animate-cloud-roll, .animate-zeus-shadow, .animate-lure-pulse, .animate-abyss-lurk,
       .animate-jelly-pulse, .animate-abyss-glow,
-      .animate-sun-disk-glow, .animate-eye-glow, .animate-nile-shimmer {
+      .animate-sun-disk-glow, .animate-eye-glow, .animate-nile-shimmer, .animate-god-breathe,
+      .animate-rune-spin, .animate-rune-spin-rev, .animate-circle-pulse, .animate-flame-flicker-magic,
+      .animate-sparkle-twinkle, .animate-owl-blink, .animate-aurora-shift {
         animation: none;
       }
-      .animate-sand-drift,
+      .animate-sand-drift, .animate-stardust-rise, .animate-wand-trail, .animate-candle-bob,
+      .animate-spell-bolt, .animate-spell-ring, .animate-shooting-star, .animate-rune-float,
       .animate-sprinkle-fall, .animate-leaf-fall, .animate-bubble-rise, .animate-fish-swim,
       .animate-bolt-strike, .animate-storm-flash, .animate-spark-flicker,
       .animate-squid-drift, .animate-snow-sink, .animate-eye-blink {
@@ -650,6 +735,20 @@
         bannerEmoji: '🏺',
         illustrationText: '👁️☀️ ดวงตาแห่งฮอรัสเฝ้าคุ้มครอง — ทีมนี้ได้รับพรจากทวยเทพแห่งไนล์!',
         unlockLevel: 100
+      },
+      magic: {
+        id: 'magic',
+        name: 'ธีมเวทมนตร์ ปลดล็อกพิเศษ 🔮',
+        shortName: 'เวทมนตร์',
+        swatch: 'bg-gradient-to-b from-indigo-950 via-violet-600 to-amber-300',
+        bgClass: 'bg-gradient-to-b from-slate-950 via-indigo-950 to-violet-950 text-violet-50',
+        headerClass: 'bg-indigo-950/85 border-amber-300/70 shadow-violet-900/50 text-violet-50',
+        primaryButton: 'bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 hover:brightness-125 focus:ring-amber-300',
+        activeTabClass: 'bg-gradient-to-r from-indigo-950/90 to-violet-950/85 text-amber-100 border-l-4 border-amber-300 shadow-sm shadow-violet-500/30',
+        accentText: 'text-amber-300',
+        bannerEmoji: '🔮',
+        illustrationText: '🔮✨ ร่ายมนตร์แห่งดวงดาว — ตำราเวทเปิดออก ทีมนี้มีพลังเวทเหนือใคร!',
+        unlockLevel: 120
       }
     };
 
@@ -736,7 +835,9 @@
     const FOCUS_MINUTES = 25;
 
     // เลขรุ่นของหน้าเว็บ — เปลี่ยนทุกครั้งที่ deploy เพื่อให้เครื่องที่เปิดค้างไว้รู้ตัวว่ามีเวอร์ชันใหม่แล้วรีเฟรชให้เอง
-    const APP_VERSION = '2026-11-25.1';
+    const APP_VERSION = '2026-11-25.2';
+    // ปลดล็อกธีมทั้งหมดเฉพาะตอนรันบน localhost (เครื่องผู้พัฒนา) — บนเว็บจริงยังล็อกตามเลเวลปกติ ไม่ต้องแก้โค้ดก่อน push
+    const IS_LOCALHOST = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
 
     /* ============================================================
        SOUND — สังเคราะห์เสียงสัตว์ด้วย Web Audio API
@@ -2236,6 +2337,130 @@
       );
     }
 
+    // SMIL ไม่เคารพ prefers-reduced-motion เอง จึงเช็กเองก่อนใส่ animateTransform
+    const EGYPT_REDUCED_MOTION = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // pivot คือจุดหมุน (ข้อมือ) ใน user space ของ SVG — แกว่งเบา ๆ ด้วย spline ให้ดูมีน้ำหนัก
+    function EgyptSwing({ deg, cx, cy, dur, begin }) {
+      if (EGYPT_REDUCED_MOTION) return null;
+      return (
+        <animateTransform
+          attributeName="transform" type="rotate"
+          values={(-deg) + ' ' + cx + ' ' + cy + ';' + deg + ' ' + cx + ' ' + cy + ';' + (-deg) + ' ' + cx + ' ' + cy}
+          keyTimes="0;0.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1"
+          dur={dur} begin={begin || '0s'} repeatCount="indefinite"
+        />
+      );
+    }
+
+    // เทพเจ้าอียิปต์ยืนข้างดวงอาทิตย์: 'anubis' (หัวสุนัขจิ้งจอก ผิวดำ) / 'horus' (หัวเหยี่ยว สวมมงกุฎคู่)
+    // ท่ายืนแบบภาพจิตรกรรมอียิปต์ (ลำตัวตรง ขาก้าวมองข้าง) ถือคทา was ข้างหนึ่งและอังค์ห้อยแกว่งอีกข้าง
+    function EgyptGod({ kind, className, flip }) {
+      const anubis = kind === 'anubis';
+      const skin = anubis ? '#111018' : '#9a4f2b';
+      const g = 'egGodGold' + kind;
+      return (
+        <div className={'absolute bottom-7 sm:bottom-10 ' + className}>
+          <div className={flip ? '-scale-x-100' : ''}>
+            <div className="relative w-[65px] h-[152px] sm:w-[110px] sm:h-[256px]">
+              <div className="absolute left-1/2 top-[22%] -translate-x-1/2 w-[190%] h-[62%] rounded-full animate-sun-disk-glow" style={{ background: 'radial-gradient(circle, rgba(252,199,46,0.36) 0%, rgba(45,212,191,0.12) 45%, rgba(45,212,191,0) 70%)' }} />
+              <div className="relative animate-god-breathe">
+                <svg viewBox="0 -40 120 280" className="block w-full h-auto" style={{ filter: 'drop-shadow(0 0 3px rgba(252,199,46,0.6)) drop-shadow(0 6px 8px rgba(0,0,0,0.45))' }}>
+                  <defs>
+                    <linearGradient id={g} x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0" stopColor="#fef3c7" />
+                      <stop offset="0.5" stopColor="#fcc72e" />
+                      <stop offset="1" stopColor="#92650f" />
+                    </linearGradient>
+                  </defs>
+                  {/* คทา was (แกว่งรอบมือ) */}
+                  <g>
+                    <EgyptSwing deg={2.2} cx={100} cy={92} dur="4.6s" />
+                    <rect x="98.5" y="58" width="3" height="170" rx="1.5" fill={'url(#' + g + ')'} />
+                    <path d="M95 58 Q96 48 102 46 L112 50 L104 55 Q101 58 100 62 Z" fill={'url(#' + g + ')'} />
+                    <path d="M100 226 L93 238 M100 226 L107 238" stroke={'url(#' + g + ')'} strokeWidth="2.6" strokeLinecap="round" />
+                    <rect x="96.5" y="84" width="7" height="3" fill="#2bb3a3" />
+                  </g>
+                  {/* ขา + เท้า */}
+                  <path d="M40 148 L55 148 L46 224 L31 224 Z" fill={skin} />
+                  <path d="M28 224 L50 224 L56 233 L26 233 Z" fill={skin} />
+                  <path d="M56 148 L71 148 L77 224 L62 224 Z" fill={skin} />
+                  <path d="M59 224 L83 224 L90 233 L57 233 Z" fill={skin} />
+                  <rect x="32" y="214" width="14" height="4" fill={'url(#' + g + ')'} />
+                  <rect x="63" y="214" width="14" height="4" fill={'url(#' + g + ')'} />
+                  {/* ลำตัว */}
+                  <path d="M35 50 L75 50 L69 102 L41 102 Z" fill={skin} />
+                  <path d="M55 58 L55 98" stroke="#d4af37" strokeOpacity="0.25" strokeWidth="1" />
+                  {/* ผ้านุ่ง shendyt + เข็มขัดทอง + ผ้าห้อยลาพิส */}
+                  <path d="M39 98 L73 98 L82 153 L34 153 Z" fill="#f8f1dc" stroke="#d4af37" strokeWidth="1.4" />
+                  {[46, 52, 58, 64].map((x) => (<line key={'egpl' + kind + x} x1={x} y1="104" x2={x - 3 + (x - 55) * 0.4} y2="151" stroke="#d9cfae" strokeWidth="1" />))}
+                  <rect x="39" y="96" width="34" height="6" rx="1" fill={'url(#' + g + ')'} stroke="#92650f" strokeWidth="0.6" />
+                  <path d="M52 102 L72 102 L78 152 L54 152 Z" fill="#1c3f95" stroke="#d4af37" strokeWidth="1.2" />
+                  <path d="M54 118 L74 118 M55 130 L75 130 M56 142 L76 142" stroke="#d4af37" strokeWidth="1" />
+                  {/* แขนหลัง ห้อยอังค์ */}
+                  <path d="M36 54 L28 58 L25 98 L33 100 Z" fill={skin} />
+                  <rect x="24" y="68" width="10" height="4" rx="1" fill={'url(#' + g + ')'} transform="rotate(-8 29 70)" />
+                  <g>
+                    <EgyptSwing deg={9} cx={29} cy={102} dur="3.2s" begin="-1s" />
+                    <circle cx="29" cy="101" r="4.2" fill={skin} />
+                    <ellipse cx="29" cy="111" rx="5.2" ry="6.4" fill="none" stroke={'url(#' + g + ')'} strokeWidth="2.4" />
+                    <path d="M29 117 L29 146 M21 126 L37 126" stroke={'url(#' + g + ')'} strokeWidth="2.6" strokeLinecap="round" />
+                  </g>
+                  {/* แขนหน้า จับคทา */}
+                  <path d="M68 54 L79 54 L103 87 L96 94 Z" fill={skin} />
+                  <circle cx="100" cy="90" r="4.6" fill={skin} />
+                  <rect x="72" y="62" width="10" height="4" rx="1" fill={'url(#' + g + ')'} transform="rotate(34 77 64)" />
+                  {/* สร้อยคอ usekh */}
+                  <path d="M31 47 Q55 90 79 47 L66 43 Q55 63 44 43 Z" fill={'url(#' + g + ')'} stroke="#92650f" strokeWidth="0.6" />
+                  <path d="M37 47 Q55 79 73 47 L66 43 Q55 59 44 43 Z" fill="#1c3f95" />
+                  <path d="M41 47 Q55 70 69 47" fill="none" stroke="#2bb3a3" strokeWidth="2.2" strokeLinecap="round" />
+                  {[0, 1, 2, 3, 4].map((i) => (<circle key={'egbead' + kind + i} cx={38 + i * 8.5} cy={55 + [4, 10, 12, 10, 4][i]} r="1.7" fill="#fcc72e" />))}
+                  {/* ผ้าคลุมศีรษะ (nemes) ลาพิสลายทอง */}
+                  <path d="M36 14 Q36 8 46 8 L50 8 L50 54 L34 56 Q33 30 36 14 Z" fill="#1c3f95" stroke="#d4af37" strokeWidth="1" />
+                  {[18, 26, 34, 42].map((y) => (<line key={'egnem' + kind + y} x1="35" y1={y} x2="49" y2={y + 1} stroke="#d4af37" strokeWidth="1.3" />))}
+                  <rect x="48" y="38" width="12" height="14" fill={skin} />
+                  {anubis ? (
+                    <g>
+                      {/* หูสูง */}
+                      <path d="M44 14 L38 -16 L54 10 Z" fill={skin} stroke="#d4af37" strokeWidth="1" />
+                      <path d="M44 10 L41 -8 L50 8 Z" fill="#fcc72e" fillOpacity="0.85" />
+                      <path d="M54 12 L58 -14 L63 14 Z" fill={skin} stroke="#d4af37" strokeWidth="1" />
+                      {/* กะโหลกและจมูกยาว */}
+                      <path d="M44 14 Q56 7 63 19 L64 36 Q53 42 44 38 Z" fill={skin} stroke="#d4af37" strokeWidth="0.8" />
+                      <path d="M60 21 L91 30 Q93 33 90 36 L61 39 Z" fill={skin} stroke="#d4af37" strokeWidth="0.8" />
+                      <circle cx="90.5" cy="32.5" r="2.4" fill="#d4af37" />
+                      <path d="M62 36 L84 35" stroke="#d4af37" strokeOpacity="0.7" strokeWidth="0.9" />
+                      <path d="M42 18 Q55 10 63 19" fill="none" stroke={'url(#' + g + ')'} strokeWidth="2.6" />
+                      <path d="M60 25 L76 24" stroke="#fcc72e" strokeWidth="1.6" strokeLinecap="round" />
+                    </g>
+                  ) : (
+                    <g>
+                      {/* มงกุฎคู่ pschent: แดงรองรับขาวสูง */}
+                      <path d="M47 15 L46 -18 Q56 -36 66 -18 L63 15 Z" fill="#f8f1dc" stroke="#d4af37" strokeWidth="1.2" />
+                      <path d="M45 16 L65 16 L63 6 L47 6 Z" fill="#b5371f" stroke="#d4af37" strokeWidth="1" />
+                      <path d="M65 8 Q76 -4 66 -12 Q60 -14 62 -8" fill="none" stroke="#b5371f" strokeWidth="2.2" strokeLinecap="round" />
+                      <path d="M52 -12 L58 -12 M51 -2 L59 -2" stroke="#d4af37" strokeWidth="1.1" />
+                      {/* หัวเหยี่ยว */}
+                      <path d="M44 16 Q56 9 63 20 L64 33 Q54 41 44 38 Z" fill={skin} stroke="#d4af37" strokeWidth="0.8" />
+                      <path d="M62 23 Q82 20 86 34 Q74 31 63 35 Z" fill="url(#egGodGoldhorus)" stroke="#92650f" strokeWidth="0.8" />
+                      <path d="M63 34 Q61 46 55 52 Q58 54 62 50" fill="none" stroke="#111018" strokeWidth="2.4" strokeLinecap="round" />
+                      <path d="M60 25 L74 25" stroke="#111018" strokeWidth="2.2" strokeLinecap="round" />
+                    </g>
+                  )}
+                  {/* ดวงตาเรืองแสง */}
+                  <g className="animate-sun-disk-glow">
+                    <circle cx={anubis ? 65 : 63} cy="27" r="5" fill="#5eead4" fillOpacity="0.35" />
+                    <circle cx={anubis ? 65 : 63} cy="27" r="2.4" fill="#5eead4" />
+                    <circle cx={anubis ? 65 : 63} cy="27" r="1" fill="#fff" />
+                  </g>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     // เสาหัวบัวปาปิรัส สองข้างกลางฉาก ประดับอักษรอียิปต์โบราณ
     function EgyptColumn({ className }) {
       return (
@@ -2360,8 +2585,11 @@
                 borderTop: '2px solid #d4af37'
               }}
             />
-            <EgyptColumn className="right-1/2 mr-[118px] sm:mr-[240px]" />
-            <EgyptColumn className="left-1/2 ml-[118px] sm:ml-[240px]" />
+            <EgyptColumn className="hidden sm:flex right-1/2 sm:mr-[285px] lg:mr-[410px]" />
+            <EgyptColumn className="hidden sm:flex left-1/2 sm:ml-[285px] lg:ml-[410px]" />
+            {/* เทพเจ้า: Anubis ซ้าย / Horus ขวา หันเข้าหาดวงอาทิตย์ */}
+            <EgyptGod kind="anubis" className="right-1/2 mr-[72px] sm:mr-[160px] lg:mr-[245px]" />
+            <EgyptGod kind="horus" flip className="left-1/2 ml-[72px] sm:ml-[160px] lg:ml-[245px]" />
             {/* ดวงอาทิตย์มีปีก */}
             <div className="absolute left-1/2 -translate-x-1/2 top-[7%] w-[19rem] sm:w-[34rem]">
               <EgyptWingedSun className="block w-full h-auto" />
@@ -2394,6 +2622,342 @@
             <span className="hidden sm:inline text-xs text-teal-200/80 ml-3">ดวงตาแห่งฮอรัสเฝ้าคุ้มครองทีมของคุณ</span>
           </div>
           <div className="h-5 sm:h-6" style={{ backgroundImage: EGYPT_LOTUS, backgroundSize: '32px 16px', backgroundRepeat: 'repeat-x', backgroundPosition: 'center' }} />
+        </div>
+      );
+    }
+
+    // ===== ธีมเวทมนตร์ — สำนักเวทยามค่ำคืน: วงเวทรูนหมุนสวนทาง ตำราเวทลอยได้ พ่อมดถือคทาคริสตัล และนกฮูกคู่ใจ =====
+    // พาเลต: ครามเที่ยงคืน (#1e1b4b) · ม่วงอเมทิสต์ (#c084fc) · ทองอาร์เคน (#fcd34d) · ฟ้าอีเทอเรียล (#67e8f9) · ชมพูกุหลาบ (#f0abfc) · กระดาษหนังสือ (#f5e9c8)
+    const MAGIC_SKY = 'linear-gradient(to bottom, #0b1026 0%, #1e1b4b 40%, #2e1065 78%, #4c1d95 100%)';
+    // แถบลายดาวสี่แฉกสลับข้าวหลามตัดทองบนพื้นคราม (ขอบล่างของฉากและป้ายแบนเนอร์)
+    const MAGIC_RUNE_BAND = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='16' viewBox='0 0 32 16'%3E%3Crect width='32' height='16' fill='%231e1b4b'/%3E%3Cpath d='M8 2 L9.6 6.4 L14 8 L9.6 9.6 L8 14 L6.4 9.6 L2 8 L6.4 6.4Z' fill='%23fcd34d'/%3E%3Cpath d='M24 4 L27 8 L24 12 L21 8Z' fill='none' stroke='%23c084fc' stroke-width='1.2'/%3E%3Crect y='0' width='32' height='1.2' fill='%23fcd34d'/%3E%3Crect y='14.8' width='32' height='1.2' fill='%23fcd34d'/%3E%3C/svg%3E")`;
+    const MAGIC_REDUCED_MOTION = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // แกว่งรอบจุด pivot (SMIL ไม่เคารพ reduced-motion จึงเช็กเอง)
+    function MagicSwing({ deg, cx, cy, dur, begin }) {
+      if (MAGIC_REDUCED_MOTION) return null;
+      return (
+        <animateTransform
+          attributeName="transform" type="rotate"
+          values={(-deg) + ' ' + cx + ' ' + cy + ';' + deg + ' ' + cx + ' ' + cy + ';' + (-deg) + ' ' + cx + ' ' + cy}
+          keyTimes="0;0.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1"
+          dur={dur} begin={begin || '0s'} repeatCount="indefinite"
+        />
+      );
+    }
+
+    // ลอยขึ้นลงเบา ๆ (translate)
+    function MagicFloat({ dy, dur, begin }) {
+      if (MAGIC_REDUCED_MOTION) return null;
+      return (
+        <animateTransform
+          attributeName="transform" type="translate"
+          values={'0 0;0 ' + (-dy) + ';0 0'}
+          keyTimes="0;0.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1"
+          dur={dur} begin={begin || '0s'} repeatCount="indefinite"
+        />
+      );
+    }
+
+    // วงเวทกลางฉาก: วงรูนนอกหมุนช้า วงประหมุนสวนทาง ดาวหกแฉกเรืองแสง ลูกแก้วคริสตัลลอยเหนือตำราเวทที่เปิดอยู่
+    function MagicCircle({ className }) {
+      const pt = (r, a) => (120 + r * Math.cos(a * Math.PI / 180)).toFixed(1) + ',' + (120 + r * Math.sin(a * Math.PI / 180)).toFixed(1);
+      const tri1 = [-90, 30, 150].map((a) => pt(80, a)).join(' ');
+      const tri2 = [90, 210, 330].map((a) => pt(80, a)).join(' ');
+      const runes = [
+        'M120 10 L120 22 M120 12 L127 17',
+        'M120 10 L120 22 M120 16 L126 11 M120 16 L126 21',
+        'M120 10 L120 22 M114 14 L120 18 L126 14',
+        'M120 10 L120 22 M115 13 L125 20'
+      ];
+      return (
+        <svg viewBox="0 0 240 240" className={className} style={{ filter: 'drop-shadow(0 0 16px rgba(167,139,250,0.55))' }}>
+          <defs>
+            <linearGradient id="mgGold" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stopColor="#fef3c7" />
+              <stop offset="0.5" stopColor="#fcd34d" />
+              <stop offset="1" stopColor="#92650f" />
+            </linearGradient>
+            <radialGradient id="mgOrb" cx="0.38" cy="0.32" r="0.8">
+              <stop offset="0" stopColor="#e0f2fe" />
+              <stop offset="0.35" stopColor="#67e8f9" />
+              <stop offset="0.72" stopColor="#6741b8" />
+              <stop offset="1" stopColor="#1e1b4b" />
+            </radialGradient>
+          </defs>
+          <circle cx="120" cy="120" r="116" fill="#7c3aed" fillOpacity="0.1" />
+          <g className="animate-rune-spin">
+            <circle cx="120" cy="120" r="112" fill="none" stroke="url(#mgGold)" strokeWidth="1.4" />
+            <circle cx="120" cy="120" r="98" fill="none" stroke="url(#mgGold)" strokeWidth="0.9" />
+            {Array.from({ length: 24 }, (_, i) => (
+              <path key={'mgr' + i} d={runes[i % 4]} transform={'rotate(' + (i * 15) + ' 120 120)'} fill="none" stroke="#fcd34d" strokeWidth="1.4" strokeLinecap="round" />
+            ))}
+          </g>
+          <g className="animate-rune-spin-rev">
+            <circle cx="120" cy="120" r="88" fill="none" stroke="#c084fc" strokeWidth="1.2" strokeDasharray="2 6" strokeLinecap="round" />
+          </g>
+          <g className="animate-circle-pulse">
+            <circle cx="120" cy="120" r="80" fill="none" stroke="#c084fc" strokeWidth="1.2" />
+            <polygon points={tri1} fill="none" stroke="#c084fc" strokeWidth="1.6" strokeLinejoin="round" />
+            <polygon points={tri2} fill="none" stroke="#f0abfc" strokeWidth="1.6" strokeLinejoin="round" />
+            {[-90, 30, 150, 90, 210, 330].map((a, i) => {
+              const [x, y] = pt(80, a).split(',');
+              return <circle key={'mgn' + i} cx={x} cy={y} r="3" fill="#fcd34d" />;
+            })}
+          </g>
+          <g className="animate-rune-spin-rev">
+            <circle cx="120" cy="120" r="54" fill="none" stroke="url(#mgGold)" strokeWidth="1" />
+            {Array.from({ length: 12 }, (_, i) => (
+              <line key={'mgt' + i} x1="120" y1="60" x2="120" y2="66" transform={'rotate(' + (i * 30) + ' 120 120)'} stroke="#fcd34d" strokeWidth="1.6" strokeLinecap="round" />
+            ))}
+          </g>
+          {/* ตำราเวทลอยเปิดอยู่ */}
+          <g>
+            <MagicFloat dy={3} dur="5s" />
+            <path d="M54 184 Q92 174 120 188 Q148 174 186 184 L186 190 Q148 180 120 194 Q92 180 54 190 Z" fill="#4c1d95" stroke="#fcd34d" strokeWidth="1" />
+            <path d="M120 162 Q92 150 58 158 L58 184 Q92 176 120 190 Z" fill="#f5e9c8" stroke="#d4a72c" strokeWidth="0.8" />
+            <path d="M120 162 Q148 150 182 158 L182 184 Q148 176 120 190 Z" fill="#efe0b8" stroke="#d4a72c" strokeWidth="0.8" />
+            <path d="M66 164 Q92 160 114 168 M66 170 Q92 166 114 174 M66 176 Q92 172 114 180" fill="none" stroke="#6741b8" strokeOpacity="0.55" strokeWidth="1" />
+            <path d="M126 168 Q148 160 174 164 M126 174 Q148 166 174 170" fill="none" stroke="#6741b8" strokeOpacity="0.55" strokeWidth="1" />
+            <path d="M120 162 L120 190" stroke="#92650f" strokeWidth="1.2" />
+          </g>
+          {/* หน้ากระดาษปลิว */}
+          <g>
+            <MagicFloat dy={7} dur="4.2s" begin="-1s" />
+            <path d="M70 140 L84 134 L88 148 L74 154 Z" fill="#f5e9c8" fillOpacity="0.9" stroke="#d4a72c" strokeWidth="0.6" transform="rotate(-14 79 144)" />
+          </g>
+          <g>
+            <MagicFloat dy={6} dur="5.6s" begin="-2.5s" />
+            <path d="M158 134 L172 140 L168 154 L154 148 Z" fill="#f5e9c8" fillOpacity="0.9" stroke="#d4a72c" strokeWidth="0.6" transform="rotate(12 163 144)" />
+          </g>
+          {/* ลูกแก้วคริสตัล */}
+          <g>
+            <MagicFloat dy={5} dur="4.4s" />
+            <circle cx="120" cy="108" r="34" fill="#67e8f9" fillOpacity="0.18" className="animate-circle-pulse" />
+            <circle cx="120" cy="108" r="24" fill="url(#mgOrb)" stroke="#fcd34d" strokeWidth="1.4" />
+            <path d="M104 112 Q114 100 124 108 Q134 116 138 104" fill="none" stroke="#e0f2fe" strokeOpacity="0.6" strokeWidth="1.6" strokeLinecap="round" />
+            <ellipse cx="112" cy="98" rx="7" ry="4.5" fill="#fff" fillOpacity="0.55" />
+            <path d="M110 134 L130 134 L126 140 L114 140 Z" fill="url(#mgGold)" stroke="#92650f" strokeWidth="0.6" />
+          </g>
+        </svg>
+      );
+    }
+
+    // เอฟเฟกต์ร่ายเวทกลางฮีโร่: ลูกพลังเวทหางดาวพุ่งจากสองฝั่งเข้าลูกแก้วสลับกัน เกิดคลื่นแสงระเบิดเมื่อโดน และมีอักษรรูนลอยขึ้น
+    // ตำแหน่งอิง % ของความสูงฮีโร่ เพื่อให้ลูกแก้วตรงกับจุดตกในทุกขนาดจอ (--sx ปรับตามความกว้างจอ)
+    function MagicSpellEffects() {
+      const sides = [
+        { dir: -1, delay: '0s', y0: '-30px', core: '#ffffff', glow: '103,232,249', ring: 'border-cyan-200' },
+        { dir: 1, delay: '-2.5s', y0: '24px', core: '#fff7d6', glow: '240,171,252', ring: 'border-fuchsia-200' }
+      ];
+      const runes = [
+        'M10 2 L10 22 M10 6 L17 12',
+        'M10 2 L10 22 M10 10 L16 5 M10 10 L16 15',
+        'M10 2 L10 22 M5 6 L10 11 L15 6',
+        'M10 2 L10 22 M5 8 L15 16'
+      ];
+      return (
+        <div className="absolute left-1/2 top-0 w-0 h-full" style={{ '--sx': 'clamp(110px, 21vw, 280px)' }}>
+          {sides.map((sd, si) => (
+            <React.Fragment key={'msd' + si}>
+              {[0, 1, 2, 3].map((k) => (
+                <span
+                  key={'msb' + si + k}
+                  className="absolute rounded-full animate-spell-bolt"
+                  style={{
+                    left: 0, top: '45%', marginLeft: -(6 - k) + 'px', marginTop: -(6 - k) + 'px',
+                    width: (12 - k * 2.5) + 'px', height: (12 - k * 2.5) + 'px',
+                    '--dir': sd.dir, '--y0': sd.y0,
+                    background: 'radial-gradient(circle, ' + sd.core + ' 0 30%, rgba(' + sd.glow + ',0.9) 60%, rgba(' + sd.glow + ',0) 100%)',
+                    boxShadow: '0 0 ' + (14 - k * 3) + 'px ' + (5 - k) + 'px rgba(' + sd.glow + ',0.65)',
+                    animationDelay: 'calc(' + sd.delay + ' + ' + (k * 0.07) + 's)'
+                  }}
+                />
+              ))}
+              <span
+                className={'absolute w-24 h-24 sm:w-32 sm:h-32 rounded-full border-2 animate-spell-ring ' + sd.ring}
+                style={{ left: 0, top: '45%', animationDelay: sd.delay, boxShadow: '0 0 18px 4px rgba(' + sd.glow + ',0.5), inset 0 0 14px rgba(' + sd.glow + ',0.45)' }}
+              />
+            </React.Fragment>
+          ))}
+          {[[-150, 62], [-95, 78], [-40, 70], [55, 76], [105, 64], [150, 80]].map(([x, t], i) => (
+            <svg
+              key={'mrf' + i}
+              viewBox="0 0 20 24"
+              className="absolute w-3.5 h-4 sm:w-5 sm:h-6 animate-rune-float"
+              style={{ left: x * 0.8, top: t + '%', animationDelay: -(i * 1.1) + 's', animationDuration: (5 + (i % 3)) + 's', filter: 'drop-shadow(0 0 5px rgba(252,211,77,0.95))' }}
+              fill="none" stroke={i % 2 ? '#c084fc' : '#fcd34d'} strokeWidth="2.2" strokeLinecap="round"
+            >
+              <path d={runes[i % 4]} />
+            </svg>
+          ))}
+        </div>
+      );
+    }
+
+    // ตัวละครภาพวาด (PNG พื้นโปร่งจาก Pixabay) ลอยหายใจช้า ๆ มีรัศมีม่วงฟ้าเต้นอยู่ด้านหลัง พร้อมประกายดาวระยิบ
+    function MagicFigure({ src, className, sizeClass, sparkles }) {
+      return (
+        <div className={'absolute bottom-7 sm:bottom-10 ' + className}>
+          <div className={'relative ' + sizeClass}>
+            <div className="absolute left-1/2 top-[22%] -translate-x-1/2 w-[200%] h-[66%] rounded-full animate-sun-disk-glow" style={{ background: 'radial-gradient(circle, rgba(192,132,252,0.45) 0%, rgba(103,232,249,0.14) 45%, rgba(103,232,249,0) 70%)' }} />
+            <div className="relative h-full animate-god-breathe">
+              <img src={src} alt="" className="block h-full w-auto max-w-none" style={{ filter: 'drop-shadow(0 0 6px rgba(192,132,252,0.7)) drop-shadow(0 8px 10px rgba(0,0,0,0.5))' }} />
+            </div>
+            {sparkles.map(([l, t, d], i) => (
+              <span key={'mfsp' + i} className="absolute text-amber-200 text-sm sm:text-lg animate-sparkle-twinkle" style={{ left: l, top: t, animationDelay: d, textShadow: '0 0 8px rgba(252,211,77,0.95)' }}>✦</span>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    // เทียนลอยวิเศษ: ตัวเทียนครีม เปลวไฟพลิ้ว แสงนวลรอบตัว (ใช้ในฉากพื้นหลัง)
+    function MagicCandle({ className, dur, delay }) {
+      return (
+        <div className={'absolute ' + className}>
+          <div className="animate-candle-bob" style={{ animationDuration: dur, animationDelay: delay }}>
+            <div className="relative w-4 flex flex-col items-center">
+              <div className="absolute -top-5 w-14 h-14 -translate-y-1/4 rounded-full" style={{ background: 'radial-gradient(circle, rgba(253,230,138,0.38) 0%, rgba(253,230,138,0) 70%)' }} />
+              <svg viewBox="0 0 10 16" className="relative w-2.5 h-4 animate-flame-flicker-magic">
+                <path d="M5 0 Q10 7 8.4 11 Q7 15 5 15 Q3 15 1.6 11 Q0 7 5 0 Z" fill="#f59e0b" />
+                <path d="M5 5 Q8 9 6.8 12 Q6 14 5 14 Q4 14 3.2 12 Q2 9 5 5 Z" fill="#fde68a" />
+              </svg>
+              <div className="w-3 h-9 rounded-sm bg-gradient-to-r from-amber-100 via-amber-50 to-amber-200 shadow-[0_0_6px_rgba(253,230,138,0.5)]" />
+              <div className="w-1 h-1 rounded-full bg-amber-200/60 mt-0.5" />
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // งานออกแบบ: ท้องฟ้าคืนเวทมนตร์ — แสงเหนือสีม่วงฟ้าไหล ดาวระยิบ ฝุ่นดาวลอยขึ้น เทียนลอยได้ ชั้นหนังสือและหอคอยขอบจอ และแถบรูนทองด้านล่าง
+    function MagicScene() {
+      return (
+        <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 select-none" aria-hidden="true">
+          {/* ภาพท้องฟ้าจันทร์เต็มดวงจาง ๆ เป็นฉากหลังทั้งหน้า (Pixabay) */}
+          <div className="absolute inset-0 opacity-45" style={{ backgroundImage: "url('assets/magic-sky-pixabay-4871130.jpg')", backgroundSize: 'cover', backgroundPosition: 'center' }} />
+          <div className="absolute inset-0" style={{ backgroundImage: 'linear-gradient(to bottom, rgba(11,16,38,0.55), rgba(30,27,75,0.75) 60%, rgba(46,16,101,0.85))' }} />
+          <div className="absolute -top-56 left-1/2 -translate-x-1/2 w-[1100px] h-[560px] rounded-full bg-violet-700/30 blur-3xl" />
+          <div className="absolute -top-24 right-[6%] w-80 h-80 rounded-full bg-cyan-400/10 blur-3xl" />
+          <div
+            className="absolute inset-x-0 top-0 h-[55%] opacity-70 animate-aurora-shift"
+            style={{
+              backgroundImage: 'linear-gradient(100deg, rgba(0,0,0,0) 0%, rgba(103,232,249,0.18) 25%, rgba(192,132,252,0.24) 50%, rgba(240,171,252,0.16) 75%, rgba(0,0,0,0) 100%)',
+              backgroundSize: '200% 100%',
+              WebkitMaskImage: 'linear-gradient(to bottom, #000 0%, transparent 100%)',
+              maskImage: 'linear-gradient(to bottom, #000 0%, transparent 100%)'
+            }}
+          />
+          {Array.from({ length: 45 }, (_, i) => (
+            <span
+              key={'mgstar' + i}
+              className={'absolute rounded-full animate-twinkle ' + (i % 5 === 0 ? 'bg-amber-200' : 'bg-white')}
+              style={{
+                left: (((i * 37) + 5) % 98 + 1) + '%',
+                top: (((i * 23) + 3) % 78 + 1) + '%',
+                width: (1 + (i % 4 === 0 ? 1 : 0)) + 'px',
+                height: (1 + (i % 4 === 0 ? 1 : 0)) + 'px',
+                animationDuration: (2.5 + (i % 4)) + 's',
+                animationDelay: -(i * 0.45) + 's'
+              }}
+            />
+          ))}
+          {[['12%', '8%', '-2s'], ['58%', '4%', '-6s'], ['80%', '18%', '-9s']].map(([l, t, d], i) => (
+            <span key={'mgss' + i} className="absolute w-20 sm:w-32 h-px animate-shooting-star" style={{ left: l, top: t, animationDelay: d, animationDuration: (11 + i * 2) + 's', backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0), #fff)', boxShadow: '0 0 6px 1px rgba(255,255,255,0.6)' }} />
+          ))}
+          {/* กลุ่มดาวเส้นทอง */}
+          <svg className="absolute left-[12%] top-[14%] w-32 h-20 opacity-50" viewBox="0 0 128 80" fill="none" stroke="#fcd34d" strokeWidth="0.8">
+            <polyline points="6,60 34,38 62,48 92,16 122,30" />
+            {[[6, 60], [34, 38], [62, 48], [92, 16], [122, 30]].map(([x, y], i) => (<circle key={'mgc1' + i} cx={x} cy={y} r="2.4" fill="#fcd34d" stroke="none" />))}
+          </svg>
+          <svg className="absolute right-[16%] top-[32%] w-28 h-24 opacity-45" viewBox="0 0 112 96" fill="none" stroke="#c084fc" strokeWidth="0.8">
+            <polyline points="8,20 38,10 58,44 90,36 104,78" />
+            {[[8, 20], [38, 10], [58, 44], [90, 36], [104, 78]].map(([x, y], i) => (<circle key={'mgc2' + i} cx={x} cy={y} r="2.4" fill="#f0abfc" stroke="none" />))}
+          </svg>
+          {/* ฝุ่นดาวลอยขึ้น */}
+          {Array.from({ length: 16 }, (_, i) => (
+            <span
+              key={'mgdust' + i}
+              className="absolute rounded-full animate-stardust-rise"
+              style={{
+                left: (((i * 29) + 6) % 94 + 2) + '%',
+                bottom: '-3%',
+                width: (2 + (i % 3)) + 'px',
+                height: (2 + (i % 3)) + 'px',
+                background: ['#c084fc', '#67e8f9', '#fcd34d'][i % 3],
+                boxShadow: '0 0 6px 2px ' + ['rgba(192,132,252,0.6)', 'rgba(103,232,249,0.6)', 'rgba(252,211,77,0.6)'][i % 3],
+                '--dx': ((i % 2 ? 1 : -1) * (14 + (i % 5) * 6)) + 'px',
+                animationDuration: (14 + (i % 5) * 2.5) + 's',
+                animationDelay: -(i * 1.9) + 's'
+              }}
+            />
+          ))}
+          {/* เทียนลอยได้ (จอใหญ่) */}
+          <div className="hidden md:block">
+            <MagicCandle className="left-[9%] top-[18%]" dur="6s" delay="0s" />
+            <MagicCandle className="left-[16%] top-[42%]" dur="7s" delay="-2s" />
+            <MagicCandle className="left-[7%] top-[64%]" dur="5.5s" delay="-3.5s" />
+            <MagicCandle className="right-[9%] top-[24%]" dur="6.5s" delay="-1s" />
+            <MagicCandle className="right-[15%] top-[52%]" dur="5.8s" delay="-4s" />
+            <MagicCandle className="right-[7%] top-[72%]" dur="7.2s" delay="-2.8s" />
+          </div>
+          {/* ชั้นหนังสือซ้าย / หอคอยขวา */}
+          <div className="hidden md:block absolute -left-2 top-0 bottom-8 w-10 xl:w-14 opacity-70 border-r-2 border-amber-300/50" style={{ backgroundColor: '#0b1026', backgroundImage: 'repeating-linear-gradient(to bottom, #2e1065 0 14px, #0b1026 14px 18px), repeating-linear-gradient(90deg, rgba(252,211,77,0.0) 0 6px, rgba(103,65,184,0.5) 6px 9px)', boxShadow: '6px 0 18px -6px rgba(124,58,237,0.5)' }} />
+          <div className="hidden md:block absolute -right-2 top-0 bottom-8 w-10 xl:w-14 opacity-70 border-l-2 border-amber-300/50" style={{ backgroundColor: '#0b1026', backgroundImage: 'repeating-linear-gradient(to bottom, #1e1b4b 0 22px, #2e1065 22px 24px), repeating-linear-gradient(90deg, rgba(0,0,0,0) 0 14px, rgba(252,211,77,0.35) 14px 15px)', boxShadow: '-6px 0 18px -6px rgba(124,58,237,0.5)' }} />
+          <div className="absolute inset-x-0 bottom-0">
+            <div className="h-1.5 bg-gradient-to-r from-violet-700 via-amber-300 to-violet-700" />
+            <div className="h-5" style={{ backgroundImage: MAGIC_RUNE_BAND, backgroundSize: '32px 16px', backgroundRepeat: 'repeat-x', backgroundPosition: 'center' }} />
+            <div className="h-3 bg-gradient-to-b from-violet-800 to-indigo-950" />
+          </div>
+        </div>
+      );
+    }
+
+    // ฮีโร่: ภาพเมืองเวทใต้จันทร์ม่วง กับวงเวทรูนยักษ์เหนือตำราและลูกแก้ว ขนาบด้วยหนูพ่อมดกับนกฮูกจอมเวท
+    function MagicHero() {
+      return (
+        <div className="relative z-10 pointer-events-none select-none isolate" aria-hidden="true">
+          <div className="relative overflow-hidden h-72 sm:h-[24rem]" style={{ backgroundImage: MAGIC_SKY }}>
+            {/* ภาพพื้นหลังเมืองเวทใต้จันทร์ม่วง (Pixabay) + ไล่เฉดมืดบน/ล่างให้กลืนกับหน้าเว็บ */}
+            <div className="absolute inset-0" style={{ backgroundImage: "url('assets/magic-bg-pixabay-7471412.jpg')", backgroundSize: 'cover', backgroundPosition: 'center 62%' }} />
+            <div className="absolute inset-0" style={{ backgroundImage: 'linear-gradient(to bottom, rgba(11,16,38,0.5) 0%, rgba(11,16,38,0) 38%, rgba(30,27,75,0) 70%, rgba(30,27,75,0.9) 100%)' }} />
+            {[['8%', '6%', '0s'], ['46%', '14%', '-4s'], ['70%', '4%', '-7s']].map(([l, t, d], i) => (
+              <span key={'mhss' + i} className="absolute w-16 sm:w-24 h-px animate-shooting-star" style={{ left: l, top: t, animationDelay: d, backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0), #fff)', boxShadow: '0 0 6px 1px rgba(255,255,255,0.7)' }} />
+            ))}
+            {/* พื้นเรืองม่วง */}
+            <div className="absolute inset-x-0 bottom-0 h-7 sm:h-10" style={{ backgroundImage: 'linear-gradient(to bottom, #4c1d95, #1e1b4b)', borderTop: '2px solid #c084fc', boxShadow: '0 -6px 22px rgba(192,132,252,0.55)' }} />
+            {/* วงเวท */}
+            <div className="absolute left-1/2 -translate-x-1/2 top-[2%] w-[15rem] sm:w-[23rem]">
+              <MagicCircle className="block w-full h-auto" />
+            </div>
+            <MagicSpellEffects />
+            <MagicFigure src="assets/magic-mouse-pixabay-8618574.webp" sizeClass="h-[165px] sm:h-[290px]" className="right-1/2 mr-[84px] sm:mr-[178px] lg:mr-[260px]" sparkles={[['88%', '28%', '0s'], ['96%', '8%', '-1.1s']]} />
+            <MagicFigure src="assets/magic-owl-pixabay-10462102.webp" sizeClass="h-[135px] sm:h-[235px]" className="left-1/2 ml-[84px] sm:ml-[178px] lg:ml-[260px]" sparkles={[['2%', '20%', '-0.6s'], ['90%', '4%', '-1.7s']]} />
+            {/* ประกายลอย */}
+            {[10, 22, 34, 66, 78, 90].map((left, i) => (
+              <span
+                key={'mhsp' + i}
+                className="absolute text-amber-200 text-base sm:text-xl animate-mote-drift"
+                style={{
+                  left: left + '%',
+                  top: (14 + (i % 3) * 18) + '%',
+                  textShadow: '0 0 8px rgba(192,132,252,0.95)',
+                  '--dx': ((i % 2 ? 1 : -1) * 8) + 'px',
+                  animationDuration: (6 + i) + 's',
+                  animationDelay: -(i * 1.3) + 's'
+                }}
+              >{i % 2 ? '✧' : '✦'}</span>
+            ))}
+          </div>
+          {/* ป้ายชื่อ + แถบรูน */}
+          <div className="bg-gradient-to-b from-indigo-950 to-violet-950 border-y-2 border-amber-300 text-center py-1.5 sm:py-2 px-3">
+            <span className="text-sm sm:text-xl font-black bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-fuchsia-200 to-cyan-200" style={{ WebkitBackgroundClip: 'text' }}>
+              ✦ สำนักเวทแห่งดวงดาวเปิดตำราแล้ว ✦
+            </span>
+            <span className="hidden sm:inline text-xs text-cyan-200/80 ml-3">มนตร์คุ้มครองทีมของคุณตลอดคืน</span>
+          </div>
+          <div className="h-5 sm:h-6" style={{ backgroundImage: MAGIC_RUNE_BAND, backgroundSize: '32px 16px', backgroundRepeat: 'repeat-x', backgroundPosition: 'center' }} />
         </div>
       );
     }
@@ -2551,7 +3115,7 @@
                 {Object.values(THEMES_CONFIG).map((t) => {
                   const isCurrent = t.id === theme.id;
                   // ธีมที่ใช้อยู่แล้วต้องไม่โดนล็อก แม้เลเวลห้องจะร่วงลงมาทีหลัง (เช่นเพื่อนแต้มเยอะออกจากห้องไป)
-                  const locked = !isCurrent && t.unlockLevel && houseLevel < t.unlockLevel;
+                  const locked = !IS_LOCALHOST && !isCurrent && t.unlockLevel && houseLevel < t.unlockLevel;
                   return (
                     <button
                       key={t.id}
@@ -3938,7 +4502,7 @@
         const t = THEMES_CONFIG[roomTheme];
         if (!t) return;
         const level = Math.floor(houseTotal / HOUSE_EXP_PER_LEVEL) + 1;
-        if (t.unlockLevel && level < t.unlockLevel) return;
+        if (!IS_LOCALHOST && t.unlockLevel && level < t.unlockLevel) return;
         setThemeId(roomTheme);
       }, [roomTheme, houseTotal]);
 
@@ -4342,6 +4906,7 @@
           {theme.id === 'greekgod' && <GreekGodScene />}
           {theme.id === 'ocean' && <OceanScene />}
           {theme.id === 'egypt' && <EgyptScene />}
+          {theme.id === 'magic' && <MagicScene />}
           <Header
             theme={theme}
             me={me}
@@ -4365,6 +4930,7 @@
           {theme.id === 'greekgod' && <GreekGodHero />}
           {theme.id === 'ocean' && <OceanHero />}
           {theme.id === 'egypt' && <EgyptHero />}
+          {theme.id === 'magic' && <MagicHero />}
           <div className="relative z-10 max-w-[1800px] mx-auto px-3 py-4 grid gap-4 grid-cols-1 lg:grid-cols-[280px_minmax(0,1fr)] xl:grid-cols-[280px_minmax(0,1fr)_340px]">
 
             {/* ---------- ซ้าย ---------- */}
